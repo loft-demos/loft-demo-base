@@ -7,10 +7,6 @@ on:
       vcluster-name:
         description: "Name of vcluster to be used as demo domain prefix"
         required: true
-      repo_name:
-        description: 'Demo App Repo Name'
-        type: string
-        default: 'hello-app'
       cluster:
         description: "Host cluster for vcluster"
         type: choice
@@ -42,7 +38,7 @@ env:
   TEMPLATE_VERSION: ${{ inputs.template-version }}
   PRODUCT: ${{ inputs.product }}
   LOGO: ${{ inputs.logo }}
-  REPO_NAME: ${{ inputs.repo_name || 'hello-app' }}
+  REPO_NAME: 'hello-app-${{ inputs.vcluster-name }}'
 
 jobs:
   create-demo-env:
