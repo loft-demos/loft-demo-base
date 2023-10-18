@@ -73,13 +73,21 @@ jobs:
             --cluster $CLUSTER \
             --set loftProduct=$PRODUCT \
             --set uiLogoURL=$LOGO
-            sed -i "s|REPLACE_BASE_DOMAIN|$BASE_DOMAIN|g" loft/projects.yaml
-          kubectl wait --for condition=established --timeout=60s crd/projects.management.loft.sh
+          
+          sed -i "s|REPLACE_BASE_DOMAIN|$BASE_DOMAIN|g" loft/projects.yaml
+
+          kubectl get pods -A
+          
+          kubectl wait --for condition=established --timeout=60s 
+          crd/teams.storage.loft.sh
+          
           kubectl apply -f ./loft -n loft
+          
           while ! kubectl get configmap argocd-rbac-cm -n argocd; do
             echo "Waiting for argocd rbac configmap...";
             sleep 1; 
           done
+          
           kubectl patch configmap/argocd-rbac-cm \
             -n argocd \
             --type merge \
