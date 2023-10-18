@@ -78,8 +78,10 @@ jobs:
 
           kubectl get pods -A
           
-          kubectl wait --for condition=established --timeout=60s 
-          crd/teams.storage.loft.sh
+          while ! kubectl get projects.storage.loft.sh default -n loft; do
+            echo "Waiting for loft default project...";
+            sleep 1; 
+          done
           
           kubectl apply -f ./loft -n loft
           
