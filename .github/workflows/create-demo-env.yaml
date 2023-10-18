@@ -48,6 +48,12 @@ jobs:
       - id: checkout
         uses: actions/checkout@v4
 
+      - id: generate-githubapp-token
+        uses: tibdex/github-app-token@v1.8.0
+        with:
+          app_id: ${{ secrets.LOFT_DEMOS_GITHUB_APP_ID }}
+          private_key: ${{ secrets.LOFT_DEMOS_GITHUB_APP_KEY }}
+
       - id: install-loft-cli
         uses: loft-sh/setup-loft@v2
         with:
@@ -56,7 +62,7 @@ jobs:
           # Specify your Loft access key here
           access-key: ${{ secrets.LOFT_SALES_DEMO_ACCESS_KEY }}
           kubectl-install: false
-      
+          kubectl-version: v1.28.2
       
       - id: set-domain
         run: |
