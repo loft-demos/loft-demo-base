@@ -1,2 +1,2 @@
-# loft-demo-objects
-Base demo objects for Loft demos.
+# loft-demo-base
+Base demo objects and GitHub setup for Loft demos.
