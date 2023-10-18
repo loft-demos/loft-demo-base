@@ -75,7 +75,7 @@ jobs:
             --set uiLogoURL=$LOGO
           
           sed -i "s|REPLACE_BASE_DOMAIN|$BASE_DOMAIN|g" loft/projects.yaml
-          yq e -i ".spec.key = \"${{ secrets.LOFT_DEMO_ENV_ACCESS_KEY }}\"" loft/accesskey.yaml
+          yq e -i ".spec.key = \"${{ secrets.LOFT_DEMO_ENV_ACCESS_KEY }}\"" loft/ownedaccesskey.yaml
 
           kubectl get pods -A
           
