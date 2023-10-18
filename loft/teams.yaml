@@ -8,6 +8,7 @@ spec:
     team: loft-admins
   users:
     - anna-smith
+    - admin
   clusterRoles:
     - name: loft-management-project-user
   access:
@@ -30,6 +31,7 @@ spec:
     team: loft-admins
   users:
     - eric-jones
+    - admin
   clusterRoles:
     - name: loft-management-project-user
   access:
