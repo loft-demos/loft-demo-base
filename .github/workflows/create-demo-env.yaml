@@ -87,6 +87,7 @@ jobs:
           done
           
           kubectl apply -f ./loft -n loft
+          kubectl apply -f ./loft-p-api-framework
           
           while ! kubectl get configmap argocd-rbac-cm -n argocd; do
             echo "Waiting for argocd rbac configmap...";
