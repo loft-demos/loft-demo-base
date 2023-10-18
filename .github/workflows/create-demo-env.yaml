@@ -134,6 +134,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ steps.generate-githubapp-token.outputs.token }}
         run: |
+          echo $BASE_DOMAIN
           gh  api \
             --method POST \
             -H "Accept: application/vnd.github+json" \
@@ -144,8 +145,8 @@ jobs:
             -f description='Simple ehco app to use with vCluster.Pro ArgoCD demo.' \
             -F include_all_branches=false \
             -F private=false
-          echo '{"name":"web","active":true,"events":["push","release"],"config":{"url":"https://argocd-$BASE_DOMAIN/api/webhook","secret":"'"${{ secrets.ARGOCD_GITHUB_WEBHOOK_SECRET }}"'","content_type":"json","insecure_ssl":"0"}}' | gh api repos/loft-demos/$REPO_NAME/hooks --input - -X POST
-          echo '{"name":"web","active":true,"events":["pull_request"],"config":{"url":"https://argocd-appset-$BASE_DOMAIN/api/webhook","secret":"'"${{ secrets.ARGOCD_GITHUB_WEBHOOK_SECRET }}"'","content_type":"json","insecure_ssl":"0"}}' | gh api repos/loft-demos/$REPO_NAME/hooks --input - -X POST
+          echo '{"name":"web","active":true,"events":["push","release"],"config":{"url":"'"https://argocd-$BASE_DOMAIN/api/webhook"'","secret":"'"${{ secrets.ARGOCD_GITHUB_WEBHOOK_SECRET }}"'","content_type":"json","insecure_ssl":"0"}}' | gh api repos/loft-demos/$REPO_NAME/hooks --input - -X POST
+          echo '{"name":"web","active":true,"events":["pull_request"],"config":{"url":"'"https://argocd-appset-$BASE_DOMAIN/api/webhook"'","secret":"'"${{ secrets.ARGOCD_GITHUB_WEBHOOK_SECRET }}"'","content_type":"json","insecure_ssl":"0"}}' | gh api repos/loft-demos/$REPO_NAME/hooks --input - -X POST
       
 
           
