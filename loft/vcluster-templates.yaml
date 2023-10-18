@@ -1,0 +1,61 @@
+kind: VirtualClusterTemplate
+apiVersion: management.loft.sh/v1
+metadata:
+  name: preview-template
+spec:
+  displayName: vCluster.Pro Preview Template
+  template:
+    metadata:
+      labels:
+        loft.sh/import-argocd: 'true'
+      annotations:
+        sleepmode.loft.sh/delete-after: '72000'
+        loft.sh/require-ingress-authentication: 'true'
+        sleepmode.loft.sh/sleep-after: '600'
+    objects: |
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: preview-hello-world-app
+      ---
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: ghcr-login-secret
+        namespace: preview-hello-world-app
+        labels:
+          loft.sh/project-secret-name: ghcr-login-secret
+      data:
+        .dockerconfigjson: e30K
+      type: kubernetes.io/dockerconfigjson
+    access:
+      rules:
+        - teams:
+            - loft-admins
+          clusterRole: cluster-admin
+    pro:
+      enabled: true
+    helmRelease:
+      chart: {}
+      values: |-
+        sync:
+          ingresses:
+            enabled: true
+        isolation:
+          enabled: true
+          networkPolicy:
+            enabled: false
+        coredns:
+          integrated: true
+    accessPoint:
+      ingress: {}
+    spaceTemplate:
+      metadata: {}
+  access:
+    - verbs:
+        - '*'
+      subresources:
+        - '*'
+      users:
+        - admin
+

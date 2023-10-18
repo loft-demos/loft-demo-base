@@ -9,18 +9,18 @@ spec:
   quotas:
     project:
       count/virtualclusterinstances: '10'
+    user:
+      limits.memory: 8Gi
   allowedClusters:
     - name: loft-cluster
   allowedTemplates:
-    - kind: DevPodWorkspaceTemplate
-      group: storage.loft.sh
-      name: '*'
-    - kind: SpaceTemplate
-      group: storage.loft.sh
-      name: '*'
     - kind: VirtualClusterTemplate
       group: storage.loft.sh
       name: vcluster-pro-template
+    - kind: VirtualClusterTemplate
+      group: storage.loft.sh
+      name: preview-template
+      isDefault: true
   requireTemplate: {}
   members:
     - kind: Team

@@ -1,0 +1,12 @@
+apiVersion: management.loft.sh/v1
+kind: VirtualClusterInstance
+metadata:
+  name: api-framework-dev
+  namespace: loft-p-api-framework
+spec:
+  owner:
+    user: anna-smith
+  templateRef:
+    name: vcluster-pro-template
+  clusterRef:
+    cluster: loft-cluster
