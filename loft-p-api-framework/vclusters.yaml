@@ -5,7 +5,7 @@ metadata:
   namespace: loft-p-api-framework
 spec:
   owner:
-    user: anna-smith
+    user: admin
   templateRef:
     name: vcluster-pro-template
   clusterRef:
