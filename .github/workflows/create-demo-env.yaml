@@ -1,0 +1,89 @@
+name: create-demo-environment
+
+# on merge to main from pull request (recommended)
+on:
+  workflow_dispatch:
+    inputs:
+      vcluster-name:
+        description: "Name of vcluster to be used as demo domain prefix"
+        required: true
+      cluster:
+        description: "Host cluster for vcluster"
+        type: choice
+        default: "worker-cluster-na"
+        options: 
+        - worker-cluster-na
+        - worker-cluster-eu
+      product:
+        description: "Loft product to demo"
+        type: choice
+        default: "vcluster-pro"
+        options: 
+        - vcluster-pro
+        - loft
+        - devpod-pro
+      logo:
+        description: "Company logo URL to override UI"
+        default: "https://www.vcluster.com/pro/docs/media/vclusterpro_orange.svg"
+      template-version:
+        description: "vcluster template version to use"
+        default: "1.0.0"
+      loft-cli-version:
+        description: 'Loft CLI version to use'
+        default: "v3.2.4"
+env:
+  LOFT_CLI_VERSION: ${{ inputs.loft-cli-version || 'v3.2.4' }}
+  VCLUSTER_NAME: ${{ inputs.vcluster-name }}
+  CLUSTER: ${{ inputs.cluster }}
+  TEMPLATE_VERSION: ${{ inputs.template-version }}
+  PRODUCT: ${{ inputs.product }}
+  LOGO: ${{ inputs.logo }}
+
+jobs:
+  create-demo-env:
+    runs-on: ubuntu-22.04
+    permissions:
+      id-token: write
+    steps:
+      - id: checkout
+        uses: actions/checkout@v4
+
+      - id: install-loft-cli
+        uses: loft-sh/setup-loft@v2
+        with:
+          version: ${{ env.LOFT_CLI_VERSION }}
+          url: ${{ secrets.LOFT_URL }}
+          # Specify your Loft access key here
+          access-key: ${{ secrets.LOFT_SALES_DEMO_ACCESS_KEY }}
+      
+      
+      - id: set-domain
+        run: |
+          if [ "$CLUSTER" == "worker-cluster-na" ]
+          then
+            echo "BASE_DOMAIN=$VCLUSTER_NAME.us.demo.dev" >> $GITHUB_ENV
+          else
+            echo "BASE_DOMAIN=$VCLUSTER_NAME.eu.demo.dev" >> $GITHUB_ENV
+          fi
+
+      - id: create-demo-vcluster
+        run: |
+          loft create vcluster $VCLUSTER_NAME --project sales-demos --recreate \
+            --template loft-demo --version $TEMPLATE_VERSION \
+            --cluster $CLUSTER \
+            --set loftProduct=$PRODUCT \
+            --set uiLogoURL=$LOGO
+            sed -i "s|REPLACE_BASE_DOMAIN|$BASE_DOMAIN|g" loft/projects.yaml
+          kubectl wait --for condition=established --timeout=60s crd/projects.management.loft.sh
+          kubectl apply -f ./loft -n loft
+          while ! kubectl get configmap argocd-rbac-cm -n argocd; do
+            echo "Waiting for argocd rbac configmap...";
+            sleep 1; 
+          done
+          kubectl patch configmap/argocd-rbac-cm \
+            -n argocd \
+            --type merge \
+            -p '{"data":{"policy.default":"role:readonly"}}'
+
+
+          
