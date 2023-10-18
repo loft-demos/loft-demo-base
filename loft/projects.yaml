@@ -20,7 +20,6 @@ spec:
     - kind: VirtualClusterTemplate
       group: storage.loft.sh
       name: preview-template
-      isDefault: true
   requireTemplate: {}
   members:
     - kind: Team
