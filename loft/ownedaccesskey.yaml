@@ -1,9 +1,0 @@
-apiVersion: management.loft.sh/v1
-kind: OwnedAccessKey
-metadata:
-  name: demo-env-access-key
-spec:
-  displayName: demo-env-access-key
-  type: User
-  user: admin
-  key: REPLACE_KEY
