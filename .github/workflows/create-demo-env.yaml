@@ -119,6 +119,15 @@ jobs:
         with:
           app_id: ${{ secrets.LOFT_DEMOS_GITHUB_APP_ID }}
           private_key: ${{ secrets.LOFT_DEMOS_GITHUB_APP_KEY }}
+      
+      - id: set-domain
+        run: |
+          if [ "$CLUSTER" == "worker-cluster-na" ]
+          then
+            echo "BASE_DOMAIN=$VCLUSTER_NAME.us.demo.dev" >> $GITHUB_ENV
+          else
+            echo "BASE_DOMAIN=$VCLUSTER_NAME.eu.demo.dev" >> $GITHUB_ENV
+          fi
 
       - id: create-echo-repo-from-template
         shell: bash
