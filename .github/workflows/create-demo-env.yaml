@@ -55,6 +55,7 @@ jobs:
           url: ${{ secrets.LOFT_URL }}
           # Specify your Loft access key here
           access-key: ${{ secrets.LOFT_SALES_DEMO_ACCESS_KEY }}
+          kubectl-install: false
       
       
       - id: set-domain
