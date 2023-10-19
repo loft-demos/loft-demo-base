@@ -78,6 +78,7 @@ jobs:
           
           sed -i "s|REPLACE_BASE_DOMAIN|$BASE_DOMAIN|g" loft/projects.yaml
           sed -i "s|REPLACE_BASE_DOMAIN|$BASE_DOMAIN|g" loft/apps.yaml
+          sed -i "s|LOFT_DEMO_GHCR_LOGIN_SECRET|${{ secrets.LOFT_DEMO_GHCR_LOGIN_SECRET }}|g" loft/sharedsecrets.yaml
 
           yq e -i ".spec.key = \"${{ secrets.LOFT_DEMO_ENV_ACCESS_KEY }}\"" loft/accesskey.yaml
 
@@ -89,9 +90,6 @@ jobs:
           done
           
           kubectl apply -f ./loft -n loft
-
-          loft set secret ghcr-login-secret.".dockerconfigjson" ${{ secrets.LOFT_DEMO_GHCR_LOGIN_SECRET }} -n loft
-          
           kubectl apply -f ./loft-p-api-framework
           
           while ! kubectl get configmap argocd-rbac-cm -n argocd; do
