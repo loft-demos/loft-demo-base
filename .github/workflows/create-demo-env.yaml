@@ -115,6 +115,7 @@ jobs:
           yq e -i ".spec.destination.namespace = \"$REPO_NAME\"" argocd/argocd-app.yaml
           kubectl apply -f argocd/argocd-app.yaml
 
+          loft login https://$BASE_DOMAIN --access-key 
           loft use vcluster api-framework-dev -p api-framework
           kubectl create namespace $REPO_NAME --dry-run=client -o yaml | kubectl apply -f -
           kubectl create secret docker-registry ghcr-login-secret -n $REPO_NAME --docker-server=https://ghcr.io \
