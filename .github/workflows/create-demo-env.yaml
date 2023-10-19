@@ -96,6 +96,11 @@ jobs:
             echo "Waiting for argocd rbac configmap...";
             sleep 1; 
           done
+
+          while ! kubectl get pod api-framework-dev-0 -n loft-api-framework-v-api-framework-dev; do
+            echo "Waiting for api-framework-dev vcluster...";
+            sleep 1; 
+          done
           
           kubectl patch configmap/argocd-rbac-cm \
             -n argocd \
@@ -114,11 +119,6 @@ jobs:
           yq e -i ".spec.source.repoURL = \"https://github.com/loft-demos/$REPO_NAME.git\"" argocd/argocd-app.yaml
           yq e -i ".spec.destination.namespace = \"$REPO_NAME\"" argocd/argocd-app.yaml
           kubectl apply -f argocd/argocd-app.yaml
-
-          while ! kubectl get pod api-framework-dev-0 -n loft-api-framework-v-api-framework-dev; do
-            echo "Waiting for api-framework-dev vcluster...";
-            sleep 1; 
-          done
 
           loft login https://$BASE_DOMAIN --access-key ${{ secrets.LOFT_DEMO_ENV_ACCESS_KEY }}
           loft use vcluster api-framework-dev -p api-framework
