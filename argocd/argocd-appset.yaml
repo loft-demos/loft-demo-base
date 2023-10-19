@@ -53,7 +53,7 @@ spec:
       project: "default"
       destination:
         server: https://LOFT_DOMAIN/kubernetes/project/api-framework/virtualcluster/REPO_NAME-pr-{{number}}
-        namespace: preview-REPO_NAME
+        namespace: preview-hello-world-app
       info:
         - name: Preview App Link
           value: >-
