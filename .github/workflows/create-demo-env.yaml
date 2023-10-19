@@ -110,13 +110,15 @@ jobs:
 
       - id: create-argocd-app
         run: |
-          kubectl create namespace $REPO_NAME --dry-run=client -o yaml | kubectl apply -f -
-          kubectl create secret docker-registry ghcr-login-secret -n $REPO_NAME --docker-server=https://ghcr.io \
-            --docker-username=km-demos --docker-password=${{ secrets.KM_MANAGE_PACKAGES_TOKEN }} --docker-email=km@kurtmadel.com
           yq e -i ".metadata.name = \"$REPO_NAME\"" argocd/argocd-app.yaml
           yq e -i ".spec.source.repoURL = \"https://github.com/loft-demos/$REPO_NAME.git\"" argocd/argocd-app.yaml
           yq e -i ".spec.destination.namespace = \"$REPO_NAME\"" argocd/argocd-app.yaml
           kubectl apply -f argocd/argocd-app.yaml
+          
+          loft use vcluster api-framework-dev -p api-framework
+          kubectl create namespace $REPO_NAME --dry-run=client -o yaml | kubectl apply -f -
+          kubectl create secret docker-registry ghcr-login-secret -n $REPO_NAME --docker-server=https://ghcr.io \
+            --docker-username=km-demos --docker-password=${{ secrets.KM_MANAGE_PACKAGES_TOKEN }} --docker-email=km@kurtmadel.com
 
   create-demo-app:
     runs-on: ubuntu-22.04
