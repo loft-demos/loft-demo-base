@@ -4,7 +4,7 @@ metadata:
   name: APPLICATION_NAME
   namespace: argocd
 spec:
-  project: loft-api-framework
+  project: default
 
   source:
     repoURL: 
