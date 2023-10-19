@@ -191,6 +191,7 @@ jobs:
 
           sed -i "s|REPO_NAME|$REPO_NAME|g" helm-chart/Chart.yaml
           sed -i "s|REPO_NAME|$REPO_NAME|g" helm-chart/values.yaml
+          sed -i "s|REPLACE_LOFT_DEMO_DOMAIN|$BASE_DOMAIN|g" helm-chart/values.yaml
           sed -i "s|REPLACE_LOFT_DEMO_DOMAIN|$BASE_DOMAIN|g" .github/workflows/create-pr-preview.yaml
           sed -i "s|REPLACE_LOFT_DEMO_DOMAIN|$BASE_DOMAIN|g" .github/workflows/delete-pr-preview.yaml
           git commit -am "updating repo name and loft demo url"
