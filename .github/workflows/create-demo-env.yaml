@@ -186,7 +186,7 @@ jobs:
       - id: update-cloned-repo
         shell: bash
         env:
-          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
+          GITHUB_TOKEN: ${{ steps.generate-githubapp-token.outputs.token }}
         run: |
           cd $REPO_NAME
           ls -la
