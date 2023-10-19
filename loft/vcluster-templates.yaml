@@ -2,15 +2,18 @@ apiVersion: management.loft.sh/v1
 kind: VirtualClusterTemplate
 metadata:
   name: vcluster-pro-template
+  labels:
+    app.kubernetes.io/instance: loft-configuration
 spec:
   displayName: Virtual Cluster Pro Template
-  description: This virtual cluster template deploys a vcluster pro
+  description: This virtual cluster template deploys a vCluster.Pro virtual cluster
+  owner:
+    team: loft-admins
   template:
     metadata: {}
     instanceTemplate:
       metadata: {}
-    pro:
-      enabled: true
+    pro: {}
     helmRelease:
       chart: {}
       values: |-
