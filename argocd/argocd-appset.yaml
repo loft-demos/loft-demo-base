@@ -50,11 +50,9 @@ spec:
             value: prefix
           - name: "ingress.tls[0].hosts[0]"
             value: REPO_NAME-pr-{{number}}-LOFT_DOMAIN
-          - name: "ingress.tls[0].secretName"
-            value: preview-tls
-      project: "loft-preview"
+      project: "loft-api-framework"
       destination:
-        server: https://LOFT_DOMAIN/kubernetes/project/preview/virtualcluster/REPO_NAME-pr-{{number}}
+        server: https://LOFT_DOMAIN/kubernetes/project/api-framework/virtualcluster/REPO_NAME-pr-{{number}}
         namespace: preview-REPO_NAME
       info:
         - name: Preview App Link

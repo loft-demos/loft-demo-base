@@ -1,0 +1,27 @@
+apiVersion: management.loft.sh/v1
+kind: App
+metadata:
+  name: helm-dashboard
+spec:
+  displayName: Helm Dashboard
+  description: Helm Dashboard offers a UI-driven way to view the installed Helm charts
+  owner:
+    team: loft-admins
+  config:
+    chart:
+      name: helm-dashboard
+      version: 0.1.10
+      repoURL: https://helm-charts.komodor.io
+    values: |-
+      ingress:
+        enabled: true
+        className: "nginx"
+        annotations: {}
+        hosts:
+          - host: helm-dashboard-REPLACE_BASE_DOMAIN
+            paths:
+              - path: /
+                pathType: ImplementationSpecific
+        tls:
+          - hosts:
+              - helm-dashboard-REPLACE_BASE_DOMAIN

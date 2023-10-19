@@ -1,3 +1,96 @@
+apiVersion: management.loft.sh/v1
+kind: VirtualClusterTemplate
+metadata:
+  name: vcluster-pro-template
+spec:
+  displayName: Virtual Cluster Pro Template
+  description: This virtual cluster template deploys a vcluster pro
+  template:
+    metadata: {}
+    instanceTemplate:
+      metadata: {}
+    pro:
+      enabled: true
+    helmRelease:
+      chart: {}
+      values: |-
+        # Below you can configure the virtual cluster
+        isolation:
+          enabled: false
+
+        sync:
+          ingresses:
+            enabled: true
+
+        coredns:
+          integrated: true
+
+        # Checkout https://vcluster.com/pro/docs/ for more config options
+    accessPoint:
+      ingress: {}
+    spaceTemplate:
+      metadata: {}
+  versions:
+    - template:
+        metadata: {}
+        instanceTemplate:
+          metadata: {}
+        pro:
+          enabled: true
+        helmRelease:
+          chart: {}
+          values: |-
+            # Below you can configure the virtual cluster
+            isolation:
+              enabled: false
+
+            sync:
+              ingresses:
+                enabled: true
+
+            coredns:
+              integrated: true
+
+            # Checkout https://vcluster.com/pro/docs/ for more config options
+        accessPoint:
+          ingress: {}
+        spaceTemplate:
+          metadata: {}
+      version: 1.0.0
+    - template:
+        metadata: {}
+        instanceTemplate:
+          metadata: {}
+        pro:
+          enabled: true
+        helmRelease:
+          chart: {}
+          values: |-
+            # Below you can configure the virtual cluster
+            isolation:
+              enabled: false
+
+            sync:
+              ingresses:
+                enabled: true
+
+            coredns:
+              integrated: true
+
+            # Checkout https://vcluster.com/pro/docs/ for more config options
+        accessPoint:
+          ingress: {}
+        spaceTemplate:
+          metadata: {}
+      version: 0.0.0
+  access:
+    - verbs:
+        - '*'
+      subresources:
+        - '*'
+      users:
+        - admin
+---
 kind: VirtualClusterTemplate
 apiVersion: management.loft.sh/v1
 metadata:

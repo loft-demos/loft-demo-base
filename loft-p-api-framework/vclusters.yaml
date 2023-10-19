@@ -3,10 +3,13 @@ kind: VirtualClusterInstance
 metadata:
   name: api-framework-dev
   namespace: loft-p-api-framework
+  labels:
+    loft.sh/import-argocd: 'true'
 spec:
   owner:
     user: admin
   templateRef:
     name: vcluster-pro-template
+    version: 1.0.x
   clusterRef:
     cluster: loft-cluster
