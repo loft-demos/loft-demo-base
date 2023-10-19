@@ -209,4 +209,14 @@ jobs:
           git commit -am "trigger src build"
           git push origin main
 
+          git checkout -b feature-x
+          echo >> src/Dockerfile
+          git commit -am "adding new feature X"
+          git push origin feature-x
+            
+          curl -H 'Accept: application/vnd.github.antiope-preview+json' \
+            -H "authorization: Bearer $GITHUB_TOKEN" \
+            --data '{"title":"New Feature X","head":"feature-x","base":"main"}' \
+            https://api.github.com/repos/loft-demos/$REPO_NAME/pulls
+
           
