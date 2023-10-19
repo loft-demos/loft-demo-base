@@ -50,7 +50,7 @@ spec:
             value: prefix
           - name: "ingress.tls[0].hosts[0]"
             value: REPO_NAME-pr-{{number}}-LOFT_DOMAIN
-      project: "loft-api-framework"
+      project: "default"
       destination:
         server: https://LOFT_DOMAIN/kubernetes/project/api-framework/virtualcluster/REPO_NAME-pr-{{number}}
         namespace: preview-REPO_NAME
