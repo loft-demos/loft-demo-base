@@ -4,14 +4,14 @@ metadata:
   name: APPLICATION_NAME
   namespace: argocd
 spec:
-  project: default
+  project: loft-api-framework
 
   source:
     repoURL: 
     targetRevision: main
     path: helm-chart
   destination: 
-    server: https://kubernetes.default.svc
+    name: loft-api-framework-vcluster-api-framework-dev
     namespace: PREVIEW_NAMESPACE
 
   syncPolicy:
