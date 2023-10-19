@@ -79,7 +79,7 @@ jobs:
           sed -i "s|REPLACE_BASE_DOMAIN|$BASE_DOMAIN|g" loft/projects.yaml
           sed -i "s|REPLACE_BASE_DOMAIN|$BASE_DOMAIN|g" loft/apps.yaml
 
-          yq e -i ".spec.data.\".dockerconfigjson\"" = \"${{ secrets.LOFT_DEMO_GHCR_LOGIN_SECRET }}\"" loft/sharedsecrets.yaml
+          yq e -i ".spec.data.\".dockerconfigjson\" = \"${{ secrets.LOFT_DEMO_GHCR_LOGIN_SECRET }}\"" loft/sharedsecrets.yaml
           yq e -i ".spec.key = \"${{ secrets.LOFT_DEMO_ENV_ACCESS_KEY }}\"" loft/accesskey.yaml
 
           kubectl get pods -A
