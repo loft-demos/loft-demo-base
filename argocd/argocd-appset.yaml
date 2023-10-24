@@ -16,7 +16,7 @@ spec:
         # Labels is used to filter the PRs that you want to target. (optional)
         labels:
         - preview-cluster-ready
-      requeueAfterSeconds: 180
+      requeueAfterSeconds: 30
   template:
     metadata:
       name: 'REPO_NAME-{{branch}}-{{number}}'
