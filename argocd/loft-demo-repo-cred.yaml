@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: loft-demo-org-cred
+  namespace: argocd
+  labels:
+    argocd.argoproj.io/secret-type: repo-creds
+data:
+  githubAppID: REPLACE_APP_ID
+  githubAppInstallationID: REPLACE_INSTALL_ID
+  githubAppPrivateKey: |
+    REPLACE_APP_PRIVATE_KEY
+  url: https://github.com/loft-demos
+type: Opaque
