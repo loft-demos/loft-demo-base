@@ -135,27 +135,12 @@ jobs:
           kubectl create secret docker-registry ghcr-login-secret -n $REPO_NAME --docker-server=https://ghcr.io \
             --docker-username=km-demos --docker-password=${{ secrets.KM_MANAGE_PACKAGES_TOKEN }} --docker-email=km@kurtmadel.com
 
-  create-demo-app:
-    runs-on: ubuntu-22.04
-    permissions:
-      id-token: write
-      contents: read
-    steps:
       - id: generate-githubapp-token
         uses: tibdex/github-app-token@v1.8.0
         with:
           app_id: ${{ secrets.LOFT_DEMOS_GITHUB_APP_ID }}
           private_key: ${{ secrets.LOFT_DEMOS_GITHUB_APP_KEY }}
       
-      - id: set-domain
-        run: |
-          if [ "$CLUSTER" == "worker-cluster-na" ]
-          then
-            echo "BASE_DOMAIN=$VCLUSTER_NAME.us.demo.dev" >> $GITHUB_ENV
-          else
-            echo "BASE_DOMAIN=$VCLUSTER_NAME.eu.demo.dev" >> $GITHUB_ENV
-          fi
-
       - id: create-echo-repo-from-template
         shell: bash
         env:
