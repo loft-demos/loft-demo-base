@@ -8,7 +8,6 @@ metadata:
 data:
   githubAppID: REPLACE_APP_ID
   githubAppInstallationID: REPLACE_INSTALL_ID
-  githubAppPrivateKey: |
-    REPLACE_APP_PRIVATE_KEY
+  githubAppPrivateKey: REPLACE_APP_PRIVATE_KEY
   url: https://github.com/loft-demos
 type: Opaque

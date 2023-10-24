@@ -107,9 +107,9 @@ jobs:
             --type merge \
             -p '{"data":{"policy.default":"role:readonly"}}'
 
-          sed -i "s|REPLACE_APP_ID|${{ secrets.LOFT_DEMOS_GITHUB_APP_ID }}|g" argocd/loft-demo-repo-cred.yaml
-          sed -i "s|REPLACE_INSTALL_ID|${{ secrets.LOFT_DEMOS_GITHUB_APP_INSTANCE_ID }}|g" argocd/loft-demo-repo-cred.yaml
-          sed -i "s|REPLACE_APP_PRIVATE_KEY|${{ secrets.LOFT_DEMOS_GITHUB_APP_KEY }}|g" argocd/loft-demo-repo-cred.yaml
+          yq e -i ".data.githubAppID = \"${{ secrets.LOFT_DEMOS_GITHUB_APP_ID }}\"" argocd/loft-demo-repo-cred.yaml
+          yq e -i ".data.githubAppInstallationID = \"${{ secrets.LOFT_DEMOS_GITHUB_APP_INSTANCE_ID }}\"" argocd/loft-demo-repo-cred.yaml
+          yq e -i ".data.githubAppPrivateKey = \"${{ secrets.LOFT_DEMOS_GITHUB_APP_KEY }}\"" argocd/loft-demo-repo-cred.yaml
           kubectl apply -f argocd/loft-demo-repo-cred.yaml
 
           POD=$(kubectl get pod -l app.kubernetes.io/name=argocd-applicationset-controller -n argocd -o jsonpath="{.items[0].metadata.name}")
