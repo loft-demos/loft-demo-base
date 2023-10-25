@@ -110,6 +110,7 @@ jobs:
           yq e -i ".data.githubAppID = \"${{ secrets.BASE64_LOFT_DEMOS_GITHUB_APP_ID }}\"" argocd/loft-demo-repo-cred.yaml
           yq e -i ".data.githubAppInstallationID = \"${{ secrets.BASE64_LOFT_DEMOS_GITHUB_APP_INSTALL_ID }}\"" argocd/loft-demo-repo-cred.yaml
           yq e -i ".data.githubAppPrivateKey = \"${{ secrets.BASE64_LOFT_DEMOS_GITHUB_APP_KEY }}\"" argocd/loft-demo-repo-cred.yaml
+          more argocd/loft-demo-repo-cred.yaml
           kubectl apply -f argocd/loft-demo-repo-cred.yaml
 
           POD=$(kubectl get pod -l app.kubernetes.io/name=argocd-applicationset-controller -n argocd -o jsonpath="{.items[0].metadata.name}")
