@@ -9,5 +9,5 @@ data:
   githubAppID: REPLACE_APP_ID
   githubAppInstallationID: REPLACE_INSTALL_ID
   githubAppPrivateKey: REPLACE_APP_PRIVATE_KEY
-  url: https://github.com/loft-demos
+  url: aHR0cHM6Ly9naXRodWIuY29tL2xvZnQtZGVtb3MK
 type: Opaque
