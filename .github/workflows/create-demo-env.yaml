@@ -115,7 +115,7 @@ jobs:
 
           POD=$(kubectl get pod -l app.kubernetes.io/name=argocd-applicationset-controller -n argocd -o jsonpath="{.items[0].metadata.name}")
           echo $POD
-          kubectl delete $POD -n arogcd
+          kubectl delete pod $POD -n arogcd
 
       - id: create-argocd-pr-app-set
         run: |
