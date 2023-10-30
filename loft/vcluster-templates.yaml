@@ -21,6 +21,9 @@ spec:
         isolation:
           enabled: false
 
+        vcluster:
+          image: rancher/k3s:{{ .Values.k8sVersion }}-k3s1
+
         sync:
           ingresses:
             enabled: true
@@ -47,6 +50,9 @@ spec:
             isolation:
               enabled: false
 
+            vcluster:
+              image: rancher/k3s:{{ .Values.k8sVersion }}-k3s1
+
             sync:
               ingresses:
                 enabled: true
@@ -59,6 +65,15 @@ spec:
           ingress: {}
         spaceTemplate:
           metadata: {}
+      parameters:
+        - variable: k8sVersion
+          label: k8sVersion
+          description: Please select product to be demoed
+          options:
+            - v1.28.2
+            - v1.27.5
+            - v1.26.9
+          defaultValue: v1.27.5
       version: 1.0.0
     - template:
         metadata: {}
