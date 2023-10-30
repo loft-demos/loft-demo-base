@@ -10,4 +10,5 @@ data:
   githubAppInstallationID: REPLACE_INSTALL_ID
   githubAppPrivateKey: REPLACE_APP_PRIVATE_KEY
   url: aHR0cHM6Ly9naXRodWIuY29tL2xvZnQtZGVtb3MK
+  type: aGVsbQ==
 type: Opaque
