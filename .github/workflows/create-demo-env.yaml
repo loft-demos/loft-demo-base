@@ -113,7 +113,7 @@ jobs:
           more argocd/loft-demo-repo-cred.yaml
           kubectl apply -f argocd/loft-demo-repo-cred.yaml
           
-          kubectl delete pod -l app.kubernetes.io/name=argocd-applicationset-controller -n argocd -o jsonpath="{.items[0].metadata.name}"
+          kubectl delete pod -l app.kubernetes.io/name=argocd-applicationset-controller -n argocd
 
       - id: create-argocd-pr-app-set
         run: |
