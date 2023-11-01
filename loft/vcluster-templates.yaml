@@ -70,6 +70,7 @@ spec:
           label: k8sVersion
           description: Please select product to be demoed
           options:
+            - v1.28.3
             - v1.28.2
             - v1.27.5
             - v1.26.9
