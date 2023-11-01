@@ -102,11 +102,6 @@ jobs:
             sleep 1; 
           done
           
-          kubectl patch configmap/argocd-rbac-cm \
-            -n argocd \
-            --type merge \
-            -p '{"data":{"policy.default":"role:readonly"}}'
-          
           yq e -i ".data.githubAppID = \"${{ secrets.BASE64_LOFT_DEMOS_GITHUB_APP_ID }}\"" argocd/loft-demo-repo-cred.yaml
           yq e -i ".data.githubAppInstallationID = \"${{ secrets.BASE64_LOFT_DEMOS_GITHUB_APP_INSTALL_ID }}\"" argocd/loft-demo-repo-cred.yaml
           yq e -i ".data.githubAppPrivateKey = \"${{ secrets.BASE64_LOFT_DEMOS_GITHUB_APP_KEY }}\"" argocd/loft-demo-repo-cred.yaml
