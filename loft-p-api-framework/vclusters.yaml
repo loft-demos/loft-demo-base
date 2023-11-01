@@ -13,3 +13,5 @@ spec:
     version: 1.0.x
   clusterRef:
     cluster: loft-cluster
+  parameters: |
+    k8sVersion: v1.27.5
