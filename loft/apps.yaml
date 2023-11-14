@@ -7,6 +7,11 @@ spec:
   description: Helm Dashboard offers a UI-driven way to view the installed Helm charts
   owner:
     team: loft-admins
+  recommendedApp:
+    - virtualcluster
+  defaultNamespace: helm-dashboard
+  icon: >-
+    https://raw.githubusercontent.com/komodorio/helm-dashboard/main/images/logo-header.svg#gh-light-mode-only
   config:
     chart:
       name: helm-dashboard
