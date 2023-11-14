@@ -40,7 +40,10 @@ spec:
     - template:
         metadata: {}
         instanceTemplate:
-          metadata: {}
+          metadata:
+            labels:
+              environment: '{{ .Values.environment }}'
+              team: '{{ .Values.loft.project }}'
         pro:
           enabled: true
         helmRelease:
@@ -68,13 +71,23 @@ spec:
       parameters:
         - variable: k8sVersion
           label: k8sVersion
-          description: Please select product to be demoed
+          description: Please select Kubernetes version
+          type: select
           options:
             - v1.28.3
             - v1.28.2
             - v1.27.5
             - v1.26.9
           defaultValue: v1.27.5
+        - variable: environment
+          label: Deployment Environment
+          description: Environment for deployments
+          type: select
+          options:
+            - dev
+            - staging
+            - production
+          defaultValue: dev
       version: 1.0.0
     - template:
         metadata: {}
