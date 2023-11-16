@@ -72,7 +72,6 @@ spec:
         - variable: k8sVersion
           label: k8sVersion
           description: Please select Kubernetes version
-          type: select
           options:
             - v1.28.3
             - v1.28.2
@@ -82,7 +81,6 @@ spec:
         - variable: environment
           label: Deployment Environment
           description: Environment for deployments
-          type: select
           options:
             - dev
             - staging
