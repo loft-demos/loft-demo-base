@@ -72,7 +72,7 @@ jobs:
         run: |
           loft create vcluster $VCLUSTER_NAME --project sales-demos --recreate \
             --template loft-demo --version $TEMPLATE_VERSION \
-            --cluster $CLUSTER \
+            --cluster '$CLUSTER' \
             --set loftProduct=$PRODUCT \
             --set uiLogoURL=$LOGO
           
