@@ -25,6 +25,10 @@ on:
         - vcluster-pro
         - loft
         - devpod-pro
+      create-dev-cluster:
+        type: boolean
+        description: 'Create dev vCluster to use as fake cluster'
+        default: false
       argocd-app:
         type: boolean
         description: 'Include Argo CD Demo App'
@@ -44,6 +48,7 @@ env:
   LOGO: ${{ inputs.logo }}
   REPO_NAME: 'hello-app-${{ inputs.vcluster-name }}'
   ARGOCD_APP: ${{ inputs.argocd-app || false }}
+  CREATE_DEV_CLUSTER: ${{ inputs.create-dev-cluster || false }}
 
 jobs:
   create-demo-env:
@@ -114,6 +119,11 @@ jobs:
           kubectl apply -f argocd/loft-demo-repo-cred.yaml
           
           kubectl delete pod -l app.kubernetes.io/name=argocd-applicationset-controller -n argocd
+
+      - id: create-dev-cluster
+        if: ${{ github.env.CREATE_DEV_CLUSTER }}
+        run: |
+          
 
       - id: create-argocd-pr-app-set
         run: |
