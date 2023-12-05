@@ -78,6 +78,11 @@ jobs:
             echo "BASE_DOMAIN=$VCLUSTER_NAME.eu.demo.dev" >> $GITHUB_ENV
           fi
 
+      - id: create-dev-cluster
+        if: ${{ github.env.CREATE_DEV_CLUSTER }}
+        run: |
+          echo "TODO: create dev cluster"  
+
       - id: create-demo-vcluster
         run: |
           loft create vcluster $VCLUSTER_NAME --project sales-demos --recreate \
@@ -119,11 +124,6 @@ jobs:
           kubectl apply -f argocd/loft-demo-repo-cred.yaml
           
           kubectl delete pod -l app.kubernetes.io/name=argocd-applicationset-controller -n argocd
-
-      - id: create-dev-cluster
-        if: ${{ github.env.CREATE_DEV_CLUSTER }}
-        run: |
-          
 
       - id: create-argocd-pr-app-set
         run: |

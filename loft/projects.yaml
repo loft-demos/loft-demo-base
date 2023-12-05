@@ -10,7 +10,7 @@ spec:
     project:
       count/virtualclusterinstances: '10'
     user:
-      limits.memory: 8Gi
+      requests.memory: 8Gi
   allowedClusters:
     - name: loft-cluster
   allowedTemplates:
