@@ -48,7 +48,7 @@ spec:
           enabled: true
         helmRelease:
           chart: 
-            version: v0.18.0-alpha.0
+            version: v0.18.0
           values: |-
             # Below you can configure the virtual cluster
             isolation:
@@ -67,15 +67,6 @@ spec:
 
             coredns:
               integrated: true
-
-            syncer:
-              resources:
-                limits:
-                  cpu: 1
-                  memory: 1Gi
-                requests:
-                  cpu: 200m
-                  memory: 256Mi
 
             # Checkout https://vcluster.com/pro/docs/ for more config options
         accessPoint:
@@ -173,11 +164,15 @@ spec:
     pro:
       enabled: true
     helmRelease:
-      chart: {}
+      chart: 
+        version: v0.18.0
       values: |-
         sync:
           ingresses:
             enabled: true
+        # Use an embedded managed etcd server instead of using the default SQLite backend
+        embeddedEtcd:
+          enabled: true
         isolation:
           enabled: true
           networkPolicy:
