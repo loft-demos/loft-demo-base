@@ -54,7 +54,7 @@ spec:
             isolation:
               enabled: false
 
-            # Use an embedded managed etcd server instead of using the default SQLite backend
+            # Use an embedded managed etcd server instead of using the k3s default SQLite backend
             embeddedEtcd:
               enabled: true
 
@@ -170,7 +170,7 @@ spec:
         sync:
           ingresses:
             enabled: true
-        # Use an embedded managed etcd server instead of using the default SQLite backend
+        # Use an embedded managed etcd server instead of using the k3s default SQLite backend
         embeddedEtcd:
           enabled: true
         isolation:
