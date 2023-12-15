@@ -125,6 +125,8 @@ jobs:
           
           kubectl delete pod -l app.kubernetes.io/name=argocd-applicationset-controller -n argocd
 
+          kubectl delete apiservice v1beta1.metrics.k8s.io
+
       - id: create-argocd-pr-app-set
         run: |
           sed -i "s|REPO_NAME|$REPO_NAME|g" argocd/argocd-appset.yaml
