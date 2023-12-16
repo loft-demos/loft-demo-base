@@ -42,6 +42,7 @@ on:
 env:
   LOFT_CLI_VERSION: ${{ inputs.loft-cli-version || 'v3.3.0' }}
   VCLUSTER_NAME: ${{ inputs.vcluster-name }}
+  DEV_VCLUSTER_NAME: ${{ inputs.vcluster-name }}-dev-cluster
   CLUSTER: ${{ inputs.cluster }}
   TEMPLATE_VERSION: ${{ inputs.template-version }}
   PRODUCT: ${{ inputs.product }}
@@ -82,7 +83,8 @@ jobs:
       - id: create-dev-cluster
         if: ${{ inputs.create-dev-cluster }}
         run: |
-          loft create vcluster "$VCLUSTER_NAME-dev-cluster" --project sales-demos --recreate \
+          echo $DEV_VCLUSTER_NAME
+          loft create vcluster $DEV_VCLUSTER_NAME --project sales-demos --recreate \
             --template demo-dev-cluster \
             --create-context false \
             --cluster $CLUSTER
