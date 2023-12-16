@@ -71,6 +71,7 @@ jobs:
       
       - id: set-domain
         run: |
+          echo $CREATE_DEV_CLUSTER
           if [ "$CLUSTER" == "worker-cluster-na" ]
           then
             echo "BASE_DOMAIN=$VCLUSTER_NAME.us.demo.dev" >> $GITHUB_ENV
@@ -79,7 +80,7 @@ jobs:
           fi
 
       - id: create-dev-cluster
-        if: ${{ github.env.CREATE_DEV_CLUSTER }}
+        if: ${{ inputs.create-dev-cluster }}
         run: |
           loft create vcluster $VCLUSTER_NAME-dev-cluster --project sales-demos --recreate \
             --template demo-dev-cluster \
@@ -215,7 +216,7 @@ jobs:
             https://api.github.com/repos/loft-demos/$REPO_NAME/pulls
 
       - id: connect-dev-cluster
-        if: ${{ github.env.CREATE_DEV_CLUSTER }}
+        if: ${{ inputs.create-dev-cluster }}
         run: |
           loft use cluster worker-cluster-na
           kubectl get secret vc-$VCLUSTER_NAME-dev-cluster -n loft-sales-demos-v-$VCLUSTER_NAME-dev-cluster --template={{.data.config}} | base64 -D > $VCLUSTER_NAME-dev-cluster-config.yaml
@@ -224,7 +225,7 @@ jobs:
 
 
       - id: create-argocd-app
-        if: ${{ github.env.ARGOCD_APP }}
+        if: ${{ inputs.argocd-app }}
         run: |
           yq e -i ".metadata.name = \"$REPO_NAME\"" argocd/argocd-app.yaml
           yq e -i ".spec.source.repoURL = \"https://github.com/loft-demos/$REPO_NAME.git\"" argocd/argocd-app.yaml
