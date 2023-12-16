@@ -82,7 +82,7 @@ jobs:
       - id: create-dev-cluster
         if: ${{ inputs.create-dev-cluster }}
         run: |
-          loft create vcluster $VCLUSTER_NAME-dev-cluster --project sales-demos --recreate \
+          loft create vcluster "$VCLUSTER_NAME-dev-cluster" --project sales-demos --recreate \
             --template demo-dev-cluster \
             --create-context false \
             --cluster $CLUSTER
