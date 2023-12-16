@@ -86,7 +86,6 @@ jobs:
           echo $DEV_VCLUSTER_NAME
           loft create vcluster $DEV_VCLUSTER_NAME --project sales-demos --recreate \
             --template demo-dev-cluster \
-            --create-context false \
             --cluster $CLUSTER
 
       - id: create-demo-vcluster
@@ -221,9 +220,9 @@ jobs:
         if: ${{ inputs.create-dev-cluster }}
         run: |
           loft use cluster worker-cluster-na
-          kubectl get secret vc-$VCLUSTER_NAME-dev-cluster -n loft-sales-demos-v-$VCLUSTER_NAME-dev-cluster --template={{.data.config}} | base64 -D > $VCLUSTER_NAME-dev-cluster-config.yaml
+          kubectl get secret vc-$DEV_VCLUSTER_NAME -n loft-sales-demos-v-$DEV_VCLUSTER_NAME --template={{.data.config}} | base64 -D > $DEV_VCLUSTER_NAME-config.yaml
           loft login https://$BASE_DOMAIN --access-key ${{ secrets.LOFT_DEMO_ENV_ACCESS_KEY }}
-          KUBECONFIG=$VCLUSTER_NAME-dev-cluster-config.yaml loft connect cluster dev-cluster --display-name 'Dev Cluster'
+          KUBECONFIG=$DEV_VCLUSTER_NAME-config.yaml loft connect cluster dev-cluster --display-name 'Dev Cluster'
 
 
       - id: create-argocd-app
