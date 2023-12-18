@@ -78,18 +78,17 @@ spec:
           label: k8sVersion
           description: Please select Kubernetes version
           options:
-            - v1.28.3
-            - v1.28.2
-            - v1.27.5
-            - v1.26.9
-          defaultValue: v1.27.5
-        - variable: environment
+            - v1.28.4
+            - v1.27.8
+            - v1.26.11
+          defaultValue: v1.27.8
+        - variable: env
           label: Deployment Environment
-          description: Environment for deployments
+          description: Environment for deployments for this vCluster used as cluster label for Argo CD ApplicationSet Cluster Generator
           options:
             - dev
-            - staging
-            - production
+            - qa
+            - prod
           defaultValue: dev
       version: 1.0.0
     - template:

@@ -132,12 +132,6 @@ jobs:
 
           kubectl delete apiservice v1beta1.metrics.k8s.io
 
-      - id: create-argocd-pr-app-set
-        run: |
-          sed -i "s|REPO_NAME|$REPO_NAME|g" argocd/argocd-appset.yaml
-          sed -i "s|LOFT_DOMAIN|$BASE_DOMAIN|g" argocd/argocd-appset.yaml
-          kubectl apply -f argocd/argocd-appset.yaml
-
       - id: generate-githubapp-token
         uses: tibdex/github-app-token@v1.8.0
         with:
@@ -171,7 +165,6 @@ jobs:
           path: ${{ env.REPO_NAME }}
           ref: main
 
-      
       - id: wait-for-repo
         shell: bash
         run: |
@@ -216,6 +209,15 @@ jobs:
             --data '{"title":"New Feature X","head":"feature-x","base":"main"}' \
             https://api.github.com/repos/loft-demos/$REPO_NAME/pulls
 
+      - id: create-argocd-app-sets
+        run: |
+          sed -i "s|REPO_NAME|$REPO_NAME|g" argocd/argocd-appset.yaml
+          sed -i "s|LOFT_DOMAIN|$BASE_DOMAIN|g" argocd/argocd-appset.yaml
+          kubectl apply -f argocd/argocd-appset.yaml
+          sed -i "s|REPO_NAME|$REPO_NAME|g" argocd/argocd-cluster-appset.yaml
+          sed -i "s|LOFT_DOMAIN|$BASE_DOMAIN|g" argocd/argocd-cluster-appset.yaml
+          kubectl apply -f argocd/argocd-cluster-appset.yaml
+
       - id: connect-dev-cluster
         if: ${{ inputs.create-dev-cluster }}
         run: |
@@ -223,7 +225,6 @@ jobs:
           kubectl get secret vc-$DEV_VCLUSTER_NAME -n loft-sales-demos-v-$DEV_VCLUSTER_NAME --template={{.data.config}} | base64 --decode > $DEV_VCLUSTER_NAME-config.yaml
           loft login https://$BASE_DOMAIN --access-key ${{ secrets.LOFT_DEMO_ENV_ACCESS_KEY }}
           KUBECONFIG=$DEV_VCLUSTER_NAME-config.yaml loft connect cluster dev-cluster --display-name 'Dev Cluster'
-
 
       - id: create-argocd-app
         if: ${{ inputs.argocd-app }}
