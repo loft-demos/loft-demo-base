@@ -5,7 +5,7 @@ metadata:
 spec:
   displayName: API Framework
   owner:
-    user: kurtmadel
+    team: loft-admins
   quotas:
     project:
       count/virtualclusterinstances.active: '10'
@@ -36,7 +36,7 @@ spec:
       subresources:
         - '*'
       users:
-        - kurtmadel
+        - admin
     - name: loft-access
       verbs:
         - get
@@ -68,7 +68,7 @@ spec:
   displayName: Auth Core
   description: AuthN and AuthZ core components built on top of the API Framework.
   owner:
-    user: kurtmadel
+    team: loft-admins
   quotas:
     project:
       count/virtualclusterinstances.active: '20'

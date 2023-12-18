@@ -42,7 +42,7 @@ spec:
         instanceTemplate:
           metadata:
             labels:
-              environment: '{{ .Values.environment }}'
+              env: '{{ .Values.env }}'
               team: '{{ .Values.loft.project }}'
         pro:
           enabled: true
