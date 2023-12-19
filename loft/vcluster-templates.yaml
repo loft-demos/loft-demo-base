@@ -38,7 +38,9 @@ spec:
       metadata: {}
   versions:
     - template:
-        metadata: {}
+        metadata:
+          labels:
+            loft.sh/import-argocd: 'true'
         instanceTemplate:
           metadata:
             labels:
