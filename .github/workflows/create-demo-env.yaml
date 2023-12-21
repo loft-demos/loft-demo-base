@@ -117,8 +117,8 @@ jobs:
             sleep 1; 
           done
 
-          while ! kubectl get pod api-framework-dev-0 -n loft-api-framework-v-api-framework-dev; do
-            echo "Waiting for api-framework-dev vcluster...";
+          while ! kubectl get pod api-framework-qa-0 -n loft-api-framework-v-api-framework-qa; do
+            echo "Waiting for api-framework-qa vcluster...";
             sleep 1; 
           done
           
@@ -235,7 +235,7 @@ jobs:
           kubectl apply -f argocd/argocd-app.yaml
 
           loft login https://$BASE_DOMAIN --access-key ${{ secrets.LOFT_DEMO_ENV_ACCESS_KEY }}
-          loft use vcluster api-framework-dev -p api-framework
+          loft use vcluster api-framework-qa -p api-framework
           kubectl create namespace $REPO_NAME --dry-run=client -o yaml | kubectl apply -f -
           kubectl create secret docker-registry ghcr-login-secret -n $REPO_NAME --docker-server=https://ghcr.io \
             --docker-username=km-demos --docker-password=${{ secrets.KM_MANAGE_PACKAGES_TOKEN }} --docker-email=km@kurtmadel.com
