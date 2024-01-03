@@ -221,7 +221,7 @@ jobs:
       - id: connect-dev-cluster
         if: ${{ inputs.create-dev-cluster }}
         run: |
-          loft use cluster worker-cluster-na
+          loft use cluster $CLUSTER
           kubectl get secret vc-$DEV_VCLUSTER_NAME -n loft-sales-demos-v-$DEV_VCLUSTER_NAME --template={{.data.config}} | base64 --decode > $DEV_VCLUSTER_NAME-config.yaml
           loft login https://$BASE_DOMAIN --access-key ${{ secrets.LOFT_DEMO_ENV_ACCESS_KEY }}
           KUBECONFIG=$DEV_VCLUSTER_NAME-config.yaml loft connect cluster dev-cluster --display-name 'Dev Cluster'
