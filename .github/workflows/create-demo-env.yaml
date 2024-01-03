@@ -5,13 +5,13 @@ on:
   workflow_dispatch:
     inputs:
       vcluster-name:
-        description: "Name of vcluster to be used as demo domain prefix"
+        description: "Name of vCluster to be used as demo domain prefix"
         required: true
       logo:
         description: "Company logo URL to override UI"
         default: "https://www.vcluster.com/pro/docs/media/vclusterpro_orange.svg"
       cluster:
-        description: "Host cluster for vcluster"
+        description: "Host cluster for vCluster"
         type: choice
         default: "worker-cluster-na"
         options: 
@@ -34,13 +34,13 @@ on:
         description: 'Include Argo CD Demo App'
         default: false
       template-version:
-        description: "vcluster template version to use"
+        description: "vCluster template version to use"
         default: "1.0.0"
       loft-cli-version:
         description: 'Loft CLI version to use'
-        default: "v3.3.0"
+        default: "v3.3.3"
 env:
-  LOFT_CLI_VERSION: ${{ inputs.loft-cli-version || 'v3.3.0' }}
+  LOFT_CLI_VERSION: ${{ inputs.loft-cli-version || 'v3.3.3' }}
   VCLUSTER_NAME: ${{ inputs.vcluster-name }}
   DEV_VCLUSTER_NAME: ${{ inputs.vcluster-name }}-dev-cluster
   CLUSTER: ${{ inputs.cluster }}
