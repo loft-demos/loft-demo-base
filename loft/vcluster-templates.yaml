@@ -48,7 +48,7 @@ spec:
           enabled: true
         helmRelease:
           chart: 
-            version: v0.18.0
+            version: v0.18.1
           values: |-
             # Below you can configure the virtual cluster
             isolation:
@@ -78,10 +78,10 @@ spec:
           label: k8sVersion
           description: Please select Kubernetes version
           options:
-            - v1.28.4
-            - v1.27.8
-            - v1.26.11
-          defaultValue: v1.27.8
+            - v1.28.5
+            - v1.27.9
+            - v1.26.12
+          defaultValue: v1.27.9
         - variable: env
           label: Deployment Environment
           description: Environment for deployments for this vCluster used as cluster label for Argo CD ApplicationSet Cluster Generator

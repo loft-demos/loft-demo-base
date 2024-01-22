@@ -29,6 +29,10 @@ on:
         type: boolean
         description: 'Create dev vCluster to use as fake cluster'
         default: false
+      centralized-admission-control:
+        type: boolean
+        description: 'Enable Centralized Admission Control demo'
+        default: false
       argocd-app:
         type: boolean
         description: 'Include Argo CD Demo App'
@@ -131,6 +135,14 @@ jobs:
           kubectl delete pod -l app.kubernetes.io/name=argocd-applicationset-controller -n argocd
 
           kubectl delete apiservice v1beta1.metrics.k8s.io
+
+      - id: create-centralized-admission-control-demo
+        if: ${{ inputs.centralized-admission-control }}
+        run: |
+          echo "enabling centralized-admission-control demo"
+          helm repo add kyverno https://kyverno.github.io/kyverno/
+          helm repo update
+          helm upgrade --install kyverno kyverno/kyverno -n kyverno --create-namespace --version 3.1.4
 
       - id: generate-githubapp-token
         uses: tibdex/github-app-token@v1.8.0
