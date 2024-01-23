@@ -164,7 +164,7 @@ spec:
       enabled: true
     helmRelease:
       chart: 
-        version: v0.18.0
+        version: v0.18.1
       values: |-
         sync:
           ingresses:
