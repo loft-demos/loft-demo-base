@@ -1,0 +1,87 @@
+kind: VirtualClusterTemplate
+apiVersion: management.loft.sh/v1
+metadata:
+  name: cac-template
+  namespace: loft
+spec:
+  displayName: Centralized Admission Control Template
+  template:
+    metadata:
+      annotations:
+        sleepmode.loft.sh/delete-after: '72000'
+        loft.sh/require-ingress-authentication: 'true'
+        sleepmode.loft.sh/sleep-after: '600'
+    access:
+      rules:
+        - teams:
+            - loft-admins
+          clusterRole: cluster-admin
+    pro:
+      enabled: true
+    helmRelease:
+      chart: 
+        version: v0.19.0-alpha.0
+      values: |-
+        admission:
+          validatingWebhooks:
+            - |-
+              apiVersion: admissionregistration.k8s.io/v1
+              kind: ValidatingWebhookConfiguration
+              metadata:
+                labels:
+                  webhook.kyverno.io/managed-by: kyverno
+                name: kyverno-resource-validating-webhook-cfg
+              webhooks:
+              - admissionReviewVersions:
+                - v1
+                clientConfig:
+                  service:
+                    name: kyverno-svc
+                    namespace: kyverno
+                    path: /validate/fail
+                    port: 443
+                failurePolicy: Fail
+                matchPolicy: Equivalent
+                name: validate.kyverno.svc-fail
+                namespaceSelector:
+                  matchExpressions:
+                  - key: kubernetes.io/metadata.name
+                    operator: NotIn
+                    values:
+                    - kyverno
+                objectSelector: {}
+                rules:
+                - apiGroups:
+                  - ""
+                  apiVersions:
+                  - v1
+                  operations:
+                  - CREATE
+                  resources:
+                  - Pod
+                  scope: '*'
+                sideEffects: NoneOnDryRun
+                timeoutSeconds: 10
+        sync:
+          ingresses:
+            enabled: true
+        # Use an embedded managed etcd server instead of using the k3s default SQLite backend
+        embeddedEtcd:
+          enabled: true
+        isolation:
+          enabled: true
+          networkPolicy:
+            enabled: false
+        coredns:
+          integrated: true
+    accessPoint:
+      ingress: {}
+    spaceTemplate:
+      metadata: {}
+  access:
+    - verbs:
+        - '*'
+      subresources:
+        - '*'
+      users:
+        - admin

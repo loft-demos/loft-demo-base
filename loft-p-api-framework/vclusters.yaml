@@ -3,8 +3,6 @@ kind: VirtualClusterInstance
 metadata:
   name: api-framework-qa
   namespace: loft-p-api-framework
-  labels:
-    loft.sh/import-argocd: 'true'
 spec:
   owner:
     user: admin
@@ -14,5 +12,5 @@ spec:
   clusterRef:
     cluster: loft-cluster
   parameters: |
-    k8sVersion: v1.27.8
+    k8sVersion: v1.27.9
     env: 'qa'

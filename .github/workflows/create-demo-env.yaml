@@ -95,6 +95,7 @@ jobs:
           loft create vcluster $DEV_VCLUSTER_NAME --project sales-demos --recreate \
             --template demo-dev-cluster \
             --cluster $CLUSTER
+          kubectl delete apiservice v1beta1.metrics.k8s.io
 
       - id: create-demo-vcluster
         run: |
@@ -162,7 +163,8 @@ jobs:
           echo "enabling centralized-admission-control demo"
           helm repo add kyverno https://kyverno.github.io/kyverno/
           helm repo update
-          helm upgrade --install kyverno kyverno/kyverno -n kyverno --create-namespace --version 3.1.4
+          helm upgrade --install kyverno kyverno/kyverno -n kyverno --create-namespace --version 3.1.4 --wait
+          kubectl apply -f ./vcluster-centralized-admission-control
 
       - id: generate-githubapp-token
         uses: tibdex/github-app-token@v1.8.0
