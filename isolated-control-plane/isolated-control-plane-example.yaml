@@ -1,0 +1,61 @@
+# Requires vCluster.Pro control plane v3.4.0-beta.12 or later
+# Requires enabling the 'dev' cluster and adding it, along with the 'loft-cluster' (Local), to the api-framework project
+apiVersion: management.loft.sh/v1
+kind: VirtualClusterInstance
+metadata:
+  name: isolated-control-plane-vcluster
+  namespace: loft-p-api-framework
+spec:
+  template:
+    helmRelease:
+      chart: 
+        version: v0.19.0-alpha.0
+      values: |-
+        headless: true
+  clusterRef:
+    cluster: dev-cluster # the k8s cluster where the vCluster's workloads should run
+---
+apiVersion: management.loft.sh/v1
+kind: VirtualClusterInstance
+metadata:
+  name: isolated-control-plane-vcluster-cp
+  namespace: loft-p-api-framework
+spec:
+  owner:
+    user: admin
+  template:
+    metadata: {}
+    instanceTemplate:
+      metadata: {}
+    pro:
+      enabled: true
+
+    workloadVirtualClusterTemplate: {}
+      
+    helmRelease:
+      chart: 
+        version: v0.19.0-alpha.0
+      values: |-
+        service:
+          type: LoadBalancer
+
+        sync:
+          ingresses:
+            enabled: true
+          nodes:
+            enabled: true
+
+        coredns:
+          integrated: true
+    accessPoint:
+      ingress: {}
+    spaceTemplate:
+      metadata: {}
+  clusterRef:
+    cluster: loft-cluster
+    namespace: loft-api-framework-v-isolated-control-plane-vcluster-cp
+    virtualCluster: isolated-control-plane-vcluster
+  workloadClusterRef:
+    cluster: dev-cluster 
+    namespace: loft-api-framework-v-isolated-control-plane-vcluster
+    virtualCluster: isolated-control-plane-vcluster
