@@ -29,6 +29,10 @@ on:
         type: boolean
         description: 'Create dev vCluster to use as fake cluster'
         default: false
+      install-rancher:
+        type: boolean
+        description: 'Install Rancher into Loft cluster'
+        default: false
       centralized-admission-control:
         type: boolean
         description: 'Enable Centralized Admission Control demo'
@@ -135,6 +139,22 @@ jobs:
           kubectl delete pod -l app.kubernetes.io/name=argocd-applicationset-controller -n argocd
 
           kubectl delete apiservice v1beta1.metrics.k8s.io
+
+      - id: install-rancher
+        if: ${{ inputs.install-rancher }}
+        run: |
+          echo "installing Rancher"
+          helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
+          helm repo update
+          helm upgrade --install rancher rancher-stable/rancher --version 2.7.9 \
+             --create-namespace \
+            --namespace cattle-system \
+            --set hostname="rancher-$BASE_DOMAIN" \
+            --set bootstrapPassword=admin \
+            --set ingress.enabled=true \
+            --set ingress.ingressClassName="nginx" \
+            --set ingress.tls.source=secret \
+            --set tls="ingress"
 
       - id: create-centralized-admission-control-demo
         if: ${{ inputs.centralized-admission-control }}
