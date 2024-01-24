@@ -13,7 +13,7 @@ spec:
       values: |-
         headless: true
   clusterRef:
-    cluster: dev-cluster # the k8s cluster where the vCluster's workloads should run
+    cluster: dev-cluster # the k8s cluster where the vCluster's workloads run
 ---
 apiVersion: management.loft.sh/v1
 kind: VirtualClusterInstance
@@ -30,6 +30,7 @@ spec:
     pro:
       enabled: true
 
+    # this is required for isolated control plane
     workloadVirtualClusterTemplate: {}
       
     helmRelease:
