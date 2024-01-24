@@ -8,9 +8,9 @@ spec:
     team: loft-admins
   quotas:
     project:
-      count/virtualclusterinstances.active: '10'
+      count/virtualclusterinstances.active: '15'
     user:
-      requests.memory: 8Gi
+      count/virtualclusterinstances: '4'
   allowedClusters:
     - name: loft-cluster
   allowedTemplates:
