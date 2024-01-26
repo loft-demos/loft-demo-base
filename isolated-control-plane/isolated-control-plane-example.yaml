@@ -35,7 +35,7 @@ spec:
       
     helmRelease:
       chart: 
-        version: v0.19.0-alpha.0
+        version: v0.19.0-alpha.2
       values: |-
         service:
           type: LoadBalancer
