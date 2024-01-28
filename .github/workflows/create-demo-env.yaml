@@ -141,6 +141,29 @@ jobs:
 
           kubectl delete apiservice v1beta1.metrics.k8s.io
 
+      - id: create-argocd-app-sets
+        run: |
+          sed -i "s|REPO_NAME|$REPO_NAME|g" argocd/argocd-appset.yaml
+          sed -i "s|LOFT_DOMAIN|$BASE_DOMAIN|g" argocd/argocd-appset.yaml
+          kubectl apply -f argocd/argocd-appset.yaml
+          sed -i "s|REPO_NAME|$REPO_NAME|g" argocd/argocd-cluster-appset.yaml
+          sed -i "s|LOFT_DOMAIN|$BASE_DOMAIN|g" argocd/argocd-cluster-appset.yaml
+          kubectl apply -f argocd/argocd-cluster-appset.yaml
+
+      - id: create-argocd-app
+        if: ${{ inputs.argocd-app }}
+        run: |
+          yq e -i ".metadata.name = \"$REPO_NAME\"" argocd/argocd-app.yaml
+          yq e -i ".spec.source.repoURL = \"https://github.com/loft-demos/$REPO_NAME.git\"" argocd/argocd-app.yaml
+          yq e -i ".spec.destination.namespace = \"$REPO_NAME\"" argocd/argocd-app.yaml
+          kubectl apply -f argocd/argocd-app.yaml
+
+          loft login https://$BASE_DOMAIN --access-key ${{ secrets.LOFT_DEMO_ENV_ACCESS_KEY }}
+          loft use vcluster api-framework-qa -p api-framework
+          kubectl create namespace $REPO_NAME --dry-run=client -o yaml | kubectl apply -f -
+          kubectl create secret docker-registry ghcr-login-secret -n $REPO_NAME --docker-server=https://ghcr.io \
+            --docker-username=km-demos --docker-password=${{ secrets.KM_MANAGE_PACKAGES_TOKEN }} --docker-email=km@kurtmadel.com
+
       - id: install-rancher
         if: ${{ inputs.install-rancher }}
         run: |
@@ -250,28 +273,5 @@ jobs:
             -H "authorization: Bearer $GITHUB_TOKEN" \
             --data '{"title":"New Feature X","head":"feature-x","base":"main"}' \
             https://api.github.com/repos/loft-demos/$REPO_NAME/pulls
-
-      - id: create-argocd-app-sets
-        run: |
-          sed -i "s|REPO_NAME|$REPO_NAME|g" argocd/argocd-appset.yaml
-          sed -i "s|LOFT_DOMAIN|$BASE_DOMAIN|g" argocd/argocd-appset.yaml
-          kubectl apply -f argocd/argocd-appset.yaml
-          sed -i "s|REPO_NAME|$REPO_NAME|g" argocd/argocd-cluster-appset.yaml
-          sed -i "s|LOFT_DOMAIN|$BASE_DOMAIN|g" argocd/argocd-cluster-appset.yaml
-          kubectl apply -f argocd/argocd-cluster-appset.yaml
-
-      - id: create-argocd-app
-        if: ${{ inputs.argocd-app }}
-        run: |
-          yq e -i ".metadata.name = \"$REPO_NAME\"" argocd/argocd-app.yaml
-          yq e -i ".spec.source.repoURL = \"https://github.com/loft-demos/$REPO_NAME.git\"" argocd/argocd-app.yaml
-          yq e -i ".spec.destination.namespace = \"$REPO_NAME\"" argocd/argocd-app.yaml
-          kubectl apply -f argocd/argocd-app.yaml
-
-          loft login https://$BASE_DOMAIN --access-key ${{ secrets.LOFT_DEMO_ENV_ACCESS_KEY }}
-          loft use vcluster api-framework-qa -p api-framework
-          kubectl create namespace $REPO_NAME --dry-run=client -o yaml | kubectl apply -f -
-          kubectl create secret docker-registry ghcr-login-secret -n $REPO_NAME --docker-server=https://ghcr.io \
-            --docker-username=km-demos --docker-password=${{ secrets.KM_MANAGE_PACKAGES_TOKEN }} --docker-email=km@kurtmadel.com
 
           
