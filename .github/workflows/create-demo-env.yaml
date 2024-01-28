@@ -166,6 +166,14 @@ jobs:
           helm upgrade --install kyverno kyverno/kyverno -n kyverno --create-namespace --version 3.1.4 --wait
           kubectl apply -f ./vcluster-centralized-admission-control
 
+      - id: connect-dev-cluster
+        if: ${{ inputs.create-dev-cluster }}
+        run: |
+          loft use cluster $CLUSTER
+          kubectl get secret vc-$DEV_VCLUSTER_NAME -n loft-sales-demos-v-$DEV_VCLUSTER_NAME --template={{.data.config}} | base64 --decode > $DEV_VCLUSTER_NAME-config.yaml
+          loft login https://$BASE_DOMAIN --access-key ${{ secrets.LOFT_DEMO_ENV_ACCESS_KEY }}
+          KUBECONFIG=$DEV_VCLUSTER_NAME-config.yaml loft connect cluster dev-cluster --display-name 'Dev Cluster'
+
       - id: generate-githubapp-token
         uses: tibdex/github-app-token@v1.8.0
         with:
@@ -251,14 +259,6 @@ jobs:
           sed -i "s|REPO_NAME|$REPO_NAME|g" argocd/argocd-cluster-appset.yaml
           sed -i "s|LOFT_DOMAIN|$BASE_DOMAIN|g" argocd/argocd-cluster-appset.yaml
           kubectl apply -f argocd/argocd-cluster-appset.yaml
-
-      - id: connect-dev-cluster
-        if: ${{ inputs.create-dev-cluster }}
-        run: |
-          loft use cluster $CLUSTER
-          kubectl get secret vc-$DEV_VCLUSTER_NAME -n loft-sales-demos-v-$DEV_VCLUSTER_NAME --template={{.data.config}} | base64 --decode > $DEV_VCLUSTER_NAME-config.yaml
-          loft login https://$BASE_DOMAIN --access-key ${{ secrets.LOFT_DEMO_ENV_ACCESS_KEY }}
-          KUBECONFIG=$DEV_VCLUSTER_NAME-config.yaml loft connect cluster dev-cluster --display-name 'Dev Cluster'
 
       - id: create-argocd-app
         if: ${{ inputs.argocd-app }}
