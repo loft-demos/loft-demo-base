@@ -20,7 +20,7 @@ spec:
       requeueAfterSeconds: 30
   template:
     metadata:
-      name: 'REPO_NAME-{{branch}}-{{number}}'
+      name: 'REPO_NAME-{{branch}}-pr{{number}}'
     spec:
       syncPolicy:
         automated:
