@@ -118,6 +118,7 @@ jobs:
             sleep 1; 
           done
           
+          kubectl delete VirtualClusterTemplate vcluster-pro-template -n loft --wait
           kubectl apply -f ./loft -n loft
           kubectl apply -f ./loft-p-api-framework
           
