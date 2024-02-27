@@ -95,7 +95,6 @@ jobs:
           loft create vcluster $DEV_VCLUSTER_NAME --project sales-demos --recreate \
             --template demo-dev-cluster \
             --cluster $CLUSTER
-          kubectl delete apiservice v1beta1.metrics.k8s.io
 
       - id: create-demo-vcluster
         run: |
@@ -139,8 +138,6 @@ jobs:
           kubectl apply -f argocd/loft-demo-repo-cred.yaml
           
           kubectl delete pod -l app.kubernetes.io/name=argocd-applicationset-controller -n argocd
-
-          kubectl delete apiservice v1beta1.metrics.k8s.io
 
       - id: create-argocd-app-sets
         run: |
