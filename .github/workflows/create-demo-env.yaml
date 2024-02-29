@@ -77,6 +77,13 @@ jobs:
           access-key: ${{ secrets.LOFT_SALES_DEMO_ACCESS_KEY }}
           kubectl-install: false
           kubectl-version: v1.28.2
+
+      - id: install-vcluster-cli
+        if: ${{ inputs.create-dev-cluster }}
+        uses: loft-sh/setup-vcluster@main
+        with:
+          version: v0.19.3
+          kubectl-install: false
       
       - id: set-domain
         run: |
@@ -187,13 +194,12 @@ jobs:
           helm upgrade --install kyverno kyverno/kyverno -n kyverno --create-namespace --version 3.1.4 --wait
           kubectl apply -f ./vcluster-centralized-admission-control
 
-      - id: connect-dev-cluster
+      - id: create-connect-dev-cluster
         if: ${{ inputs.create-dev-cluster }}
         run: |
-          loft use cluster $CLUSTER
-          kubectl get secret vc-$DEV_VCLUSTER_NAME -n loft-sales-demos-v-$DEV_VCLUSTER_NAME --template={{.data.config}} | base64 --decode > $DEV_VCLUSTER_NAME-config.yaml
-          loft login https://$BASE_DOMAIN --access-key ${{ secrets.LOFT_DEMO_ENV_ACCESS_KEY }}
-          KUBECONFIG=$DEV_VCLUSTER_NAME-config.yaml loft connect cluster dev-cluster --display-name 'Dev Cluster'
+          loft use vcluster $DEV_VCLUSTER_NAME
+          vcluster login https://$BASE_DOMAIN --access-key ${{ secrets.LOFT_DEMO_ENV_ACCESS_KEY }}
+          vcluster pro connect cluster $DEV_VCLUSTER_NAME --display-name "Dev Cluster" 
 
       - id: generate-githubapp-token
         uses: tibdex/github-app-token@v1.8.0
