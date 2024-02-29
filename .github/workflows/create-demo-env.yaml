@@ -133,11 +133,6 @@ jobs:
             echo "Waiting for argocd rbac configmap...";
             sleep 1; 
           done
-
-          while ! kubectl get pod api-framework-qa-0 -n loft-api-framework-v-api-framework-qa; do
-            echo "Waiting for api-framework-qa vcluster...";
-            sleep 1; 
-          done
           
           yq e -i ".data.githubAppID = \"${{ secrets.BASE64_LOFT_DEMOS_GITHUB_APP_ID }}\"" argocd/loft-demo-repo-cred.yaml
           yq e -i ".data.githubAppInstallationID = \"${{ secrets.BASE64_LOFT_DEMOS_GITHUB_APP_INSTALL_ID }}\"" argocd/loft-demo-repo-cred.yaml
