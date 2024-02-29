@@ -201,6 +201,15 @@ jobs:
       - id: connect-dev-cluster
         if: ${{ inputs.create-dev-cluster && inputs.connect-dev-cluster }}
         run: |
+          cat <<EOF | kubectl apply -f -
+          apiVersion: management.loft.sh/v1
+          kind: Cluster
+          metadata:
+            name: $DEV_VCLUSTER_NAME
+          spec:
+            displayName: $DEV_VCLUSTER_NAME
+            networkPeer: true
+          EOF
           loft use vcluster $DEV_VCLUSTER_NAME
           vcluster login https://$BASE_DOMAIN --access-key ${{ secrets.LOFT_DEMO_ENV_ACCESS_KEY }}
           vcluster pro connect cluster $DEV_VCLUSTER_NAME --display-name "Dev Cluster" 
