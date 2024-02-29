@@ -46,9 +46,9 @@ on:
         default: "1.0.0"
       loft-cli-version:
         description: 'Loft CLI version to use'
-        default: "v3.3.4"
+        default: "v3.4.0"
 env:
-  LOFT_CLI_VERSION: ${{ inputs.loft-cli-version || 'v3.3.3' }}
+  LOFT_CLI_VERSION: ${{ inputs.loft-cli-version || 'v3.4.0' }}
   VCLUSTER_NAME: ${{ inputs.vcluster-name }}
   DEV_VCLUSTER_NAME: ${{ inputs.vcluster-name }}-dev-cluster
   CLUSTER: ${{ inputs.cluster }}
