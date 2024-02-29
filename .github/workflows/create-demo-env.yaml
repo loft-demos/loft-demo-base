@@ -193,7 +193,7 @@ jobs:
       - id: connect-dev-cluster
         if: ${{ inputs.create-dev-cluster && inputs.connect-dev-cluster }}
         run: |
-          loft login loft.rocks --access-key ${{ secrets.LOFT_SALES_DEMO_ACCESS_KEY }}
+          loft login ${{ secrets.LOFT_URL }} --access-key ${{ secrets.LOFT_SALES_DEMO_ACCESS_KEY }}
           loft use vcluster $DEV_VCLUSTER_NAME
           vcluster login https://$BASE_DOMAIN --access-key ${{ secrets.LOFT_DEMO_ENV_ACCESS_KEY }}
           vcluster pro connect cluster dev-cluster --display-name "Dev Cluster" 
