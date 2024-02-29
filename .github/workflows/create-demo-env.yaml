@@ -197,14 +197,14 @@ jobs:
           apiVersion: management.loft.sh/v1
           kind: Cluster
           metadata:
-            name: $DEV_VCLUSTER_NAME
+            name: dev-cluster
           spec:
-            displayName: $DEV_VCLUSTER_NAME
+            displayName: "Dev Cluster"
             networkPeer: true
           EOF
           loft use vcluster $DEV_VCLUSTER_NAME
           vcluster login https://$BASE_DOMAIN --access-key ${{ secrets.LOFT_DEMO_ENV_ACCESS_KEY }}
-          vcluster pro connect cluster $DEV_VCLUSTER_NAME --display-name "Dev Cluster" 
+          vcluster pro connect cluster dev-cluster --display-name "Dev Cluster" 
 
       - id: generate-githubapp-token
         uses: tibdex/github-app-token@v1.8.0
