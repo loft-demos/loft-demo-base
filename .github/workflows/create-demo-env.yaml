@@ -29,6 +29,10 @@ on:
         type: boolean
         description: 'Create dev vCluster to use as fake cluster'
         default: false
+      connect-dev-cluster:
+        type: boolean
+        description: 'Connects dev vCluster to platform. Do not connect if you want to demo connecting a host cluster.'
+        default: false
       install-rancher:
         type: boolean
         description: 'Install Rancher into Loft cluster'
@@ -194,8 +198,8 @@ jobs:
           helm upgrade --install kyverno kyverno/kyverno -n kyverno --create-namespace --version 3.1.4 --wait
           kubectl apply -f ./vcluster-centralized-admission-control
 
-      - id: create-connect-dev-cluster
-        if: ${{ inputs.create-dev-cluster }}
+      - id: connect-dev-cluster
+        if: ${{ inputs.connect-dev-cluster }}
         run: |
           loft use vcluster $DEV_VCLUSTER_NAME
           vcluster login https://$BASE_DOMAIN --access-key ${{ secrets.LOFT_DEMO_ENV_ACCESS_KEY }}
