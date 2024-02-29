@@ -49,8 +49,6 @@ spec:
         pro:
           enabled: true
         helmRelease:
-          chart: 
-            version: v0.19.0-alpha.2
           values: |-
             # Below you can configure the virtual cluster
             isolation:
@@ -168,7 +166,7 @@ spec:
       enabled: true
     helmRelease:
       chart: 
-        version: v0.19.0-alpha.2
+        version: v0.19.3
       values: |-
         sync:
           ingresses:
