@@ -1,0 +1,31 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: prvclusters.demo.loft.sh
+spec:
+  group: demo.loft.sh
+  names:
+    kind: PRvCluster
+    listKind: PRvClusterList
+    plural: prvclusters
+    singular: prvcluster
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          description: A PRvCluster is a composite resource that represents a vCluster with ArgoCD installed and a GitHub Webhook for the specified repo.
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                repo:
+                  type: string
+                  description: Application repo name
+                pr_number:
+                  type: string
+                  description: Pull Request number
+              required:
+                - repo

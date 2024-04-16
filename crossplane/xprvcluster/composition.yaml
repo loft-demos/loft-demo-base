@@ -1,0 +1,92 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: prvclusters.demo.loft.sh
+spec:
+  writeConnectionSecretsToNamespace: crossplane-system
+  compositeTypeRef:
+    apiVersion: demo.loft.sh/v1alpha1
+    kind: PRvCluster
+  resources:
+    - base:
+        apiVersion: kubernetes.crossplane.io/v1alpha2
+        kind: Object
+        spec:
+          forProvider:
+            manifest:
+              apiVersion: management.loft.sh/v1
+              kind: VirtualClusterInstance
+              metadata:
+                namespace: loft-p-api-framework
+              spec:
+                owner:
+                  user: admin
+                templateRef:
+                  name: pull-request-vcluster
+                  version: 1.0.x
+                clusterRef:
+                  cluster: dev-cluster
+                parameters: |
+                  k8sVersion: v1.27.9
+                  env: 'dev'
+          providerConfigRef:
+            name: kubernetes-provider
+      patches:
+        - fromFieldPath: metadata.name
+          toFieldPath: spec.forProvider.manifest.metadata.name
+    - base:
+        apiVersion: kubernetes.crossplane.io/v1alpha2
+        kind: Object
+        spec:
+          forProvider:
+            manifest:
+              apiVersion: v1
+              kind: Secret
+              metadata:
+                name: argocd-webhook-url
+                namespace: loft-p-api-framework
+              type: Opaque
+              stringData:
+                url: ""
+          providerConfigRef:
+            name: kubernetes-provider
+      patches:
+        - fromFieldPath: metadata.name
+          toFieldPath: spec.forProvider.manifest.metadata.name
+          transforms:
+            - type: string
+              string:
+                fmt: "argocd-webhook-url-%s"
+        - fromFieldPath: metadata.name
+          toFieldPath: spec.forProvider.manifest.stringData.url
+          transforms:
+            - type: string
+              string:
+                fmt: "https://argocd-%s.us.demo.dev"
+    - base:
+        apiVersion: repo.github.upbound.io/v1alpha1
+        kind: RepositoryWebhook
+        spec:
+          forProvider:
+            active: true
+            configuration:
+            - contentType: json
+              insecureSsl: false
+              urlSecretRef:
+                key: url
+                name: ""
+                namespace: loft-p-api-framework
+            events:
+            - pull_request
+          providerConfigRef:
+            name: github-provider-config
+      patches:
+        - fromFieldPath: "spec.repo"
+          toFieldPath: "spec.forProvider.repository"
+        - type: FromCompositeFieldPath
+          fromFieldPath: metadata.name
+          toFieldPath: spec.forProvider.configuration[0].urlSecretRef.name
+          transforms:
+            - type: string
+              string:
+                fmt: "argocd-webhook-url-%s"
