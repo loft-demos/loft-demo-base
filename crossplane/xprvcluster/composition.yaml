@@ -62,7 +62,7 @@ spec:
           transforms:
             - type: string
               string:
-                fmt: "https://argocd-%s.us.demo.dev"
+                fmt: "https://argocd-appset-%s.us.demo.dev"
     - base:
         apiVersion: repo.github.upbound.io/v1alpha1
         kind: RepositoryWebhook
