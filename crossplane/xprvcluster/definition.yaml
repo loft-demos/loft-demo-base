@@ -1,10 +1,15 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: CompositeResourceDefinition
 metadata:
-  name: prvclusters.demo.loft.sh
+  name: xprvclusters.demo.loft.sh
 spec:
   group: demo.loft.sh
   names:
+    kind: XPRvCluster
+    listKind: XPRvClusterList
+    plural: xprvclusters
+    singular: xprvcluster
+  claimNames:
     kind: PRvCluster
     listKind: PRvClusterList
     plural: prvclusters

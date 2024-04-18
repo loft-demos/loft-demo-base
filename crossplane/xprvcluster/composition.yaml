@@ -6,7 +6,7 @@ spec:
   writeConnectionSecretsToNamespace: crossplane-system
   compositeTypeRef:
     apiVersion: demo.loft.sh/v1alpha1
-    kind: PRvCluster
+    kind: XPRvCluster
   resources:
     - base:
         apiVersion: kubernetes.crossplane.io/v1alpha2
@@ -62,7 +62,7 @@ spec:
           transforms:
             - type: string
               string:
-                fmt: "https://argocd-appset-%s.us.demo.dev"
+                fmt: "https://argocd-appset-%s.us.demo.dev/api/webhook"
     - base:
         apiVersion: repo.github.upbound.io/v1alpha1
         kind: RepositoryWebhook

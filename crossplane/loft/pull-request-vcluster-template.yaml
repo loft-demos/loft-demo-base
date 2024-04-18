@@ -1,0 +1,187 @@
+kind: VirtualClusterTemplate
+apiVersion: management.loft.sh/v1
+metadata:
+  name: pull-request-vcluster
+spec:
+  displayName: Pull Request vCluster
+  description: >-
+    Intended for ephemeral vClusters for GitHub pull requests and includes an
+    Argo CD instance.
+  owner:
+    user: kurtmadel
+  template:
+    metadata: {}
+    instanceTemplate:
+      metadata: {}
+    apps:
+      - name: argocd
+        namespace: argocd
+        parameters: |
+          appValues: |
+            configs:
+              params:
+                "server.insecure": true
+              rbac:
+                policy.csv: |-
+                  g, Administration, role:admin
+                  g, Sales, role:admin
+                  g, api-framework, role:admin
+            server:
+              ingress:
+                enabled: true
+                annotations:
+                  nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+                  nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+                ingressClassName: "nginx"
+                hostname: argocd-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}
+                tls: true
+              ingressGrpc:
+                enabled: false
+            ## ApplicationSet controller
+            applicationSet:
+              enabled: true
+              webhook:
+                ingress:
+                  enabled: true
+                  ingressClassName: "nginx"
+                  annotations:
+                    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+                  hostname: argocd-appset-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}
+                  tls: true
+    pro:
+      enabled: true
+    helmRelease:
+      chart: {}
+      values: |-
+        sync:
+          ingresses:
+            enabled: true
+    accessPoint:
+      ingress: {}
+    spaceTemplate:
+      metadata: {}
+  versions:
+    - template:
+        metadata:
+          annotations:
+            sleepmode.loft.sh/delete-after: '60000'
+            sleepmode.loft.sh/ignore-user-agents: argo*
+            sleepmode.loft.sh/sleep-after: '7200'
+        instanceTemplate:
+          metadata:
+            annotations:
+              loft.sh/custom-links: >-
+                https://argocd-{{ .Values.loft.virtualClusterName }}.{{
+                .Values.loft.clusterAnnotations.domain }}
+        apps:
+          - name: argocd
+            namespace: argocd
+            parameters: |
+              appValues: |
+                global:
+                  domain: argocd-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}
+                configs:
+                  params:
+                    "server.insecure": true
+                  secret:
+                    createSecret: true
+                    argocdServerAdminPassword: "$2a$10$7Pw82OmSe.SR0wpNna0AIOXeJc7AGIngdAALEudF2amGjF8iSJwQS"
+                    argocdServerAdminPasswordMtime: null
+                server:
+                  ingress:
+                    enabled: true
+                    annotations:
+                      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+                      nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+                    ingressClassName: "nginx"
+                    hostname: argocd-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}
+                    tls: true
+                  ingressGrpc:
+                    enabled: false
+                ## ApplicationSet controller
+                applicationSet:
+                  enabled: true
+                  ingress:
+                    enabled: true
+                    ingressClassName: "nginx"
+                    annotations:
+                      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+                    hostname: argocd-appset-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}
+                    tls: true
+                notifications:
+                  argocdUrl: https://argocd-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}
+                  cm:
+                    create: true
+                  context:
+                    helloAppUrl: "https://{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}"
+                  logLevel: "debug"
+                  secret:
+                    labels:
+                      loft.sh/project-secret-name: argocd-notifications-secret
+          - name: argo-cd-pr-application-set
+            namespace: argocd
+            parameters: |
+              argocdUrl: >-
+                https://argocd-{{ .Values.loft.virtualClusterName }}.{{
+                .Values.loft.clusterAnnotations.domain }}
+        objects: |-
+          apiVersion: v1
+          kind: Namespace
+          metadata:
+            name: argocd
+          ---
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: loft-demo-org-cred
+            namespace: argocd
+            labels:
+              argocd.argoproj.io/secret-type: repo-creds
+              loft.sh/project-secret-name: loft-demo-org-cred
+          type: Opaque
+          ---
+          apiVersion: v1
+          kind: Namespace
+          metadata:
+            name: preview-hello-world-app
+          ---
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: ghcr-login-secret
+            namespace: preview-hello-world-app
+            labels:
+              loft.sh/project-secret-name: ghcr-login-secret
+          data:
+            .dockerconfigjson: e30K
+          type: kubernetes.io/dockerconfigjson
+        pro:
+          enabled: true
+        helmRelease:
+          chart:
+            version: v0.19.5
+          values: |-
+            vcluster:
+              image: rancher/k3s:{{ .Values.k8sVersion }}-k3s1
+
+            sync:
+              ingresses:
+                enabled: true
+
+            coredns:
+              integrated: true
+        accessPoint:
+          ingress: {}
+        spaceTemplate:
+          metadata: {}
+      parameters:
+        - variable: k8sVersion
+          label: k8sVersion
+          description: Please select Kubernetes version
+          options:
+            - v1.29.0
+            - v1.28.5
+            - v1.27.9
+            - v1.26.12
+          defaultValue: v1.27.9
+      version: 1.0.0

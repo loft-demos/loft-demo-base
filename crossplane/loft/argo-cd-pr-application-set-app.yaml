@@ -1,0 +1,47 @@
+kind: App
+apiVersion: management.loft.sh/v1
+metadata:
+  name: argo-cd-pr-application-set
+  uid: 656566fb-61ff-4c99-9a1f-dcb01da9ac0e
+  resourceVersion: '3638791'
+  generation: 9
+  creationTimestamp: '2024-04-16T03:35:34Z'
+  managedFields:
+    - manager: loft
+      operation: Update
+      apiVersion: management.loft.sh/v1
+      time: '2024-04-17T17:26:06Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:spec:
+          .: {}
+          f:config:
+            .: {}
+            f:bash:
+              .: {}
+              f:script: {}
+            f:chart: {}
+          f:displayName: {}
+          f:owner:
+            .: {}
+            f:user: {}
+spec:
+  displayName: argo-cd-pr-application-set
+  owner:
+    user: kurtmadel
+  config:
+    chart: {}
+    bash:
+      script: >+
+        kubectl wait --for condition=established --timeout=60s crd/applicationsets.argoproj.io
+
+        while ! kubectl get crd applicationsets.argoproj.io; do
+          echo "Waiting for argo cd applicationset crd...";
+          sleep 1; 
+        done
+
+        kubectl apply -f https://raw.githubusercontent.com/loft-demos/hello-app-vcluster-pro/main/kustomize-pr/applicationset.yaml
+        
+        curl https://raw.githubusercontent.com/loft-demos/hello-app-vcluster-pro/main/kustomize-pr/argocd-notifications-cm.yaml > argocd-notifications-cm.yaml
+        kubectl patch cm argocd-notifications-cm -n argocd --type merge --patch-file ./argocd-notifications-cm.yaml
+
