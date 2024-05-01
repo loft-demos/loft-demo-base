@@ -119,12 +119,12 @@ jobs:
           
           while ! kubectl get projects.storage.loft.sh default; do
             echo "Waiting for loft default project...";
-            sleep 1; 
+            sleep 3; 
           done
-          
-          while ! kubectl get apps.storage.loft.sh default; do
-            echo "Waiting for loft default project...";
-            sleep 1; 
+
+          while ! kubectl get crd apps.storage.loft.sh; do
+            echo "Waiting for argo cd applicationset crd...";
+            sleep 3; 
           done
           
           kubectl delete VirtualClusterTemplate vcluster-pro-template --wait
