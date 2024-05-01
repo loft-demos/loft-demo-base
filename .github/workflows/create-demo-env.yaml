@@ -117,13 +117,13 @@ jobs:
 
           kubectl get pods -A
           
-          while ! kubectl get projects.storage.loft.sh default -n loft; do
+          while ! kubectl get projects.storage.loft.sh default; do
             echo "Waiting for loft default project...";
             sleep 1; 
           done
           
-          kubectl delete VirtualClusterTemplate vcluster-pro-template -n loft --wait
-          kubectl apply -f ./loft -n loft
+          kubectl delete VirtualClusterTemplate vcluster-pro-template --wait
+          kubectl apply -f ./loft
           kubectl apply -f ./loft-p-api-framework
           
           while ! kubectl get configmap argocd-rbac-cm -n argocd; do
