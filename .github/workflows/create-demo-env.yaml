@@ -46,7 +46,7 @@ on:
         description: 'Include Argo CD Demo App'
         default: false
 env:
-  LOFT_CLI_VERSION:  'v3.4.0'
+  LOFT_CLI_VERSION:  'v3.4.5'
   VCLUSTER_NAME: ${{ inputs.vcluster-name }}
   DEV_VCLUSTER_NAME: ${{ inputs.vcluster-name }}-dev
   CLUSTER: ${{ inputs.cluster }}
@@ -80,7 +80,7 @@ jobs:
         if: ${{ inputs.create-dev-cluster }}
         uses: loft-sh/setup-vcluster@main
         with:
-          version: v0.19.3
+          version: v0.19.5
           kubectl-install: false
       
       - id: set-domain
