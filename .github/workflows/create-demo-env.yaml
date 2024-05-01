@@ -117,12 +117,12 @@ jobs:
 
           kubectl get pods -A
           
-          while ! kubectl get projects.storage.loft.sh default; do
+          while ! kubectl get project.management.loft.sh default; do
             echo "Waiting for loft default project...";
             sleep 3; 
           done
 
-          while ! kubectl get crd apps.storage.loft.sh; do
+          while ! kubectl get app.management.loft.sh argocd; do
             echo "Waiting for argo cd applicationset crd...";
             sleep 3; 
           done
