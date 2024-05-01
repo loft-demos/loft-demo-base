@@ -117,12 +117,12 @@ jobs:
 
           kubectl get pods -A
           
-          while ! kubectl get projects.management.loft.sh default; do
+          while ! kubectl get projects.storage.loft.sh default; do
             echo "Waiting for loft default project...";
             sleep 1; 
           done
           
-          while ! kubectl get apps.management.loft.sh default; do
+          while ! kubectl get apps.storage.loft.sh default; do
             echo "Waiting for loft default project...";
             sleep 1; 
           done
