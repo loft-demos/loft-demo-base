@@ -5,12 +5,14 @@ metadata:
 spec:
   displayName: Pull Request vCluster
   description: >-
-    Intended for ephemeral vClusters for GitHub pull requests and includes an
-    Argo CD instance.
+    Intended for ephemeral vClusters for GitHub pull requests and includes an Argo CD instance.
   owner:
     user: kurtmadel
   template:
-    metadata: {}
+    metadata:
+      annotations:
+        sleepmode.loft.sh/delete-after: '720000'
+        sleepmode.loft.sh/sleep-after: '7200'
     instanceTemplate:
       metadata: {}
     apps:
@@ -64,7 +66,7 @@ spec:
     - template:
         metadata:
           annotations:
-            sleepmode.loft.sh/delete-after: '60000'
+            sleepmode.loft.sh/delete-after: '700000'
             sleepmode.loft.sh/ignore-user-agents: argo*
             sleepmode.loft.sh/sleep-after: '7200'
         instanceTemplate:
@@ -81,12 +83,24 @@ spec:
                 global:
                   domain: argocd-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}
                 configs:
+                  cm:
+                    create: true
+                    oidc.config: |
+                       issuer: https://vcluster-pro.us.demo.dev/oidc
+                       clientID: argocd-{{ .Values.loft.virtualClusterName }}
+                       clientSecret: LPgAfWZk1X8R3JUeJdCRbLk3LEdrQ0TGpGC2ux74FXHHJh5jnW1Qgj8aXkjnsA5S
+                       Name: Loft
                   params:
                     "server.insecure": true
                   secret:
                     createSecret: true
                     argocdServerAdminPassword: "$2a$10$7Pw82OmSe.SR0wpNna0AIOXeJc7AGIngdAALEudF2amGjF8iSJwQS"
                     argocdServerAdminPasswordMtime: null
+                  rbac:
+                    policy.csv: |-
+                      g, Administration, role:admin
+                      g, Sales, role:admin
+                      g, Engineering, role:admin
                 server:
                   ingress:
                     enabled: true
@@ -101,6 +115,7 @@ spec:
                 ## ApplicationSet controller
                 applicationSet:
                   enabled: true
+                  logLevel: "debug"
                   ingress:
                     enabled: true
                     ingressClassName: "nginx"
@@ -124,6 +139,8 @@ spec:
               argocdUrl: >-
                 https://argocd-{{ .Values.loft.virtualClusterName }}.{{
                 .Values.loft.clusterAnnotations.domain }}
+              vClusterName: '{{ .Values.loft.virtualClusterName }}'
+              repoName: '{{ .Values.reponame }}'
         objects: |-
           apiVersion: v1
           kind: Namespace
@@ -184,4 +201,12 @@ spec:
             - v1.27.9
             - v1.26.12
           defaultValue: v1.27.9
+        - variable: prnumber
+          label: PR Number
+          type: string
+          defaultValue: '1'
+        - variable: reponame
+          label: Repo Name
+          type: string
+          defaultValue: hello-app
       version: 1.0.0

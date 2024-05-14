@@ -2,29 +2,6 @@ kind: App
 apiVersion: management.loft.sh/v1
 metadata:
   name: argo-cd-pr-application-set
-  uid: 656566fb-61ff-4c99-9a1f-dcb01da9ac0e
-  resourceVersion: '3638791'
-  generation: 9
-  creationTimestamp: '2024-04-16T03:35:34Z'
-  managedFields:
-    - manager: loft
-      operation: Update
-      apiVersion: management.loft.sh/v1
-      time: '2024-04-17T17:26:06Z'
-      fieldsType: FieldsV1
-      fieldsV1:
-        f:spec:
-          .: {}
-          f:config:
-            .: {}
-            f:bash:
-              .: {}
-              f:script: {}
-            f:chart: {}
-          f:displayName: {}
-          f:owner:
-            .: {}
-            f:user: {}
 spec:
   displayName: argo-cd-pr-application-set
   owner:
@@ -32,7 +9,7 @@ spec:
   config:
     chart: {}
     bash:
-      script: >+
+      script: >
         kubectl wait --for condition=established --timeout=60s crd/applicationsets.argoproj.io
 
         while ! kubectl get crd applicationsets.argoproj.io; do
@@ -40,8 +17,116 @@ spec:
           sleep 1; 
         done
 
-        kubectl apply -f https://raw.githubusercontent.com/loft-demos/hello-app-vcluster-pro/main/kustomize-pr/applicationset.yaml
-        
-        curl https://raw.githubusercontent.com/loft-demos/hello-app-vcluster-pro/main/kustomize-pr/argocd-notifications-cm.yaml > argocd-notifications-cm.yaml
-        kubectl patch cm argocd-notifications-cm -n argocd --type merge --patch-file ./argocd-notifications-cm.yaml
+        cat <<EOF | kubectl apply -f -
+        apiVersion: argoproj.io/v1alpha1
+        kind: ApplicationSet
+        metadata:
+          name: {{ .Values.repoName }}-pr
+          namespace: argocd
+        spec:
+          generators:
+          - pullRequest:
+              github:
+                # The GitHub organization or user.
+                owner: loft-demos
+                # The Github repository
+                repo: {{ .Values.repoName }}
+                # (optional) use a GitHub App to access the API instead of a PAT.
+                appSecretName: loft-demo-org-cred
+                # Labels is used to filter the PRs that you want to target. (optional)
+                labels:
+                - create-prvcluster
+              requeueAfterSeconds: 30
+          template:
+            metadata:
+              name: '{{ .Values.loft.virtualClusterName }}'
+              annotations:
+                notifications.argoproj.io/subscribe.github: ""
+                notifications.argoproj.io/subscribe.on-deployed.github: ""
+            spec:
+              syncPolicy:
+                automated:
+                  selfHeal: true
+                syncOptions:
+                  - CreateNamespace=true
+              source:
+                repoURL: 'https://github.com/loft-demos/{{ .Values.repoName }}.git'
+                targetRevision: '{{`{{head_sha}}`}}'
+                path: helm-chart/
+                helm:
+                  parameters:
+                  - name: "image.repository"
+                    value: ghcr.io/loft-demos/{{ .Values.repoName }}
+                  - name: "image.tag"
+                    value: "{{`{{head_short_sha}}`}}"
+                  - name: "image.args.text"
+                    value: "Hello from {{ .Values.loft.virtualClusterName }} commit {{`{{head_short_sha}}`}}"
+                  - name: "ingress.hosts[0].host"
+                    value: {{ .Values.loft.virtualClusterName }}.us.demo.dev
+                  - name: ingress.hosts[0].paths[0].backend.service.name
+                    value: {{ .Values.repoName }}
+                  - name: ingress.hosts[0].paths[0].backend.service.port.name
+                    value: http
+                  - name: ingress.hosts[0].paths[0].path
+                    value: /
+                  - name: ingress.hosts[0].paths[0].pathType
+                    value: prefix
+                  - name: "ingress.tls[0].hosts[0]"
+                    value: {{ .Values.loft.virtualClusterName }}.us.demo.dev
+              project: "default"
+              destination:
+                name: 'in-cluster'
+                namespace: preview-hello-world-app
+              info:
+                - name: Preview App Link
+                  value: >-
+                    https://{{ .Values.loft.virtualClusterName }}.us.demo.dev
+                - name: GitHub PR
+                  value: >-
+                    https://github.com/loft-demos/{{ .Values.repoName }}/pull/{{`{{number}}`}}
+        EOF
+
+        cat <<EOF | kubectl patch cm argocd-notifications-cm -n argocd --type merge --patch-file -
+        apiVersion: v1
+        kind: ConfigMap
+        metadata:
+          name: argocd-notifications-cm
+          namespace: argocd
+        data:
+          service.github: |
+            appID: 410217 
+            installationID: 43032092
+            privateKey: $github-privateKey {{`
+          template.app-deployed: |
+            message: |
+              Application {{.app.metadata.name}} is now running new version of deployments manifests.
+            github:
+              repoURLPath: "{{.app.spec.source.repoURL}}"
+              revisionPath: "{{.app.spec.source.targetRevision}}"
+              status:
+                state: success
+                label: "argo-cd/{{.app.metadata.name}}"
+                targetURL: "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true"
+              pullRequestComment:
+                content: |
+                  The application code for this pull requests has been deployed and is available at: [{{.app.metadata.name}}]({{.context.helloAppUrl}}).
+                  For possible deployment issues or for more info, view in the pull request specific [Argo CD instance]({{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true)
+          trigger.on-deployed: |
+            - description: Application is synced and healthy. Triggered once per commit.
+              oncePer: app.status.operationState?.syncResult?.revision
+              send:
+              - app-deployed
+              when: app.status.operationState.phase in ['Succeeded']
+                and app.status.health.status == 'Healthy' `}}`
+        EOF
+
+        POD=$(kubectl get pod -n argocd -l app.kubernetes.io/component=applicationset-controller -o jsonpath="{.items[0].metadata.name}")
+        kubectl delete pod -n argocd $POD
+  parameters:
+    - variable: vClusterName
+      label: vCluster Name
+      description: Name of vCluster using App
+    - variable: repoName
+      label: Repository Name
+      description: Repository name for pull request
 
