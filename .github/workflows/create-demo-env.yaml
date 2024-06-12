@@ -7,6 +7,10 @@ on:
       vcluster-name:
         description: "Name of vCluster to be used as demo domain prefix"
         required: true
+      template-version:
+        description: "Virtual Cluster Template version to use"
+        required: true
+        default: "1.0.3"
       logo:
         description: "Company logo URL to override UI"
         default: "https://www.vcluster.com/pro/docs/media/vclusterpro_orange.svg"
@@ -28,15 +32,6 @@ on:
       create-dev-cluster:
         type: boolean
         description: 'Create dev vCluster to use as fake cluster'
-        default: false
-      connect-dev-cluster:
-        type: boolean
-        description: 'Connects dev vCluster to platform. Do not connect if you want to demo connecting a host cluster.'
-        default: false
-      install-rancher:
-        type: boolean
-        description: 'Install Rancher into Loft cluster'
-        default: false
       centralized-admission-control:
         type: boolean
         description: 'Enable Centralized Admission Control demo'
@@ -46,11 +41,11 @@ on:
         description: 'Include Argo CD Demo App'
         default: false
 env:
-  LOFT_CLI_VERSION:  'v3.4.5'
+  LOFT_CLI_VERSION:  'v3.4.6'
   VCLUSTER_NAME: ${{ inputs.vcluster-name }}
   DEV_VCLUSTER_NAME: ${{ inputs.vcluster-name }}-dev
   CLUSTER: ${{ inputs.cluster }}
-  TEMPLATE_VERSION: "1.0.3"
+  TEMPLATE_VERSION: '${{ template-version }}''
   PRODUCT: ${{ inputs.product }}
   LOGO: ${{ inputs.logo }}
   REPO_NAME: 'hello-app-${{ inputs.vcluster-name }}'
@@ -166,22 +161,6 @@ jobs:
           kubectl create namespace $REPO_NAME --dry-run=client -o yaml | kubectl apply -f -
           kubectl create secret docker-registry ghcr-login-secret -n $REPO_NAME --docker-server=https://ghcr.io \
             --docker-username=km-demos --docker-password=${{ secrets.KM_MANAGE_PACKAGES_TOKEN }} --docker-email=km@kurtmadel.com
-
-      - id: install-rancher
-        if: ${{ inputs.install-rancher }}
-        run: |
-          echo "installing Rancher"
-          helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
-          helm repo update
-          helm upgrade --install rancher rancher-stable/rancher --version 2.7.9 \
-             --create-namespace \
-            --namespace cattle-system \
-            --set hostname="rancher-$BASE_DOMAIN" \
-            --set bootstrapPassword=admin \
-            --set ingress.enabled=true \
-            --set ingress.ingressClassName="nginx" \
-            --set ingress.tls.source=secret \
-            --set tls="ingress"
 
       - id: create-centralized-admission-control-demo
         if: ${{ inputs.centralized-admission-control }}
