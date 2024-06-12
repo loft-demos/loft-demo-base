@@ -45,7 +45,7 @@ env:
   VCLUSTER_NAME: ${{ inputs.vcluster-name }}
   DEV_VCLUSTER_NAME: ${{ inputs.vcluster-name }}-dev
   CLUSTER: ${{ inputs.cluster }}
-  TEMPLATE_VERSION: '${{ template-version }}'
+  TEMPLATE_VERSION: '${{ inputs.template-version }}'
   PRODUCT: ${{ inputs.product }}
   LOGO: ${{ inputs.logo }}
   REPO_NAME: 'hello-app-${{ inputs.vcluster-name }}'
