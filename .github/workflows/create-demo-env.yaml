@@ -75,7 +75,6 @@ jobs:
         run: |
           curl -L -o vcluster "https://github.com/loft-sh/vcluster/releases/download/v0.20.0-beta.10/vcluster-linux-amd64" && sudo install -c -m 0755 vcluster /usr/local/bin && rm -f vcluster
           echo $CREATE_DEV_CLUSTER
-          vcluster use driver platform
           if [ "$CLUSTER" == "worker-cluster-na" ]
           then
             echo "BASE_DOMAIN=$VCLUSTER_NAME.us.demo.dev" >> $GITHUB_ENV
@@ -152,6 +151,7 @@ jobs:
           kubectl apply -f argocd/argocd-app.yaml
 
           vcluster login https://$BASE_DOMAIN --access-key ${{ secrets.LOFT_DEMO_ENV_ACCESS_KEY }}
+          vcluster use driver platform
           vcluster connect api-framework-qa --project api-framework
           kubectl create namespace $REPO_NAME --dry-run=client -o yaml | kubectl apply -f -
           kubectl create secret docker-registry ghcr-login-secret -n $REPO_NAME --docker-server=https://ghcr.io \
@@ -172,6 +172,7 @@ jobs:
           loft login ${{ secrets.LOFT_URL }} --access-key ${{ secrets.LOFT_SALES_DEMO_ACCESS_KEY }}
           loft use vcluster $DEV_VCLUSTER_NAME
           vcluster login https://$BASE_DOMAIN --access-key ${{ secrets.LOFT_DEMO_ENV_ACCESS_KEY }}
+          vcluster use driver platform
           vcluster platform add cluster dev-cluster --display-name "Dev Cluster" --helm-set=resources.requests.memory=2Gi
 
       - id: generate-githubapp-token
