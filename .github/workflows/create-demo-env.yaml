@@ -59,16 +59,10 @@ jobs:
     steps:
       - id: checkout
         uses: actions/checkout@v4
-
-      - id: install-vcluster-cli
-        if: ${{ inputs.create-dev-cluster }}
-        uses: loft-sh/setup-vcluster@main
-        with:
-          version: v0.20.10
-          kubectl-install: false
       
       - id: set-domain-login
         run: |
+          curl -L -o vcluster "https://github.com/loft-sh/vcluster/releases/download/v0.20.0-beta.10/vcluster-linux-amd64" && sudo install -c -m 0755 vcluster /usr/local/bin && rm -f vcluster
           echo $CREATE_DEV_CLUSTER
           vcluster login ${{ secrets.LOFT_URL }} --access-key=${{ secrets.LOFT_SALES_DEMO_ACCESS_KEY }}
           vcluster use driver platform
