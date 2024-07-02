@@ -41,6 +41,7 @@ on:
         description: 'Include Argo CD Demo App'
         default: false
 env:
+  LOFT_CLI_VERSION:  'v3.4.6'
   VCLUSTER_NAME: ${{ inputs.vcluster-name }}
   DEV_VCLUSTER_NAME: ${{ inputs.vcluster-name }}-dev
   CLUSTER: ${{ inputs.cluster }}
@@ -59,12 +60,21 @@ jobs:
     steps:
       - id: checkout
         uses: actions/checkout@v4
+
+      - id: install-loft-cli
+        uses: loft-sh/setup-loft@v2
+        with:
+          version: ${{ env.LOFT_CLI_VERSION }}
+          url: ${{ secrets.LOFT_URL }}
+          # Specify your Loft access key here
+          access-key: ${{ secrets.LOFT_SALES_DEMO_ACCESS_KEY }}
+          kubectl-install: false
+          kubectl-version: v1.28.2
       
       - id: set-domain-login
         run: |
           curl -L -o vcluster "https://github.com/loft-sh/vcluster/releases/download/v0.20.0-beta.10/vcluster-linux-amd64" && sudo install -c -m 0755 vcluster /usr/local/bin && rm -f vcluster
           echo $CREATE_DEV_CLUSTER
-          vcluster login ${{ secrets.LOFT_URL }} --access-key=${{ secrets.LOFT_SALES_DEMO_ACCESS_KEY }}
           vcluster use driver platform
           if [ "$CLUSTER" == "worker-cluster-na" ]
           then
@@ -77,13 +87,13 @@ jobs:
         if: ${{ inputs.create-dev-cluster }}
         run: |
           echo $DEV_VCLUSTER_NAME
-          vcluster create $DEV_VCLUSTER_NAME --project sales-demos --recreate \
+          loft create vcluster $DEV_VCLUSTER_NAME --project sales-demos --recreate \
             --template demo-dev-cluster \
             --cluster $CLUSTER
 
       - id: create-demo-vcluster
         run: |
-          vcluster create $VCLUSTER_NAME --project sales-demos --recreate \
+          loft create vcluster $VCLUSTER_NAME --project sales-demos --recreate \
             --template loft-demo --version $TEMPLATE_VERSION \
             --cluster $CLUSTER \
             --set loftProduct=$PRODUCT \
@@ -142,7 +152,7 @@ jobs:
           kubectl apply -f argocd/argocd-app.yaml
 
           vcluster login https://$BASE_DOMAIN --access-key ${{ secrets.LOFT_DEMO_ENV_ACCESS_KEY }}
-          vcluster connect api-framework-qa -p api-framework
+          vcluster connect api-framework-qa --project api-framework
           kubectl create namespace $REPO_NAME --dry-run=client -o yaml | kubectl apply -f -
           kubectl create secret docker-registry ghcr-login-secret -n $REPO_NAME --docker-server=https://ghcr.io \
             --docker-username=km-demos --docker-password=${{ secrets.KM_MANAGE_PACKAGES_TOKEN }} --docker-email=km@kurtmadel.com
@@ -157,10 +167,10 @@ jobs:
           kubectl apply -f ./vcluster-centralized-admission-control
 
       - id: connect-dev-cluster
-        if: ${{ inputs.create-dev-cluster && inputs.connect-dev-cluster }}
+        if: ${{ inputs.create-dev-cluster }}
         run: |
-          vcluster login ${{ secrets.LOFT_URL }} --access-key ${{ secrets.LOFT_SALES_DEMO_ACCESS_KEY }}
-          vcluster connect $DEV_VCLUSTER_NAME
+          loft login ${{ secrets.LOFT_URL }} --access-key ${{ secrets.LOFT_SALES_DEMO_ACCESS_KEY }}
+          loft use vcluster $DEV_VCLUSTER_NAME
           vcluster login https://$BASE_DOMAIN --access-key ${{ secrets.LOFT_DEMO_ENV_ACCESS_KEY }}
           vcluster platform add cluster dev-cluster --display-name "Dev Cluster" --helm-set=resources.requests.memory=2Gi
 
