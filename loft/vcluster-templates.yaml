@@ -1,9 +1,7 @@
-apiVersion: management.loft.sh/v1
 kind: VirtualClusterTemplate
+apiVersion: management.loft.sh/v1
 metadata:
   name: vcluster-pro-template
-  labels:
-    app.kubernetes.io/instance: loft-configuration
 spec:
   displayName: Virtual Cluster Pro Template
   description: This virtual cluster template deploys a vCluster.Pro virtual cluster
@@ -18,19 +16,10 @@ spec:
       chart:
         version: 0.20.0-beta.10
       values: |-
-        # Below you can configure the virtual cluster
-        isolation:
-          enabled: false
-
-        vcluster:
-          image: rancher/k3s:{{ .Values.k8sVersion }}-k3s1
-
         sync:
-          ingresses:
-            enabled: true
-
-        coredns:
-          integrated: true
+          toHost:
+            ingresses:
+              enabled: true
 
         # Checkout https://vcluster.com/pro/docs/ for more config options
     accessPoint:
@@ -41,7 +30,7 @@ spec:
     - template:
         metadata:
           annotations:
-            sleepmode.loft.sh/ignore-user-agents: 'argo*'
+            sleepmode.loft.sh/ignore-user-agents: argo*
         instanceTemplate:
           metadata:
             labels:
@@ -52,24 +41,28 @@ spec:
         helmRelease:
           chart:
             version: 0.20.0-beta.10
-          values: |-
-            # Below you can configure the virtual cluster
-            isolation:
-              enabled: false
-
-            # Use an embedded managed etcd server instead of using the k3s default SQLite backend
-            embeddedEtcd:
-              enabled: true
-
-            vcluster:
-              image: rancher/k3s:{{ .Values.k8sVersion }}-k3s1
-
+          values: >-
             sync:
-              ingresses:
-                enabled: true
+              toHost:
+                ingresses:
+                  enabled: true
 
-            coredns:
-              integrated: true
+            controlPlane:
+              # Use an embedded managed etcd server instead of using the k3s default SQLite backend
+              backingStore:
+                etcd:
+                  embedded:
+                    enabled: true
+              distro:
+                k8s:
+                  apiServer:
+                    image:
+                      tag:  {{ .Values.k8sVersion }}
+                  controllerManager:
+                    image:
+                      tag: {{ .Values.k8sVersion }}
+              coredns:
+                embedded: true
 
             # Checkout https://vcluster.com/pro/docs/ for more config options
         accessPoint:
@@ -81,14 +74,17 @@ spec:
           label: k8sVersion
           description: Please select Kubernetes version
           options:
-            - v1.29.0
-            - v1.28.5
+            - v1.30.2
+            - v1.29.6
+            - v1.28.11
             - v1.27.9
-            - v1.26.12
-          defaultValue: v1.27.9
+            - v1.26.15
+          defaultValue: v1.29.6
         - variable: env
           label: Deployment Environment
-          description: Environment for deployments for this vCluster used as cluster label for Argo CD ApplicationSet Cluster Generator
+          description: >-
+            Environment for deployments for this vCluster used as cluster label
+            for Argo CD ApplicationSet Cluster Generator
           options:
             - dev
             - qa
@@ -105,17 +101,10 @@ spec:
           chart:
             version: 0.20.0-beta.10
           values: |-
-            # Below you can configure the virtual cluster
-            isolation:
-              enabled: false
-
             sync:
-              ingresses:
-                enabled: true
-
-            coredns:
-              integrated: true
-
+              toHost:
+                ingresses:
+                  enabled: true
             # Checkout https://vcluster.com/pro/docs/ for more config options
         accessPoint:
           ingress: {}
@@ -129,6 +118,7 @@ spec:
         - '*'
       users:
         - admin
+status: {}
 ---
 kind: VirtualClusterTemplate
 apiVersion: management.loft.sh/v1
@@ -173,17 +163,24 @@ spec:
         version: 0.20.0-beta.10
       values: |-
         sync:
-          ingresses:
+          toHost:
+            ingresses:
+              enabled: true
+
+        controlPlane:
+          # Use an embedded managed etcd server instead of using the k3s default SQLite backend
+          backingStore:
+            etcd:
+              embedded:
+                enabled: true
+          coredns:
+            embedded: true
+        policies:
+          limitRange:
             enabled: true
-        # Use an embedded managed etcd server instead of using the k3s default SQLite backend
-        embeddedEtcd:
-          enabled: true
-        isolation:
-          enabled: true
-          networkPolicy:
-            enabled: false
-        coredns:
-          integrated: true
+          podSecurityStandard: baseline
+          resourceQuota:
+            enabled: true
     accessPoint:
       ingress: {}
     spaceTemplate:

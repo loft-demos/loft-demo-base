@@ -22,6 +22,25 @@ spec:
       chart:
         version: 0.20.0-beta.10
       values: |-
+        sync:
+          toHost:
+            ingresses:
+              enabled: true
+
+        controlPlane:
+          # Use an embedded managed etcd server instead of using the k3s default SQLite backend
+          backingStore:
+            etcd:
+              embedded:
+                enabled: true
+          coredns:
+            embedded: true
+        policies:
+          limitRange:
+            enabled: true
+          podSecurityStandard: baseline
+          resourceQuota:
+            enabled: true
         admission:
           validatingWebhooks:
             - |-
@@ -62,18 +81,6 @@ spec:
                   scope: '*'
                 sideEffects: NoneOnDryRun
                 timeoutSeconds: 10
-        sync:
-          ingresses:
-            enabled: true
-        # Use an embedded managed etcd server instead of using the k3s default SQLite backend
-        embeddedEtcd:
-          enabled: true
-        isolation:
-          enabled: true
-          networkPolicy:
-            enabled: false
-        coredns:
-          integrated: true
     accessPoint:
       ingress: {}
     spaceTemplate:
