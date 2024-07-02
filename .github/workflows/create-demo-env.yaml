@@ -77,13 +77,13 @@ jobs:
         if: ${{ inputs.create-dev-cluster }}
         run: |
           echo $DEV_VCLUSTER_NAME
-          vcluster create vcluster $DEV_VCLUSTER_NAME --project sales-demos --recreate \
+          vcluster create $DEV_VCLUSTER_NAME --project sales-demos --recreate \
             --template demo-dev-cluster \
             --cluster $CLUSTER
 
       - id: create-demo-vcluster
         run: |
-          vcluster create vcluster $VCLUSTER_NAME --project sales-demos --recreate \
+          vcluster create $VCLUSTER_NAME --project sales-demos --recreate \
             --template loft-demo --version $TEMPLATE_VERSION \
             --cluster $CLUSTER \
             --set loftProduct=$PRODUCT \
