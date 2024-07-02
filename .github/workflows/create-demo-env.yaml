@@ -10,7 +10,7 @@ on:
       template-version:
         description: "Virtual Cluster Template version to use"
         required: true
-        default: "1.0.3"
+        default: "0.40.17"
       logo:
         description: "Company logo URL to override UI"
         default: "https://www.vcluster.com/pro/docs/media/vclusterpro_orange.svg"

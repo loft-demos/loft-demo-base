@@ -27,7 +27,7 @@ spec:
         server: '{{server}}'
         # {{metadata.labels.env}} is the value of the env label that is being used to select kubernetes clusters 
         # and used as sub-folder in the target git repository
-        namespace: hello-world-app-{{metadata.labels.env}}
+        namespace: hello-app-{{metadata.labels.env}}
       info:
         - name: GitHub Repo
           value: https://github.com/loft-demos/REPO_NAME/

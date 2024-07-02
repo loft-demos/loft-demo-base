@@ -19,8 +19,8 @@ spec:
     pro:
       enabled: true
     helmRelease:
-      chart: 
-        version: v0.19.0-alpha.0
+      chart:
+        version: 0.20.0-beta.10
       values: |-
         admission:
           validatingWebhooks:

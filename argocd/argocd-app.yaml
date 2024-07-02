@@ -11,7 +11,7 @@ spec:
     targetRevision: main
     path: helm-chart
   destination: 
-    name: loft-api-framework-vcluster-api-framework-dev
+    name: loft-api-framework-vcluster-api-framework-qa
     namespace: PREVIEW_NAMESPACE
 
   syncPolicy:
