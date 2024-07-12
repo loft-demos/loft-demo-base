@@ -10,7 +10,7 @@ on:
       template-version:
         description: "Virtual Cluster Template version to use"
         required: true
-        default: "0.40.17"
+        default: "4.0.0"
       logo:
         description: "Company logo URL to override UI"
         default: "https://www.vcluster.com/pro/docs/media/vclusterpro_orange.svg"
@@ -60,20 +60,12 @@ jobs:
     steps:
       - id: checkout
         uses: actions/checkout@v4
-
-      - id: install-loft-cli
-        uses: loft-sh/setup-loft@v2
-        with:
-          version: ${{ env.LOFT_CLI_VERSION }}
-          url: ${{ secrets.LOFT_URL }}
-          # Specify your Loft access key here
-          access-key: ${{ secrets.LOFT_SALES_DEMO_ACCESS_KEY }}
-          kubectl-install: false
-          kubectl-version: v1.28.2
       
       - id: set-domain-login
         run: |
-          curl -L -o vcluster "https://github.com/loft-sh/vcluster/releases/download/v0.20.0-beta.10/vcluster-linux-amd64" && sudo install -c -m 0755 vcluster /usr/local/bin && rm -f vcluster
+          curl -L -o vcluster "https://github.com/loft-sh/vcluster/releases/download/v0.20.0-beta.12/vcluster-linux-amd64" && sudo install -c -m 0755 vcluster /usr/local/bin && rm -f vcluster
+          vcluster login ${{ secrets.LOFT_URL }} --access-key ${{ secrets.LOFT_SALES_DEMO_ACCESS_KEY }}
+          vcluster user driver platform
           echo $CREATE_DEV_CLUSTER
           if [ "$CLUSTER" == "worker-cluster-na" ]
           then
@@ -86,17 +78,17 @@ jobs:
         if: ${{ inputs.create-dev-cluster }}
         run: |
           echo $DEV_VCLUSTER_NAME
-          loft create vcluster $DEV_VCLUSTER_NAME --project sales-demos --recreate \
+          vcluster create $DEV_VCLUSTER_NAME --project sales-demos --recreate \
             --template demo-dev-cluster \
             --cluster $CLUSTER
 
       - id: create-demo-vcluster
         run: |
-          loft create vcluster $VCLUSTER_NAME --project sales-demos --recreate \
+          vcluster create $VCLUSTER_NAME --project sales-demos --recreate \
             --template loft-demo --version $TEMPLATE_VERSION \
             --cluster $CLUSTER \
-            --set loftProduct=$PRODUCT \
-            --set uiLogoURL=$LOGO
+            --set-param loftProduct=$PRODUCT \
+            --set-param uiLogoURL=$LOGO
           
           sed -i "s|REPLACE_BASE_DOMAIN|$BASE_DOMAIN|g" loft/projects.yaml
           sed -i "s|REPLACE_BASE_DOMAIN|$BASE_DOMAIN|g" loft/apps.yaml
@@ -169,8 +161,8 @@ jobs:
       - id: connect-dev-cluster
         if: ${{ inputs.create-dev-cluster }}
         run: |
-          loft login ${{ secrets.LOFT_URL }} --access-key ${{ secrets.LOFT_SALES_DEMO_ACCESS_KEY }}
-          loft use vcluster $DEV_VCLUSTER_NAME
+          vcluster login ${{ secrets.LOFT_URL }} --access-key ${{ secrets.LOFT_SALES_DEMO_ACCESS_KEY }}
+          vcluster connect $DEV_VCLUSTER_NAME
           vcluster login https://$BASE_DOMAIN --access-key ${{ secrets.LOFT_DEMO_ENV_ACCESS_KEY }}
           vcluster use driver platform
           vcluster platform add cluster dev-cluster --display-name "Dev Cluster" --helm-set=resources.requests.memory=2Gi
