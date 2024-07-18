@@ -65,7 +65,7 @@ jobs:
         run: |
           curl -L -o vcluster "https://github.com/loft-sh/vcluster/releases/download/v0.20.0-beta.12/vcluster-linux-amd64" && sudo install -c -m 0755 vcluster /usr/local/bin && rm -f vcluster
           vcluster login ${{ secrets.LOFT_URL }} --access-key ${{ secrets.LOFT_SALES_DEMO_ACCESS_KEY }}
-          vcluster user driver platform
+          vcluster use driver platform
           echo $CREATE_DEV_CLUSTER
           if [ "$CLUSTER" == "worker-cluster-na" ]
           then
