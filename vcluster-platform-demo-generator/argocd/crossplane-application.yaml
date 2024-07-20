@@ -14,7 +14,7 @@ spec:
   source:
     repoURL: https://github.com/loft-demos/loft-demo-base
     targetRevision: HEAD
-    path: vcluster-platform-demo-generator/argo-cd/crossplan-bootstrap
+    path: vcluster-platform-demo-generator/argo-cd/crossplane-bootstrap
   destination:
     server: https://kubernetes.default.svc
     namespace: crossplane-system
