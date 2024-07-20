@@ -56,6 +56,9 @@ spec:
               - link: https://github.com/loft-demos/{{ .Values.loft.virtualClusterName }}-app/tree/main/vcluster-gitops
                 position: TopEnd
                 text: GitHub Repo
+              - link: https://komoplane-{{ .Values.domain }}
+                position: TopEnd
+                text: Komoplane
               logoURL: "{{ .Values.uiLogoURL }}"
             auth:
               oidc:
