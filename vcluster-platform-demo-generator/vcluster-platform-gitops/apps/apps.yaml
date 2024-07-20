@@ -471,6 +471,11 @@ spec:
           sleep 1; 
         done
 
+        while ! kubectl get secret oidc-secret -n loft; do
+          echo "Waiting for oidc-secret...";
+          sleep 1; 
+        done
+
         OIDC_CLIENT_SECRET=$(kubectl get secret oidc-secret -n loft -o
         jsonpath="{.data.clientSecret}") | base64 --decode
 
