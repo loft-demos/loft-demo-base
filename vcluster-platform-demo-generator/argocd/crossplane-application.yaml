@@ -1,0 +1,31 @@
+# The Argo CD Application for bootstrapping the Crossplane providers for a vCluster Platform Demo Generator environment
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: crossplane-bootstrap
+  namespace: argocd
+  labels:
+    crossplane.demos.loft.sh: bootstrap
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/loft-demos/loft-demo-base
+    targetRevision: HEAD
+    path: vcluster-platform-demo-generator/argo-cd/crossplan-bootstrap
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: crossplane-system
+  syncPolicy:
+    automated:
+      prune: true    
+    syncOptions:
+    - CreateNamespace=true
+    retry:
+      limit: 1
+      backoff:
+        duration: 5s 
+        factor: 2 
+        maxDuration: 1m
