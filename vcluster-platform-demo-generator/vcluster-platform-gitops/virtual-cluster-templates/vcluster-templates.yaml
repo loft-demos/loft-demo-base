@@ -52,7 +52,7 @@ spec:
               domain: >-
                 {{ .Values.loft.virtualClusterName }}.{{
                 .Values.loft.clusterAnnotations.domain }}
-          - name: vcluster-platform-configure-admins
+          - name: vcluster-platform-demo-configure-admins
             namespace: loft
           - name: argocd
             namespace: argocd
