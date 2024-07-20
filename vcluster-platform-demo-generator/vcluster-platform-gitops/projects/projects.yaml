@@ -1,0 +1,59 @@
+apiVersion: management.loft.sh/v1
+kind: Project
+metadata:
+  name: demos
+spec:
+  displayName: Demo Environments
+  description: vCluster Platform demo environments
+  owner:
+    team: loft-admins
+  quotas: {}
+  allowedClusters:
+    - name: loft-cluster
+  allowedRunners:
+    - name: '*'
+  allowedTemplates:
+    - kind: VirtualClusterTemplate
+      group: storage.loft.sh
+      name: vcluster-platform-demo
+      isDefault: true
+  requireTemplate:
+    disabled: false
+  members:
+    - kind: Team
+      group: storage.loft.sh
+      name: loft-admins
+      clusterRole: loft-management-project-admin
+  access:
+    - name: loft-access
+      verbs:
+        - get
+      subresources:
+        - members
+        - clusters
+        - templates
+        - chartinfo
+        - charts
+      teams:
+        - loft-admins
+    - name: loft-admin-access
+      verbs:
+        - get
+        - update
+        - patch
+        - delete
+      subresources:
+        - '*'
+      teams:
+        - loft-admins
+  namespacePattern:
+    virtualCluster: '{{.Values.loft.project}}-v-{{.Values.loft.name}}'
+  argoCD:
+    enabled: true
+    cluster: loft-cluster
+    namespace: argocd
+    sso:
+      enabled: true
+      host: REPLACED_BY_ARGO_CD
+      assignedRoles:
+        - role:admin
