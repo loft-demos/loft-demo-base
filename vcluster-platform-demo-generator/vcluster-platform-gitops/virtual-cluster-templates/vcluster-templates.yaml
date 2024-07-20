@@ -104,6 +104,7 @@ spec:
             namespace: argocd
           - name: crossplane
             namespace: crossplane-system
+            version: 1.16.0
           - name: crossplane-manifest
             namespace: crossplane-system
             parameters: |
