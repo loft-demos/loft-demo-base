@@ -52,8 +52,6 @@ spec:
               domain: >-
                 {{ .Values.loft.virtualClusterName }}.{{
                 .Values.loft.clusterAnnotations.domain }}
-          - name: vcluster-platform-demo-configure-admins
-            namespace: loft
           - name: argocd
             namespace: argocd
             version: 7.3.6
@@ -100,18 +98,20 @@ spec:
                       nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
                     hostname: argocd-appset-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}
                     tls: true
-          - name: github-repo-argo-cd-webhooks
-            namespace: argocd
           - name: crossplane
             namespace: crossplane-system
             version: 1.16.0
+          - name: komoplane
+            namespace: crossplane-system
+            version: 0.1.5
+          - name: github-repo-argo-cd-webhooks
+            namespace: argocd
           - name: crossplane-manifest
             namespace: crossplane-system
             parameters: |
               vClusterName: '{{ .Values.loft.virtualClusterName }}'
-          - name: komoplane
-            namespace: crossplane-system
-            version: 0.1.5
+          - name: vcluster-platform-demo-configure-admins
+            namespace: loft
         objects: |
           apiVersion: v1
           kind: Namespace
