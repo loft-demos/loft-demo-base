@@ -10,13 +10,13 @@ metadata:
   finalizers:
     - resources-finalizer.argocd.argoproj.io
   annotations:
-    argocd.argoproj.io/sync-wave: "2"
+    argocd.argoproj.io/sync-wave: "0"
 spec:
   project: default
   source:
     repoURL: https://github.com/loft-demos/loft-demo-base
     targetRevision: HEAD
-    path: vcluster-platform-demo-generator/crossplane/provider-github/coopnorge-provider-github.yaml
+    path: vcluster-platform-demo-generator/crossplane/provider-github/provider
   destination:
     namespace: default
     server: https://kubernetes.default.svc
