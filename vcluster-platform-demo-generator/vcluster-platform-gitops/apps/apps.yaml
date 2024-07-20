@@ -1,6 +1,86 @@
 apiVersion: management.loft.sh/v1
 kind: App
 metadata:
+  name: vcluster-platform-demo
+spec:
+  displayName: vCluster Platform Demo
+  description: >-
+    vCluster Platform Hierarchical Demo Environment.
+  owner:
+    team: loft-admins
+  recommendedApp:
+    - virtualcluster
+  defaultNamespace: loft
+  icon: https://www.vcluster.com/pro/docs/media/vclusterpro_orange.svg
+  config:
+    chart:
+      name: vcluster-platform
+      repoURL: https://charts.loft.sh/
+  versions:
+    - icon: https://www.vcluster.com/pro/docs/media/vclusterpro_orange.svg
+      config:
+        chart:
+          name: vcluster-platform
+          version: 4.0.0-beta.1
+          repoURL: https://charts.loft.sh/
+        values: |-
+          admin:
+            create: false
+
+          isolation:
+            enabled: true
+            networkPolicy:
+              enabled: false
+
+          ingress:
+            enabled: true
+            ingressClass: nginx
+            host: "{{ .Values.domain }}"
+            tls:
+              enabled: true
+              secret: ""
+
+          envValueFrom:
+            CLIENT_SECRET:
+              secretKeyRef:
+                name: oidc-secret
+                key: clientSecret
+
+          config:
+            loftHost: "{{ .Values.domain }}"
+            uiSettings:
+              navBarButtons:
+              - link: https://www.vcluster.com/docs/platform/
+                position: TopEnd
+                text: vCluster Docs
+              - link: https://github.com/loft-demos/{{ .Values.loft.virtualClusterName }}-app/tree/main/vcluster-gitops
+                position: TopEnd
+                text: GitHub Repo
+              logoURL: "{{ .Values.uiLogoURL }}"
+            auth:
+              oidc:
+                issuerUrl: https://loft.rocks/oidc
+                clientId: loft
+                clientSecret: $CLIENT_SECRET
+                redirectURI: https://{{ .Values.domain }}/auth/oidc/callback
+                groupsClaim: groups
+      parameters:
+        - variable: domain
+          label: Loft Domain
+          description: >-
+            The domain to run this Loft instance on, e.g.
+            some-customer.loft.host
+          required: true
+          placeholder: some-customer.loft.host
+        - variable: uiLogoURL
+          label: Logo logoURL
+          description: Will update the vCluster Platform config ui settings logoURL
+          defaultValue: https://www.vcluster.com/pro/docs/media/vclusterpro_orange.svg
+      version: 4.0.0-beta.1
+---
+apiVersion: management.loft.sh/v1
+kind: App
+metadata:
   name: argocd
 spec:
   displayName: ArgoCD
@@ -40,3 +120,29 @@ spec:
         - get
       users:
         - '*'
+---
+apiVersion: management.loft.sh/v1
+kind: App
+metadata:
+  name: crossplane
+spec:
+  displayName: Crossplane
+  owner:
+    team: loft-admins
+  recommendedApp:
+    - cluster
+  defaultNamespace: crossplane-system
+  icon: https://docs.crossplane.io/img/crossplane-logo.svg
+  config:
+    chart:
+      name: crossplane
+      repoURL: https://charts.crossplane.io/stable
+  versions:
+    - icon: https://docs.crossplane.io/img/crossplane-logo.svg
+      config:
+        chart:
+          name: crossplane
+          version: 1.16.0
+          repoURL: https://charts.crossplane.io/stable
+      version: 1.16.0
+
