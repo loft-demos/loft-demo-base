@@ -111,6 +111,7 @@ spec:
               vClusterName: '{{ .Values.loft.virtualClusterName }}'
           - name: komoplane
             namespace: crossplane-system
+            version: 0.1.5
         objects: |
           apiVersion: v1
           kind: Namespace
