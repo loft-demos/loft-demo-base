@@ -44,7 +44,7 @@ spec:
                 https://{{ .Values.loft.virtualClusterName }}.{{
                 .Values.loft.clusterAnnotations.domain }}
         apps:
-          - name: loft-demo
+          - name: vcluster-platform-demo
             namespace: loft
             version: 4.0.0-beta.1
             parameters: |
@@ -54,7 +54,7 @@ spec:
                 .Values.loft.clusterAnnotations.domain }}
               demoAppRepoSuffix: '{{ .Values.loft.virtualClusterName }}'
               loftProduct: vcluster-pro
-          - name: loft-configure-admins
+          - name: vcluster-platform-configure-admins
             namespace: loft
           - name: argocd
             namespace: argocd
