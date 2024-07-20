@@ -524,9 +524,10 @@ spec:
 
         EOF
 
-
-        kubectl wait --for condition=established --timeout=60s
-        crd/providerconfigs.kubernetes.crossplane.io
+        while ! kubectl get crd providerconfigs.kubernetes.crossplane.io; do
+          echo "Waiting for crossplane providerconfigs.kubernetes.crossplane.io crd...";
+          sleep 1; 
+        done
 
 
         cat <<EOF | kubectl apply -f -
