@@ -52,8 +52,6 @@ spec:
               domain: >-
                 {{ .Values.loft.virtualClusterName }}.{{
                 .Values.loft.clusterAnnotations.domain }}
-              demoAppRepoSuffix: '{{ .Values.loft.virtualClusterName }}'
-              loftProduct: vcluster-pro
           - name: vcluster-platform-configure-admins
             namespace: loft
           - name: argocd
