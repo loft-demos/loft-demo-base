@@ -323,7 +323,7 @@ spec:
         GITHUB_APP_INSTALL_ID=$(kubectl get secret loft-demo-org-cred -n argocd
         -o jsonpath="{.data.githubAppInstallationID}")
 
-        OIDC_CLIENT_SECRET=$(kubectl get secret oidc-secret -n argocd -o
+        OIDC_CLIENT_SECRET=$(kubectl get secret oidc-secret -n loft -o
         jsonpath="{.data.clientSecret}")
 
         cat <<EOF | kubectl apply -f -
@@ -470,6 +470,9 @@ spec:
           echo "Waiting for crossplane providers.pkg.crossplane.io crd...";
           sleep 1; 
         done
+
+        OIDC_CLIENT_SECRET=$(kubectl get secret oidc-secret -n loft -o
+        jsonpath="{.data.clientSecret}")
 
         cat <<EOF | kubectl apply -f -
 
@@ -707,7 +710,7 @@ spec:
                               namespace: loft
                             stringData:
                               clientID: PATCHED
-                              clientSecret: '{{ .Values.loft.clusterAnnotations.oidcClientSecret }}'
+                              clientSecret: '$OIDC_CLIENT_SECRET'
                               name: ''
                               redirectURIs: PATCHED
                         providerConfigRef:
