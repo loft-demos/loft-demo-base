@@ -1,0 +1,41 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: xdemorepositories.demo.loft.sh
+spec:
+  claimNames:
+    kind: DemoRepository
+    plural: demorepositories
+  defaultCompositeDeletePolicy: Background
+  defaultCompositionUpdatePolicy: Automatic
+  group: demo.loft.sh
+  names:
+    kind: XDemoRepository
+    plural: xdemorepositories
+  versions:
+    - name: v1alpha1
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          description: >-
+            A GitHub vCluster Platform demo repository used for platform gitops
+            and other demo examples.
+          properties:
+            spec:
+              properties:
+                loftDemoDomain:
+                  description: vCluster Platform demo domain
+                  type: string
+                name:
+                  description: Repo name
+                  type: string
+                virtualClusterNamespace:
+                  description: Namespace for vCluster instance
+                  type: string
+              required:
+                - name
+                - virtualClusterNamespace
+                - loftDemoDomain
+              type: object
+          type: object
+      served: true
