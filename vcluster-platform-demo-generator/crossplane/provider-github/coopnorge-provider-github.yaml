@@ -1,0 +1,15 @@
+apiVersion: pkg.crossplane.io/v1
+kind: Provider
+metadata:
+  name: provider-github
+spec:
+  ignoreCrossplaneConstraints: false
+  package: coopnorge/provider-github:v0.10.0
+  packagePullPolicy: IfNotPresent
+  revisionActivationPolicy: Automatic
+  revisionHistoryLimit: 1
+  runtimeConfigRef:
+    apiVersion: pkg.crossplane.io/v1beta1
+    kind: DeploymentRuntimeConfig
+    name: provider-github
+  skipDependencyResolution: false
