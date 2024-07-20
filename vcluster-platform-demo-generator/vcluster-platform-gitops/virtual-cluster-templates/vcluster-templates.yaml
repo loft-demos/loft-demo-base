@@ -134,7 +134,9 @@ spec:
             namespace: loft
             labels:
               loft.sh/project-secret-name: ghcr-login-secret
-          type: Opaque
+          data:
+            .dockerconfigjson: e30K
+          type: kubernetes.io/dockerconfigjson
           ---
           apiVersion: v1
           kind: Namespace
