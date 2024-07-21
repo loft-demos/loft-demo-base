@@ -52,6 +52,8 @@ spec:
               domain: >-
                 {{ .Values.loft.virtualClusterName }}.{{
                 .Values.loft.clusterAnnotations.domain }}
+          - name: vcluster-platform-demo-configure-admins
+            namespace: loft
           - name: argocd
             namespace: argocd
             version: 7.3.6
@@ -110,8 +112,6 @@ spec:
             namespace: crossplane-system
             parameters: |
               vClusterName: '{{ .Values.loft.virtualClusterName }}'
-          - name: vcluster-platform-demo-configure-admins
-            namespace: loft
         objects: |
           apiVersion: v1
           kind: Namespace
