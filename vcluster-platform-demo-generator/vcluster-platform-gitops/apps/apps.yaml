@@ -477,7 +477,7 @@ spec:
         done
 
         OIDC_CLIENT_SECRET=$(kubectl get secret oidc-secret -n loft -o
-        jsonpath="{.data.clientSecret}" | base64 --decode)
+        jsonpath="{.data.clientSecret}" | base64 -d)
 
         cat <<EOF | kubectl apply -f -
 
