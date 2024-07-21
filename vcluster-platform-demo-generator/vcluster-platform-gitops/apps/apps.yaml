@@ -761,8 +761,6 @@ spec:
           publishConnectionDetailsWithStoreConfigRef:
             name: default
         EOF
-
-        kubectl delete project default
         
   parameters:
     - variable: vClusterName
