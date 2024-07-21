@@ -67,8 +67,6 @@ spec:
                     timeout.reconciliation: 0 
                   secret:
                     createSecret: true
-                    argocdServerAdminPassword: "$2a$10$rRyBsGSHK6.uc8fntPwVIuLVHgsAhAX7TcdrqW/RADU0uh7CaChLa"
-                    argocdServerAdminPasswordMtime: null
                   rbac:
                     policy.csv: |-
                       g, Administration, role:admin
