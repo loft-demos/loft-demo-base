@@ -1,0 +1,28 @@
+apiVersion: management.loft.sh/v1
+kind: App
+metadata:
+  name: demo-crossplane
+spec:
+  displayName: Demo Crossplane
+  description: >-
+    Crossplane for the vCluster Platform Hierarchical Demo Environment generator
+    template.
+  owner:
+    team: loft-admins
+  recommendedApp:
+    - virtualcluster
+  defaultNamespace: crossplane-system
+  icon: https://docs.crossplane.io/img/crossplane-logo.svg
+  config:
+    chart:
+      name: crossplane
+      repoURL: https://charts.crossplane.io/stable
+  versions:
+    - defaultNamespace: crossplane-system
+      icon: https://docs.crossplane.io/img/crossplane-logo.svg
+      config:
+        chart:
+          name: crossplane
+          version: 1.16.0
+          repoURL: https://charts.crossplane.io/stable
+      version: 1.16.0
