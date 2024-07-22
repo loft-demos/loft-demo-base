@@ -1,0 +1,65 @@
+apiVersion: management.loft.sh/v1
+kind: App
+metadata:
+  name: demo-vcluster-platform-configure-admins
+spec:
+  displayName: Demo vCluster Platform Configure Admins
+  description: Configures SSO Groups that should get admin privileges
+  owner:
+    team: loft-admins
+  config:
+    chart: {}
+    bash:
+      script: >
+        kubectl wait --for condition=established --timeout=60s
+        crd/teams.storage.loft.sh
+
+
+        while ! kubectl get teams.storage.loft.sh loft-admins; do
+          echo "Waiting for team...";
+          sleep 1; 
+        done
+
+
+        cat <<EOF | kubectl apply -f -
+
+        kind: Team
+
+        apiVersion: storage.loft.sh/v1
+
+        metadata:
+          name: loft-admins
+        spec:
+          displayName: Global Admins
+          description: All users in this team have full admin access to all clusters
+          username: loftadmins
+          groups:
+            - loft:admins
+            - Administration
+            - Design
+            - DevRel
+            - Engineering
+            - Marketing
+            - Product
+            - Sales
+          clusterRoles:
+            - name: loft-management-admin
+          access:
+            - name: loft-access
+              verbs:
+                - get
+                - bind
+              subresources:
+                - clusters
+              teams:
+                - loft-admins
+        EOF
+
+
+        kubectl annotate clusters loft-cluster domainPrefix={{
+        .Values.loft.virtualClusterName }}
+
+        kubectl annotate clusters loft-cluster domain={{
+        .Values.loft.clusterAnnotations.domain }}
+
+        kubectl delete project default
