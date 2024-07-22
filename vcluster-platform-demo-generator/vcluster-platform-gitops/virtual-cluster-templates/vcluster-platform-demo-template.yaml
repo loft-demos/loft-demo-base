@@ -129,7 +129,7 @@ spec:
           kind: Secret
           metadata:
             name: test-oidc-secret
-            namespace: loft
+            namespace: p-api-framework
             labels:
               loft.sh/project-secret-name: oidc-secret
               loft.sh/project-secret: 'true'
