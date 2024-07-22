@@ -128,16 +128,6 @@ spec:
           apiVersion: v1
           kind: Secret
           metadata:
-            name: test-oidc-secret
-            namespace: p-api-framework
-            labels:
-              loft.sh/project-secret-name: oidc-secret
-              loft.sh/project-secret: 'true'
-          type: Opaque
-          ---
-          apiVersion: v1
-          kind: Secret
-          metadata:
             name: ghcr-login-secret
             namespace: loft
             labels:
