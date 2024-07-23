@@ -67,7 +67,7 @@ spec:
           source:
             path: vcluster-platform-demo-generator/vcluster-platform-gitops
             repoURL: https://github.com/loft-demos/loft-demo-base.git
-            targetRevision: HEAD
+            targetRevision: {{ .Values.branch}}
             kustomize:
               patches:
                 - target:
@@ -157,3 +157,7 @@ spec:
         some-customer.loft.host
       required: true
       placeholder: some-customer.loft.host
+    - variable: branch
+      label: vCluster Platform GitOps Repo Branch
+      description: Allows overriding the default branch used for the vCluster Platform Demo Generator GitOps repository
+      defaultValue: main
