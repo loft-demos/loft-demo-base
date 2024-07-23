@@ -219,6 +219,10 @@ spec:
             - v1.27.9
             - v1.26.15
           defaultValue: v1.29.6
+        - variable: branch
+          label: vCluster Platform GitOps Repo Branch
+          description: Allows overriding the default branch used for the vCluster Platform Demo Generator GitOps repository
+          defaultValue: main
       version: 4.0.0
     - template:
         metadata:
