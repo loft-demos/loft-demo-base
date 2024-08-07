@@ -79,7 +79,7 @@ spec:
           label: Logo logoURL
           description: Will update the vCluster Platform config ui settings logoURL
           defaultValue: https://www.vcluster.com/pro/docs/media/vclusterpro_orange.svg
-      version: 4.0.0-beta.1
+      version: 4.0.0-beta.4
 ---
 apiVersion: management.loft.sh/v1
 kind: App
