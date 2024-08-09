@@ -46,7 +46,7 @@ spec:
         apps:
           - name: vcluster-platform-demo
             namespace: loft
-            version: 4.0.0-beta.4
+            version: 4.0.0-beta.5
             parameters: |
               uiLogoURL: '{{ .Values.uiLogoURL }}'
               domain: >-
@@ -163,7 +163,7 @@ spec:
           enabled: true
         helmRelease:
           chart:
-            version: 0.20.0-beta.12
+            version: 0.20.0-beta.15
           values: |
             external:
               platform:
