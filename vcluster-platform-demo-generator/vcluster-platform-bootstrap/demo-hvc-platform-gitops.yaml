@@ -132,7 +132,7 @@ spec:
           project: default
           source:
             repoURL: https://github.com/loft-demos/loft-demo-base
-            targetRevision: HEAD
+            targetRevision: {{ .Values.branch}}
             path: vcluster-platform-demo-generator/argocd/crossplane-bootstrap
           destination:
             server: https://kubernetes.default.svc
