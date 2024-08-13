@@ -88,6 +88,14 @@ spec:
                     ingressClassName: "nginx"
                     hostname: argocd-grpc-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}
                     tls: true
+                repoServer:
+                  resources:
+                    requests:
+                      cpu: 500m
+                      memory: 512Mi
+                    limits:
+                      cpu: 1000m
+                      memory: 1Gi
                 ## ApplicationSet controller
                 applicationSet:
                   enabled: true
