@@ -232,12 +232,6 @@ spec:
                 export:
                   - apiVersion: demo.loft.sh/v1alpha1
                     kind: DemoRepository
-
-            integrations:
-              metricsServer:
-                enabled: true
-                nodes: true
-                pods: true
         accessPoint:
           ingress: {}
         spaceTemplate:
