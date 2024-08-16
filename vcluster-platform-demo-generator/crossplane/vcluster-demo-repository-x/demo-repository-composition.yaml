@@ -189,37 +189,6 @@ spec:
           type: MatchCondition
     - base:
         apiVersion: repo.github.upbound.io/v1alpha1
-        kind: Branch
-        metadata:
-          name: feature-branch
-        spec:
-          forProvider:
-            branch: feature-ui-table-layout
-          managementPolicies:
-            - Create
-            - Observe
-          providerConfigRef:
-            name: github-provider-config
-      name: repo-feature-branch
-      patches:
-        - fromFieldPath: metadata.name
-          toFieldPath: metadata.name
-          transforms:
-            - string:
-                fmt: '%s-feature-branch'
-                type: Format
-              type: string
-          type: FromCompositeFieldPath
-        - fromFieldPath: spec.name
-          toFieldPath: spec.forProvider.repository
-          type: FromCompositeFieldPath
-      readinessChecks:
-        - matchCondition:
-            status: 'True'
-            type: Ready
-          type: MatchCondition
-    - base:
-        apiVersion: repo.github.upbound.io/v1alpha1
         kind: RepositoryWebhook
         metadata:
           name: argo-webhook
