@@ -23,32 +23,11 @@ spec:
         done
 
 
-        while ! kubectl get secret ghcr-login-secret -n loft; do
-          echo "Waiting for secret ghcr-login-secret...";
-          sleep 1; 
-        done
-
-
         POD=$(kubectl get pod -n argocd -l
         app.kubernetes.io/component=applicationset-controller -o
         jsonpath="{.items[0].metadata.name}")
 
         kubectl delete pod -n argocd $POD
-
-
-        PULL_SECRET=$(kubectl get secret ghcr-login-secret -n loft -o
-        jsonpath="{.data['\.dockerconfigjson']}")
-
-        kubectl delete secret ghcr-login-secret -n loft
-
-        GITHUB_APP_KEY=$(kubectl get secret loft-demo-org-cred -n argocd -o
-        jsonpath="{.data.githubAppPrivateKey}")
-
-        GITHUB_APP_INSTALL_ID=$(kubectl get secret loft-demo-org-cred -n argocd
-        -o jsonpath="{.data.githubAppInstallationID}")
-
-        OIDC_CLIENT_SECRET=$(kubectl get secret oidc-secret -n loft -o
-        jsonpath="{.data.clientSecret}")
 
 
         cat <<EOF | kubectl apply -f -
@@ -76,40 +55,6 @@ spec:
                     - op: replace
                       path: /spec/argoCD/sso/host
                       value: "https://argocd-{{ .Values.virtualClusterDomain}}"
-                - target:
-                    kind: ProjectSecret
-                    name: ghcr-login-secret
-                  patch: |-
-                    - op: replace
-                      path: /spec/data/.dockerconfigjson
-                      value: $PULL_SECRET
-                - target:
-                    kind: ProjectSecret
-                    name: loft-demo-org-cred
-                  patch: |-
-                    - op: add
-                      path: /spec/data
-                      value: 
-                        githubAppID: NDEwMjE3
-                        githubAppPrivateKey: $GITHUB_APP_KEY
-                        githubAppInstallationID: $GITHUB_APP_INSTALL_ID
-                        url: aHR0cHM6Ly9naXRodWIuY29tL2xvZnQtZGVtb3M=
-                - target:
-                    kind: ProjectSecret
-                    name: argocd-notifications-secret
-                  patch: |-
-                    - op: add
-                      path: /spec/data
-                      value: 
-                        githubAppPrivateKey: $GITHUB_APP_KEY
-                - target:
-                    kind: ProjectSecret
-                    name: oidc-secret
-                  patch: |-
-                    - op: add
-                      path: /spec/data
-                      value: 
-                        clientSecret: $OIDC_CLIENT_SECRET
           syncPolicy:
             automated:
               prune: true
