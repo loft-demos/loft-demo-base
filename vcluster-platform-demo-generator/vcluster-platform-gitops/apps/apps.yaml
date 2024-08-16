@@ -499,7 +499,6 @@ spec:
                 syncOptions:
                   - CreateNamespace=true
         EOF
-
 ---
 apiVersion: management.loft.sh/v1
 kind: App
