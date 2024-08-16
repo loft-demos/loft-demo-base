@@ -476,13 +476,13 @@ spec:
                     env: "prod"
           template:
             metadata:
-              # {{`{{name}}`}} is the name of the kubernetes cluster as selected by the spec above
+              # name is the name of the kubernetes cluster as selected by the spec above
               name: {{`{{name}}`}}-env-config
             spec:
               destination:
-                # {{`{{server}}`}} is the url of the 
+                # server is the url of the 
                 server: '{{`{{server}}`}}'
-                # {{`{{metadata.labels.env}}`}} is the value of the env label that is being used to select kubernetes clusters 
+                # metadata.labels.env is the value of the env label that is being used to select kubernetes clusters 
                 # and used as sub-folder in the target git repository
                 namespace: {{ .Values.loft.virtualClusterName }}-app-{{`{{metadata.labels.env}}`}}
               info:
