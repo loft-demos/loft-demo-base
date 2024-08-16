@@ -454,7 +454,9 @@ spec:
         cat <<EOF | kubectl apply -f -
 
         apiVersion: argoproj.io/v1alpha1
+
         kind: ApplicationSet
+
         metadata:
           name: {{ .Values.loft.virtualClusterName }}-app-env-config
           namespace: argocd
