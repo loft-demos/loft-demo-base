@@ -449,56 +449,6 @@ spec:
                 automated:
                   selfHeal: true
         EOF
-
-
-        cat <<EOF | kubectl apply -f -
-
-        apiVersion: argoproj.io/v1alpha1
-
-        kind: ApplicationSet
-
-        metadata:
-          name: {{ .Values.loft.virtualClusterName }}-app-env-config
-          namespace: argocd
-        spec:
-          generators:
-            - clusters:
-                selector:
-                  matchLabels:
-                    env: "dev"
-            - clusters:
-                selector:
-                  matchLabels:
-                    env: "qa"
-            - clusters:
-                selector:
-                  matchLabels:
-                    env: "prod"
-          template:
-            metadata:
-              # name is the name of the kubernetes cluster as selected by the spec above
-              name: {{`{{name}}`}}-env-config
-            spec:
-              destination:
-                # server is the url of the 
-                server: '{{`{{server}}`}}'
-                # metadata.labels.env is the value of the env label that is being used to select kubernetes clusters 
-                # and used as sub-folder in the target git repository
-                namespace: {{ .Values.loft.virtualClusterName }}-app-{{`{{metadata.labels.env}}`}}
-              info:
-                - name: GitHub Repo
-                  value: https://github.com/loft-demos/{{ .Values.loft.virtualClusterName }}-app/
-              project: default
-              source:
-                path: k8s-manifests/{{`{{metadata.labels.env}}`}}/
-                repoURL: https://github.com/loft-demos/{{ .Values.loft.virtualClusterName }}-app.git
-                targetRevision: main
-              syncPolicy:
-                automated:
-                  selfHeal: true
-                syncOptions:
-                  - CreateNamespace=true
-        EOF
 ---
 apiVersion: management.loft.sh/v1
 kind: App
