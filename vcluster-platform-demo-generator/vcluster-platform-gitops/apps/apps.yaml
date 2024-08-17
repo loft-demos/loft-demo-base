@@ -355,6 +355,13 @@ spec:
                     - op: replace
                       path: /spec/argoCD/sso/host
                       value: "https://argocd-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}"
+                - target:
+                    kind: Project
+                    name: api-framework
+                  patch: |-
+                    - op: replace
+                      path: /spec/argoCD/sso/host
+                      value: "https://argocd-api-framework-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}"
           syncPolicy:
             automated:
               prune: true
