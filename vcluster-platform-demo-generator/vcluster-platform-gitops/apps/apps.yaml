@@ -321,8 +321,6 @@ spec:
         PULL_SECRET=$(kubectl get secret ghcr-login-secret -n loft -o
         jsonpath="{.data['\.dockerconfigjson']}")
 
-        kubectl delete secret ghcr-login-secret -n loft
-
         cat <<EOF | kubectl apply -f -
 
         apiVersion: argoproj.io/v1alpha1
@@ -351,6 +349,14 @@ spec:
                       value: $PULL_SECRET
                 - target:
                     kind: Project
+                    name: auth-core
+                  patch: |-
+                    - op: replace
+                      path: /spec/argoCD/sso/host
+                      value: "https://argocd-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}"
+                - target:
+                    kind: Project
+                    name: default
                   patch: |-
                     - op: replace
                       path: /spec/argoCD/sso/host
