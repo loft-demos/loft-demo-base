@@ -167,6 +167,15 @@ spec:
             labels:
               loft.sh/project-secret-name: oidc-secret
           type: Opaque
+          ---
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: crossplane-github-provider-secret
+            namespace: crossplane-system
+            labels:
+              loft.sh/project-secret-name: crossplane-github-provider-secret
+          type: Opaque
         pro:
           enabled: true
         helmRelease:
