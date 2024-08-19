@@ -536,6 +536,198 @@ spec:
 
         EOF
 
+        cat <<EOF | kubectl apply -f -
+        
+        apiVersion: pkg.crossplane.io/v1
+        
+        kind: Provider
+        
+        metadata:
+          name: provider-github
+        spec:
+          ignoreCrossplaneConstraints: false
+          package: coopnorge/provider-github:v0.10.0
+          packagePullPolicy: IfNotPresent
+          revisionActivationPolicy: Automatic
+          revisionHistoryLimit: 1
+          skipDependencyResolution: false
+
+        EOF
+
+        while ! kubectl get crd providerconfigs.github.upbound.io; do
+          echo "Waiting for crossplane providerconfigs.github.upbound.io crd...";
+          sleep 1; 
+        done
+
+
+        cat <<EOF | kubectl apply -f -
+
+        apiVersion: github.upbound.io/v1beta1
+        
+        kind: ProviderConfig
+        
+        metadata:
+          name: github-provider-config
+        spec:
+          credentials:
+            secretRef:
+              key: credentials
+              name: github-provider-secret
+              namespace: crossplane-system
+            source: Secret
+
+        EOF
+
+
+        cat <<EOF | kubectl apply -f -
+        
+        apiVersion: apiextensions.crossplane.io/v1
+        
+        kind: CompositeResourceDefinition
+        
+        metadata:
+          name: xargocdwebhooks.demo.loft.sh
+        spec:
+          claimNames:
+            kind: ArgoCDWebhook
+            plural: argocdwebhooks
+          defaultCompositeDeletePolicy: Background
+          defaultCompositionUpdatePolicy: Automatic
+          group: demo.loft.sh
+          names:
+            kind: XArgoCDWebhook
+            plural: xargocdwebhooks
+          versions:
+            - name: v1alpha1
+              referenceable: true
+              schema:
+                openAPIV3Schema:
+                  description: >-
+                    Creates webhooks for an Argo CD Application server and ApplicationSet server.
+                  properties:
+                    spec:
+                      properties:
+                        repoName:
+                          description: Repo name
+                          type: string
+                        virtualClusterNamespace:
+                          description: Namespace for vCluster instance
+                          type: string
+                      required:
+                        - repoName
+                        - virtualClusterNamespace
+                      type: object
+                  type: object
+              served: true
+        EOF
+
+
+        cat <<EOF | kubectl apply -f -
+
+        apiVersion: apiextensions.crossplane.io/v1
+        
+        kind: Composition
+        
+        metadata:
+          labels:
+            crossplane.io/xrd: xargocdwebhooks.demo.loft.sh
+          name: argocdwebhook
+        spec:
+          compositeTypeRef:
+            apiVersion: demo.loft.sh/v1alpha1
+            kind: XArgoCDWebhook
+          mode: Resources
+          publishConnectionDetailsWithStoreConfigRef:
+            name: default
+          resources:
+            - base:
+                apiVersion: repo.github.upbound.io/v1alpha1
+                kind: RepositoryWebhook
+                metadata:
+                  name: argo-webhook
+                spec:
+                  forProvider:
+                    active: true
+                    configuration:
+                      - contentType: json
+                        insecureSsl: false
+                        urlSecretRef:
+                          key: url
+                          name: argo-webhook-url
+                    events:
+                      - push
+                      - pull_request
+                  managementPolicies:
+                    - Create
+                    - Observe
+                  providerConfigRef:
+                    name: github-provider-config
+              name: argo-webhook
+              patches:
+                - fromFieldPath: metadata.name
+                  toFieldPath: metadata.name
+                  transforms:
+                    - string:
+                        fmt: '%s-webhook'
+                        type: Format
+                      type: string
+                  type: FromCompositeFieldPath
+                - fromFieldPath: spec.repoName
+                  toFieldPath: spec.forProvider.repository
+                  type: FromCompositeFieldPath
+                - fromFieldPath: spec.virtualClusterNamespace
+                  toFieldPath: spec.forProvider.configuration[0].urlSecretRef.namespace
+                  type: FromCompositeFieldPath
+              readinessChecks:
+                - matchCondition:
+                    status: 'True'
+                    type: Ready
+                  type: MatchCondition
+            - base:
+                apiVersion: repo.github.upbound.io/v1alpha1
+                kind: RepositoryWebhook
+                metadata:
+                  name: argo-appset-webhook
+                spec:
+                  forProvider:
+                    active: true
+                    configuration:
+                      - contentType: json
+                        insecureSsl: false
+                        urlSecretRef:
+                          key: url
+                          name: argo-appset-webhook-url
+                    events:
+                      - push
+                      - pull_request
+                  managementPolicies:
+                    - Create
+                    - Observe
+                  providerConfigRef:
+                    name: github-provider-config
+              name: argo-appset-webhook
+              patches:
+                - fromFieldPath: metadata.name
+                  toFieldPath: metadata.name
+                  transforms:
+                    - string:
+                        fmt: '%s-appset-webhook'
+                        type: Format
+                      type: string
+                  type: FromCompositeFieldPath
+                - fromFieldPath: spec.repoName
+                  toFieldPath: spec.forProvider.repository
+                  type: FromCompositeFieldPath
+                - fromFieldPath: spec.virtualClusterNamespace
+                  toFieldPath: spec.forProvider.configuration[0].urlSecretRef.namespace
+                  type: FromCompositeFieldPath
+              readinessChecks:
+                - matchCondition:
+                    status: 'True'
+                    type: Ready
+                  type: MatchCondition
+        EOF
+
 
         cat <<EOF | kubectl apply -f -
 
