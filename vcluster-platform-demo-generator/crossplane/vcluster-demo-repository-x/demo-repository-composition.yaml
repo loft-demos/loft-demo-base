@@ -189,6 +189,90 @@ spec:
           type: MatchCondition
     - base:
         apiVersion: repo.github.upbound.io/v1alpha1
+        kind: RepositoryFile
+        metadata:
+          name: repo-name
+        spec:
+          forProvider:
+            branch: main
+            file: argocd/cluster-operator-application-set.yaml
+            overwriteOnCreate: true
+            repository: repo-name
+          managementPolicies:
+            - Create
+            - Observe
+          providerConfigRef:
+            name: github-provider-config
+      name: cluster-operator-application-set
+      patches:
+        - fromFieldPath: metadata.name
+          toFieldPath: metadata.name
+          transforms:
+            - string:
+                fmt: '%s-cluster-operator-application-set'
+                type: Format
+              type: string
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.name
+          toFieldPath: spec.forProvider.repository
+          type: FromCompositeFieldPath
+        - combine:
+            strategy: string
+            string:
+              fmt: |
+                apiVersion: argoproj.io/v1alpha1
+                kind: ApplicationSet
+                metadata:
+                  name: vcluster-env-config
+                  namespace: argocd
+                spec:
+                  generators:
+                    - clusters:
+                        selector:
+                          matchLabels:
+                            env: dev
+                    - clusters:
+                        selector:
+                          matchLabels:
+                            env: qa
+                    - clusters:
+                        selector:
+                          matchLabels:
+                            env: prod
+                  template:
+                    metadata:
+                      name: %s-{{name}}
+                    spec:
+                      destination:
+                        namespace: %s-{{metadata.labels.env}}
+                        server: '{{server}}'
+                      info:
+                        - name: GitHub Repo
+                          value: https://github.com/loft-demos/%s/
+                      project: default
+                      source:
+                        path: k8s-manifests/{{metadata.labels.env}}/
+                        repoURL: https://github.com/loft-demos/%s.git
+                        targetRevision: main
+                      syncPolicy:
+                        automated:
+                          selfHeal: true
+                        syncOptions:
+                          - CreateNamespace=true
+            variables:
+              - fromFieldPath: spec.name
+              - fromFieldPath: spec.name
+              - fromFieldPath: spec.name
+              - fromFieldPath: spec.name
+          toFieldPath: spec.forProvider.content
+          type: CombineFromComposite
+      readinessChecks:
+        - matchCondition:
+            status: 'True'
+            type: Ready
+          type: MatchCondition
+    - base:
+        apiVersion: repo.github.upbound.io/v1alpha1
         kind: RepositoryWebhook
         metadata:
           name: argo-webhook
