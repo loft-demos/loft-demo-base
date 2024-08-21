@@ -49,6 +49,7 @@ spec:
             version: 4.0.0-beta.6
             parameters: |
               uiLogoURL: '{{ .Values.uiLogoURL }}'
+              logoBackgroundColor: '{{ .Values.logoBackgroundColor }}'
               domain: >-
                 {{ .Values.loft.virtualClusterName }}.{{
                 .Values.loft.clusterAnnotations.domain }}
@@ -291,6 +292,12 @@ spec:
           label: UI Logo uiLogoURL
           description: Allows overriding default ui settings logo
           defaultValue: https://www.vcluster.com/pro/docs/media/vclusterpro_orange.svg
+        - variable: logoBackgroundColor
+          label: Logo Background Color
+          description: >-
+            Color value to use as the background color for
+            the logo
+          defaultValue: '#001529'
       version: 1.0.0
   access:
     - verbs:
