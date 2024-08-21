@@ -79,6 +79,10 @@ spec:
           label: Logo logoURL
           description: Will update the vCluster Platform config ui settings logoURL
           defaultValue: https://www.vcluster.com/pro/docs/media/vclusterpro_orange.svg
+        - variable: logoBackgroundColor
+          label: Logo Background Color
+          description: LogoBackgroundColor is the color value to use as the background color for the logo
+          defaultValue: '#001529'
       version: 4.0.0-beta.6
     - icon: https://www.vcluster.com/pro/docs/media/vclusterpro_orange.svg
       config:
