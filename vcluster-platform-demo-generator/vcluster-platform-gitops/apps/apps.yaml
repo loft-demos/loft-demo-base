@@ -60,6 +60,7 @@ spec:
                 position: TopEnd
                 text: Komoplane
               logoURL: "{{ .Values.uiLogoURL }}"
+              logoBackgroundColor: "{{ .Values.logoBackgroundColor }}"
             auth:
               oidc:
                 issuerUrl: https://loft.rocks/oidc
