@@ -296,7 +296,7 @@ spec:
           label: Logo Background Color
           description: >-
             Color value to use as the background color for
-            the logo
+            the logo (#cfcfcf is a good light great for dark logos)
           defaultValue: '#001529'
       version: 1.0.0
   access:
