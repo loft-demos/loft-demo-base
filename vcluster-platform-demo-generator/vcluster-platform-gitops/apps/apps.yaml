@@ -1026,7 +1026,7 @@ spec:
                             stringData:
                               clientID: PATCHED
                               clientSecret: '$OIDC_CLIENT_SECRET'
-                              name: ''
+                              name: 'Loft'
                               redirectURIs: PATCHED
                         providerConfigRef:
                           name: kubernetes-provider
