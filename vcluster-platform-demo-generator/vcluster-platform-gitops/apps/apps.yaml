@@ -450,6 +450,7 @@ spec:
         spec:
           name: "{{ .Values.loft.virtualClusterName }}-app"
           loftDemoDomain: "{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}"
+          virtualClusterName: "{{ .Values.loft.virtualClusterName }}"
           virtualClusterNamespace: "{{ .Values.loft.virtualClusterNamespace }}"
         EOF
 
