@@ -29,6 +29,9 @@ spec:
                 name:
                   description: Repo name
                   type: string
+                virtualClusterName:
+                  description: Name for vCluster instance
+                  type: string
                 virtualClusterNamespace:
                   description: Namespace for vCluster instance
                   type: string
