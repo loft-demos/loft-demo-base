@@ -19,7 +19,7 @@ spec:
           name: repo-name
         spec:
           forProvider:
-            description: Repo description
+            description: vCluster Platform Demo repository used for vCluster Platform GitOps and demo examples
             name: repo-name
             template:
               - includeAllBranches: true
