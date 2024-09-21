@@ -291,7 +291,7 @@ spec:
         - variable: uiLogoURL
           label: UI Logo uiLogoURL
           description: Allows overriding default ui settings logo
-          defaultValue: https://www.vcluster.com/pro/docs/media/vclusterpro_orange.svg
+          defaultValue: https://vcluster.com/docs/media/vCluster_horizontal-orange.svg
         - variable: logoBackgroundColor
           label: Logo Background Color
           description: >-
