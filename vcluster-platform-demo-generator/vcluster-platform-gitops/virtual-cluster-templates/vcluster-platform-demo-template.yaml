@@ -46,7 +46,7 @@ spec:
         apps:
           - name: vcluster-platform-demo
             namespace: loft
-            version: 4.0.0-beta.14
+            version: 4.0.0-beta.15
             parameters: |
               uiLogoURL: '{{ .Values.uiLogoURL }}'
               logoBackgroundColor: '{{ .Values.logoBackgroundColor }}'
