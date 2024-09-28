@@ -284,6 +284,7 @@ spec:
             - v1.27.9
             - v1.26.15
           defaultValue: v1.29.6
+          section: Kubernetes Config
         - variable: env
           label: Deployment Environment
           description: >-
@@ -294,16 +295,19 @@ spec:
             - qa
             - prod
           defaultValue: dev
+          section: Kubernetes Config
         - variable: uiLogoURL
           label: UI Logo uiLogoURL
           description: Allows overriding default ui settings logo
           defaultValue: https://vcluster.com/docs/media/vCluster_horizontal-orange.svg
+          section: UI Customization
         - variable: logoBackgroundColor
           label: Logo Background Color
           description: >-
             Color value to use as the background color for
             the logo (#cfcfcf is a good light great for dark logos)
           defaultValue: '#001529'
+          section: UI Customization
       version: 4.0.0
     - template:
         metadata:
