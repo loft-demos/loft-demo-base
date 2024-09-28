@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: kyverno-cluster
+  namespace: argocd
+spec:
+  generators:
+    - clusters:
+        selector:
+          matchLabels:
+            kyverno: "true""
+  template:
+    metadata:
+      # name is the name of the kubernetes cluster as selected by the spec above
+      name: '{{name}}-kyverno'
+    spec:
+      destination:
+        # server is the url of the cluster as selected by the spec above
+        server: '{{server}}'
+        namespace: kyverno
+      project: default
+      source:
+        chart: kyverno
+        repoURL: https://kyverno.github.io/kyverno
+        targetRevision: 3.2.7
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - Replace=true
