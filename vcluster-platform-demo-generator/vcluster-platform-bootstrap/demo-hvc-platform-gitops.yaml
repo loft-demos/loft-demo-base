@@ -67,10 +67,10 @@ spec:
         kind: Application
 
         metadata:
-          name: crossplane-bootstrap
+          name: argo-bootstrap
           namespace: argocd
           labels:
-            crossplane.demos.loft.sh: bootstrap
+            argo.demos.loft.sh: bootstrap
           finalizers:
             - resources-finalizer.argocd.argoproj.io
         spec:
@@ -78,10 +78,10 @@ spec:
           source:
             repoURL: https://github.com/loft-demos/loft-demo-base
             targetRevision: {{ .Values.branch}}
-            path: vcluster-platform-demo-generator/argocd/crossplane-bootstrap
+            path: vcluster-platform-demo-generator/argocd
           destination:
             server: https://kubernetes.default.svc
-            namespace: crossplane-system
+            namespace: argocd
           syncPolicy:
             automated:
               prune: true    
