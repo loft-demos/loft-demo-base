@@ -39,9 +39,7 @@ spec:
             labels:
               env: '{{ .Values.env }}'
               team: '{{ .Values.loft.project }}'
-              {{if .Values.kyverno}}
-              kyverno: 'true'
-              {{end}}
+              kyverno: '{{ .Values.kyverno }}'
             annotations:
               loft.sh/custom-links: >-
                 https://{{ .Values.loft.virtualClusterName }}.{{
