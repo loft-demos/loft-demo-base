@@ -42,6 +42,7 @@ spec:
               env: '{{ .Values.env }}'
               team: '{{ .Values.loft.project }}'
               kyverno: '{{ .Values.kyverno }}'
+              eso: '{{ .Values.eso }}'
             annotations:
               loft.sh/custom-links: >-
                 https://{{ .Values.loft.virtualClusterName }}.{{
@@ -271,12 +272,18 @@ spec:
             stringData:
               url: "https://argocd-appset-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}/api/webhook"
       parameters:
-        - variable: kyverno
-          label: Kyverno
+        - variable: eso
+          label: Install External Secrets Operator
           description: >-
-            Install Kyverno
+            External secret management for Kubernetes
           type: boolean
-          section: Applications
+          section: Applications to Install
+        - variable: kyverno
+          label: Install Kyverno
+          description: >-
+            Kubernetes Native Policy Management
+          type: boolean
+          section: Applications to Install
         - variable: k8sVersion
           label: k8sVersion
           description: Please select Kubernetes version
