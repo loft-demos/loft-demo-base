@@ -189,7 +189,7 @@ spec:
           enabled: true
         helmRelease:
           chart:
-            version: 0.20.0
+            version: 0.20.1-beta.3
           values: |
             external:
               platform:
@@ -281,12 +281,12 @@ spec:
           label: k8sVersion
           description: Please select Kubernetes version
           options:
-            - v1.30.2
-            - v1.29.6
-            - v1.28.11
-            - v1.27.9
-            - v1.26.15
-          defaultValue: v1.29.6
+            - v1.31.1
+            - v1.30.5
+            - v1.29.9
+            - v1.28.14
+            - v1.27.16
+          defaultValue: v1.30.5
           section: Kubernetes Config
         - variable: env
           label: Deployment Environment
