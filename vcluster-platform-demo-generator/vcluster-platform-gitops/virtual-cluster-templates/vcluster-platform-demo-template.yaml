@@ -40,6 +40,8 @@ spec:
           metadata:
             labels:
               env: '{{ .Values.env }}'
+              vclusterName: '{{ .Values.loft.virtualClusterName }}'
+              domain: '{{ .Values.loft.clusterAnnotations.domain }}'
               team: '{{ .Values.loft.project }}'
               kyverno: '{{ .Values.kyverno }}'
               eso: '{{ .Values.eso }}'
