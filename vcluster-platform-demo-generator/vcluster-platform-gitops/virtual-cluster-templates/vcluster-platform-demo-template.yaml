@@ -43,6 +43,7 @@ spec:
               team: '{{ .Values.loft.project }}'
               kyverno: '{{ .Values.kyverno }}'
               eso: '{{ .Values.eso }}'
+              vault: '{{ .Values.vault }}'
             annotations:
               loft.sh/custom-links: >-
                 https://{{ .Values.loft.virtualClusterName }}.{{
@@ -282,6 +283,12 @@ spec:
           label: Install Kyverno
           description: >-
             Kubernetes Native Policy Management
+          type: boolean
+          section: Applications to Install
+        - variable: vault
+          label: Install Vault
+          description: >-
+            An identity-based secrets and encryption management system.
           type: boolean
           section: Applications to Install
         - variable: k8sVersion
