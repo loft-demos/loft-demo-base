@@ -38,6 +38,8 @@ spec:
                       - /
             ui:
               enabled: true
+            dev:
+              enabled: true
       syncPolicy:
         automated:
           prune: true
