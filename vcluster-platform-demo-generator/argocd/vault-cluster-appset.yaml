@@ -26,6 +26,8 @@ spec:
         helm:
           valuesObject:
             server:
+              dev:
+                enabled: true
               ingress:
                 enabled: true
                 ingressClassName: 'nginx'
@@ -37,8 +39,6 @@ spec:
                     paths:
                       - /
             ui:
-              enabled: true
-            dev:
               enabled: true
       syncPolicy:
         automated:
