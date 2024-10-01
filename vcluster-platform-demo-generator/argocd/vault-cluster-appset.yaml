@@ -34,13 +34,8 @@ spec:
                       - "vault-{{metadata.labels.vclusterName}}.{{metadata.labels.domain}}"
                 hosts:
                   - host: "vault-{{metadata.labels.vclusterName}}.{{metadata.labels.domain}}"
-                extraPaths:
-                  - path: /*
-                    backend:
-                      service:
-                        name: ssl-redirect
-                        port:
-                          number: use-annotation
+                    paths:
+                      - /
             ui:
               enabled: true
       syncPolicy:
