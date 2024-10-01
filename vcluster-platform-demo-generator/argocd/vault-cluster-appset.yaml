@@ -23,6 +23,26 @@ spec:
         chart: vault
         repoURL: https://helm.releases.hashicorp.com
         targetRevision: 0.28.1
+        helm:
+          valuesObject:
+            server:
+              ingress:
+                enabled: true
+                ingressClassName: 'nginx'
+                tls:
+                  - hosts:
+                      - "vault-{{metadata.labels.vclusterName}}.{{metadata.labels.domain}}"
+                hosts:
+                  host: "vault-{{metadata.labels.vclusterName}}.{{metadata.labels.domain}}"
+                  extraPaths:
+                    - path: /*
+                      backend:
+                        service:
+                          name: ssl-redirect
+                          port:
+                            number: use-annotation
+            ui:
+              enabled: true
       syncPolicy:
         automated:
           prune: true
