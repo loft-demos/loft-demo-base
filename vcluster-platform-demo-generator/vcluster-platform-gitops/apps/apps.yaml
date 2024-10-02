@@ -383,7 +383,7 @@ spec:
       config:
         chart:
           name: argo-cd
-          version: 7.3.6
+          version: 7.6.7
           repoURL: https://argoproj.github.io/argo-helm
         values: '{{ .Values.appValues }}'
       parameters:
@@ -397,7 +397,7 @@ spec:
                 enabled: true
                 hosts:
                 - my-domain.com
-      version: 7.3.6
+      version: 7.6.7
   access:
     - verbs:
         - get
