@@ -17,8 +17,6 @@ spec:
       group: storage.loft.sh
       name: vcluster-platform-demo
       isDefault: true
-  requireTemplate:
-    disabled: false
   members:
     - kind: Team
       group: storage.loft.sh
