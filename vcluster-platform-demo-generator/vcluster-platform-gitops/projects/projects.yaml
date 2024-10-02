@@ -34,6 +34,7 @@ spec:
         - templates
         - chartinfo
         - charts
+        - runners
       teams:
         - loft-admins
     - name: loft-admin-access
