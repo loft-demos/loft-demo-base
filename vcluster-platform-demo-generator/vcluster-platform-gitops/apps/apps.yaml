@@ -54,6 +54,12 @@ spec:
                 link: https://argocd-{{ .Values.domain }}
                 position: TopEnd
                 text: Argo CD
+              {{if eq .Values.vault}}
+              - icon: https://raw.githubusercontent.com/loft-demos/loft-demo-base/refs/heads/main/logos/vault.svg
+                link: https://vault-{{ .Values.domain }}
+                position: TopEnd
+                text: Vault
+              {{end}}
               - icon: https://raw.githubusercontent.com/loft-demos/loft-demo-base/refs/heads/main/logos/vcluster.svg
                 link: https://www.vcluster.com/docs/platform/
                 position: TopEnd
@@ -90,6 +96,11 @@ spec:
           label: Logo Background Color
           description: LogoBackgroundColor is the color value to use as the background color for the logo
           defaultValue: '#001529'
+        - variable: vault
+          label: Install Vault
+          description: >-
+            An identity-based secrets and encryption management system.
+          type: boolean
       version: 4.0.0-beta.17
     - icon: https://www.vcluster.com/pro/docs/media/vclusterpro_orange.svg
       config:
