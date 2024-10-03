@@ -287,6 +287,12 @@ spec:
             Kubernetes Native Policy Management
           type: boolean
           section: Applications to Install
+        - variable: mysql
+          label: Install MySQL Operator
+          description: >-
+            The MySQL Operator for Kubernetes is an operator for managing MySQL InnoDB Cluster setups inside a Kubernetes Cluster.
+          type: boolean
+          section: Applications to Install
         - variable: vault
           label: Install Vault
           description: >-
