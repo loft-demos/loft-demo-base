@@ -67,6 +67,8 @@ spec:
             version: 7.6.7
             parameters: |
               appValues: |-
+                global:
+                  domain: argocd-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}
                 configs:
                   cm:
                     create: true
