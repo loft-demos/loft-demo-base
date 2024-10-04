@@ -70,6 +70,7 @@ spec:
                 configs:
                   cm:
                     create: true
+                    application.resourceTrackingMethod: annotation
                   params:
                     "server.insecure": true
                     timeout.reconciliation: 0 
