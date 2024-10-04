@@ -3,6 +3,8 @@ kind: ApplicationSet
 metadata:
   name: kyverno-cluster
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/compare-options: ServerSideDiff=true
 spec:
   generators:
     - clusters:
