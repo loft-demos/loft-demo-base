@@ -337,6 +337,27 @@ spec:
           defaultValue: '#001529'
           section: UI Customization
       version: 4.0.0
+    - template:
+        metadata:
+          annotations:
+            sleepmode.loft.sh/ignore-user-agents: argo*
+          labels:
+            loft.sh/import-argocd: 'true'
+        instanceTemplate:
+          metadata:
+            labels:
+              env: '{{ .Values.env }}'
+              vclusterName: '{{ .Values.loft.virtualClusterName }}'
+              domain: '{{ .Values.loft.clusterAnnotations.domain }}'
+              team: '{{ .Values.loft.project }}'
+              kyverno: '{{ .Values.kyverno }}'
+              eso: '{{ .Values.eso }}'
+              vault: '{{ .Values.vault }}'
+            annotations:
+              loft.sh/custom-links: >-
+                https://{{ .Values.loft.virtualClusterName }}.{{
+                .Values.loft.clusterAnnotations.domain }}
+        apps:
           - name: vcluster-platform-demo
             namespace: loft
             version: 4.0.0-beta.18
