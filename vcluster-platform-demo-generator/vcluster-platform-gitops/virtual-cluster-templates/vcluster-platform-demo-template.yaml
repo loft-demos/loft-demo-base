@@ -44,7 +44,6 @@ spec:
               domain: '{{ .Values.loft.clusterAnnotations.domain }}'
               team: '{{ .Values.loft.project }}'
               kyverno: '{{ .Values.kyverno }}'
-              eso: '{{ .Values.eso }}'
               vault: '{{ .Values.vault }}'
             annotations:
               loft.sh/custom-links: >-
@@ -177,6 +176,20 @@ spec:
             namespace: argocd
             labels:
               loft.sh/project-secret-name: oidc-secret
+          type: Opaque
+          ---
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            labels:
+              argocd.argoproj.io/secret-type: cluster
+              eso: '{{ .Values.eso }}'
+            name: cluster-local
+            namespace: argocd
+          stringData:
+            config: '{"tlsClientConfig":{"insecure":false}}'
+            name: in-cluster
+            server: https://kubernetes.default.svc
           type: Opaque
           ---
           apiVersion: v1
