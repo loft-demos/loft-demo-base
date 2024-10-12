@@ -565,6 +565,19 @@ spec:
                       tag: '{{ .Values.k8sVersion }}'
               coredns:
                 embedded: true
+              statefulSet:
+                resources:
+                  # Limits are resource limits for the container
+                  limits:
+                    ephemeral-storage: 8Gi
+                    memory: 2Gi
+                    cpu: 1
+                  # Requests are minimal resources that will be consumed by the container
+                  requests:
+                    ephemeral-storage: 400Mi
+                    cpu: 200m
+                    memory: 256Mi
+                  
         accessPoint:
           ingress: {}
         spaceTemplate:
