@@ -508,6 +508,9 @@ spec:
         kubectl annotate clusters loft-cluster domain={{
         .Values.loft.clusterAnnotations.domain }}
 
+        kubectl annotate clusters loft-cluster eso={{
+        .Values.eso }}
+
 ---
 apiVersion: management.loft.sh/v1
 kind: App
