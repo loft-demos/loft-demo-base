@@ -61,6 +61,8 @@ spec:
                 .Values.loft.clusterAnnotations.domain }}
           - name: vcluster-platform-demo-configure-admins
             namespace: loft
+            parameters: |
+              eso: '{{ .Values.eso }}'
           - name: argocd
             namespace: argocd
             version: 7.6.7
