@@ -74,6 +74,7 @@ spec:
                 clientSecret: $CLIENT_SECRET
                 redirectURI: https://{{ .Values.domain }}/auth/oidc/callback
                 groupsClaim: groups
+            product: vcluster-pro
       parameters:
         - variable: domain
           label: Loft Domain
