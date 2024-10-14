@@ -453,6 +453,11 @@ spec:
   description: Configures SSO Groups that should get admin privileges
   owner:
     team: loft-admins
+  parameters:
+    - variable: eso
+      label: ESO Enabled
+      description: >-
+        Adds a cluster annotation that denotes the vCluster Platform cluster has External Secrets Operator support.
   config:
     chart: {}
     bash:
