@@ -372,7 +372,7 @@ spec:
         - variable: uiLogoURL
           label: UI Logo uiLogoURL
           description: Allows overriding default ui settings logo
-          defaultValue: https://vcluster.com/docs/media/vCluster_horizontal-orange.svg
+          defaultValue: https://cdn.prod.website-files.com/60d28872831dd0f87a178997/661ca132697136342511fa22_vCluster%20Logo.svg
           section: UI Customization
         - variable: logoBackgroundColor
           label: Logo Background Color
@@ -698,7 +698,7 @@ spec:
         - variable: uiLogoURL
           label: UI Logo uiLogoURL
           description: Allows overriding default ui settings logo
-          defaultValue: https://vcluster.com/docs/media/vCluster_horizontal-orange.svg
+          defaultValue: https://cdn.prod.website-files.com/60d28872831dd0f87a178997/661ca132697136342511fa22_vCluster%20Logo.svg
           section: UI Customization
         - variable: logoBackgroundColor
           label: Logo Background Color
