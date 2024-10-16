@@ -405,7 +405,7 @@ spec:
         apps:
           - name: vcluster-platform-demo
             namespace: loft
-            version: 4.0.0-beta.19
+            version: 4.0.0-beta.20
             parameters: |
               uiLogoURL: '{{ .Values.uiLogoURL }}'
               logoBackgroundColor: '{{ .Values.logoBackgroundColor }}'
@@ -707,7 +707,7 @@ spec:
             the logo (#cfcfcf is a good light great for dark logos)
           defaultValue: '#001529'
           section: UI Customization
-      version: 4.0.40019
+      version: 0.400.20
     - template:
         metadata:
           annotations:
