@@ -592,9 +592,6 @@ spec:
               toHost:
                 ingresses:
                   enabled: true
-                customResources:
-                  demorepositories.demo.loft.sh:
-                    enabled: true
               fromHost:
                 nodes:
                   enabled: true
@@ -627,6 +624,35 @@ spec:
                     ephemeral-storage: 500Mi
                     cpu: 500m
                     memory: 1Gi
+            experimental:
+              genericSync:
+                role:
+                  extraRules:
+                    - apiGroups:
+                        - demo.loft.sh
+                      resources:
+                        - demorepositories
+                      verbs:
+                        - create
+                        - delete
+                        - patch
+                        - update
+                        - get
+                        - list
+                        - watch
+                clusterRole:
+                  extraRules:
+                    - apiGroups:
+                        - apiextensions.k8s.io
+                      resources:
+                        - customresourcedefinitions
+                      verbs:
+                        - get
+                        - list
+                        - watch
+                export:
+                  - apiVersion: demo.loft.sh/v1alpha1
+                    kind: DemoRepository
                   
         accessPoint:
           ingress: {}
@@ -704,7 +730,7 @@ spec:
           label: Logo Background Color
           description: >-
             Color value to use as the background color for
-            the logo (#cfcfcf is a good light great for dark logos)
+            the logo (#cfcfcf is a good for darker logos, #001529 for lighter logos)
           defaultValue: '#001529'
           section: UI Customization
       version: 0.400.0
