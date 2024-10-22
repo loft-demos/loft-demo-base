@@ -624,6 +624,11 @@ spec:
                     ephemeral-storage: 500Mi
                     cpu: 500m
                     memory: 1Gi
+            integrations:
+              metricsServer:
+                enabled: true
+                nodes: true
+                pods: true
             experimental:
               genericSync:
                 role:
