@@ -629,6 +629,10 @@ spec:
                 enabled: true
                 nodes: true
                 pods: true
+            networking:
+              advanced:
+                proxyKubelets:
+                  byIP: true
             experimental:
               genericSync:
                 role:
