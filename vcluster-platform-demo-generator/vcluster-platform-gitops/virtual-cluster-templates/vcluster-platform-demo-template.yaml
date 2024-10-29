@@ -407,7 +407,7 @@ spec:
         apps:
           - name: vcluster-platform-demo
             namespace: loft
-            version: 4.0.0-beta.9
+            version: 4.0.1-beta.0
             parameters: |
               uiLogoURL: '{{ .Values.uiLogoURL }}'
               logoBackgroundColor: '{{ .Values.logoBackgroundColor }}'
@@ -547,7 +547,7 @@ spec:
           enabled: true
         helmRelease:
           chart:
-            version: 0.20.0
+            version: 0.20.3
           values: |
             external:
               platform:
@@ -638,7 +638,7 @@ spec:
             - v1.28.11
             - v1.27.9
             - v1.26.15
-          defaultValue: v1.29.6
+          defaultValue: v1.30.2
         - variable: env
           label: Deployment Environment
           description: >-
@@ -652,14 +652,14 @@ spec:
         - variable: uiLogoURL
           label: UI Logo uiLogoURL
           description: Allows overriding default ui settings logo
-          defaultValue: https://www.vcluster.com/pro/docs/media/vclusterpro_orange.svg
+          defaultValue: https://cdn.prod.website-files.com/60d28872831dd0f87a178997/661ca132697136342511fa22_vCluster%20Logo.svg
         - variable: logoBackgroundColor
           label: Logo Background Color
           description: >-
             Color value to use as the background color for
             the logo (#cfcfcf is a good light great for dark logos)
           defaultValue: '#001529'
-      version: 1.0.0
+      version: 0.401.0
   access:
     - verbs:
         - '*'
