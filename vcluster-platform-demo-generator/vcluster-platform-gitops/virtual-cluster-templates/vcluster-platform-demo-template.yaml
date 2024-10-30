@@ -142,7 +142,6 @@ spec:
             namespace: loft
             labels:
               loft.sh/project-secret-name: oidc-secret
-              demo-feature: oidc-provider
           type: Opaque
           ---
           apiVersion: v1
