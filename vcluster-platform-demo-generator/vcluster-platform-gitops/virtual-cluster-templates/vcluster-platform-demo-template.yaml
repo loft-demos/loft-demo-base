@@ -53,6 +53,358 @@ spec:
         apps:
           - name: vcluster-platform-demo
             namespace: loft
+            version: 4.0.1
+            parameters: |
+              uiLogoURL: '{{ .Values.uiLogoURL }}'
+              logoBackgroundColor: '{{ .Values.logoBackgroundColor }}'
+              domain: >-
+                {{ .Values.loft.virtualClusterName }}.{{
+                .Values.loft.clusterAnnotations.domain }}
+          - name: vcluster-platform-demo-configure-admins
+            namespace: loft
+          - name: argocd
+            namespace: argocd
+            version: 7.6.7
+            parameters: |
+              appValues: |-
+                global:
+                  domain: argocd-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}
+                configs:
+                  cm:
+                    create: true
+                    application.resourceTrackingMethod: annotation
+                  params:
+                    "server.insecure": true
+                    timeout.reconciliation: 0 
+                  secret:
+                    createSecret: true
+                  rbac:
+                    policy.csv: |-
+                      g, Administration, role:admin
+                      g, Sales, role:admin
+                      g, Engineering, role:admin
+                server:
+                  ingress:
+                    enabled: true
+                    annotations:
+                      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+                      nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+                    ingressClassName: "nginx"
+                    hostname: argocd-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}
+                    tls: true
+                  ingressGrpc:
+                    enabled: true
+                    annotations: 
+                      nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
+                    ingressClassName: "nginx"
+                    hostname: argocd-grpc-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}
+                    tls: true
+                repoServer:
+                  resources:
+                    requests:
+                      cpu: 500m
+                      memory: 512Mi
+                    limits:
+                      cpu: 1000m
+                      memory: 1Gi
+                ## ApplicationSet controller
+                applicationSet:
+                  enabled: true
+                  ingress:
+                    enabled: true
+                    ingressClassName: "nginx"
+                    annotations:
+                      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+                    hostname: argocd-appset-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}
+                    tls: true
+          - name: crossplane
+            namespace: crossplane-system
+            version: 1.16.0
+          - name: komoplane
+            namespace: crossplane-system
+            version: 0.1.5
+          - name: github-repo-argo-cd-webhooks
+            namespace: argocd
+          - name: crossplane-manifest
+            namespace: crossplane-system
+            parameters: |
+              vClusterName: '{{ .Values.loft.virtualClusterName }}'
+        objects: |
+          apiVersion: v1
+          kind: Namespace
+          metadata:
+            name: loft
+          ---
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: oidc-secret
+            namespace: loft
+            labels:
+              loft.sh/project-secret-name: oidc-secret
+          type: Opaque
+          ---
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: ghcr-login-secret
+            namespace: loft
+            labels:
+              loft.sh/project-secret-name: ghcr-login-secret
+          data:
+            .dockerconfigjson: e30K
+          type: kubernetes.io/dockerconfigjson
+          ---
+          apiVersion: v1
+          kind: Namespace
+          metadata:
+            name: argocd
+          ---
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: loft-demo-org-cred
+            namespace: argocd
+            labels:
+              argocd.argoproj.io/secret-type: repo-creds
+              loft.sh/project-secret-name: loft-demo-org-cred
+          type: Opaque
+          ---
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: oidc-secret
+            namespace: argocd
+            labels:
+              loft.sh/project-secret-name: oidc-secret
+          type: Opaque
+          ---
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            labels:
+              argocd.argoproj.io/secret-type: cluster
+              eso: '{{ .Values.eso }}'
+            name: cluster-local
+            namespace: argocd
+          stringData:
+            config: '{"tlsClientConfig":{"insecure":false}}'
+            name: in-cluster
+            server: https://kubernetes.default.svc
+          type: Opaque
+          {{if .Values.eso}}
+          ---
+          apiVersion: v1
+          kind: Namespace
+          metadata:
+            name: eso-demo
+          ---
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: ghcr-login-secret
+            namespace: eso-demo
+            labels:
+              loft.sh/project-secret-name: ghcr-login-secret
+          data:
+            .dockerconfigjson: e30K
+          type: kubernetes.io/dockerconfigjson
+          {{end}}
+          ---
+          apiVersion: v1
+          kind: Namespace
+          metadata:
+            name: crossplane-system
+          ---
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: github-provider-secret
+            namespace: crossplane-system
+            labels:
+              loft.sh/project-secret-name: crossplane-github-provider-secret
+          type: Opaque
+        pro:
+          enabled: true
+        helmRelease:
+          chart:
+            version: 0.20.4
+          values: |
+            external:
+              platform:
+                autoSleep:
+                  afterInactivity: 34200
+                autoDelete:
+                  afterInactivity: 7620000
+            sync:
+              toHost:
+                ingresses:
+                  enabled: true
+              fromHost:
+                nodes:
+                  enabled: true
+                  selector:
+                    all: true
+            controlPlane:
+              backingStore:
+                etcd:
+                  embedded:
+                    enabled: true
+              distro:
+                k8s:
+                  apiServer:
+                    image:
+                      tag: '{{ .Values.k8sVersion }}'
+                  controllerManager:
+                    image:
+                      tag: '{{ .Values.k8sVersion }}'
+              coredns:
+                embedded: true
+              statefulSet:
+                resources:
+                  # Limits are resource limits for the container
+                  limits:
+                    ephemeral-storage: 8Gi
+                    memory: 4Gi
+                    cpu: 2
+                  # Requests are minimal resources that will be consumed by the container
+                  requests:
+                    ephemeral-storage: 500Mi
+                    cpu: 500m
+                    memory: 1Gi
+            experimental:
+              genericSync:
+                role:
+                  extraRules:
+                    - apiGroups:
+                        - demo.loft.sh
+                      resources:
+                        - demorepositories
+                      verbs:
+                        - create
+                        - delete
+                        - patch
+                        - update
+                        - get
+                        - list
+                        - watch
+                clusterRole:
+                  extraRules:
+                    - apiGroups:
+                        - apiextensions.k8s.io
+                      resources:
+                        - customresourcedefinitions
+                      verbs:
+                        - get
+                        - list
+                        - watch
+                export:
+                  - apiVersion: demo.loft.sh/v1alpha1
+                    kind: DemoRepository
+                  
+        accessPoint:
+          ingress: {}
+        spaceTemplate:
+          metadata: {}
+          objects: |-
+            apiVersion: v1
+            kind: Secret
+            metadata:
+              name: argo-webhook-url
+            type: Opaque
+            stringData:
+              url: "https://argocd-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}/api/webhook"
+            ---
+            apiVersion: v1
+            kind: Secret
+            metadata:
+              name: argo-appset-webhook-url
+            type: Opaque
+            stringData:
+              url: "https://argocd-appset-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}/api/webhook"
+      parameters:
+        - variable: eso
+          label: Install External Secrets Operator
+          description: >-
+            External secret management for Kubernetes
+          type: boolean
+          section: Applications to Install
+        - variable: kyverno
+          label: Install Kyverno
+          description: >-
+            Kubernetes Native Policy Management
+          type: boolean
+          section: Applications to Install
+        - variable: mysql
+          label: Install MySQL Operator
+          description: >-
+            The MySQL Operator for Kubernetes is an operator for managing MySQL InnoDB Cluster setups inside a Kubernetes Cluster.
+          type: boolean
+          section: Applications to Install
+        - variable: vault
+          label: Install Vault
+          description: >-
+            An identity-based secrets and encryption management system.
+          type: boolean
+          section: Applications to Install
+        - variable: k8sVersion
+          label: k8sVersion
+          description: Please select Kubernetes version
+          options:
+            - v1.31.1
+            - v1.30.5
+            - v1.29.9
+            - v1.28.14
+            - v1.27.16
+          defaultValue: v1.30.5
+          section: Kubernetes Config
+        - variable: env
+          label: Deployment Environment
+          description: >-
+            Environment for deployments for this vCluster used as cluster label
+            for Argo CD ApplicationSet Cluster Generator
+          options:
+            - dev
+            - qa
+            - prod
+          defaultValue: dev
+          section: Kubernetes Config
+        - variable: uiLogoURL
+          label: UI Logo uiLogoURL
+          description: Allows overriding default ui settings logo
+          defaultValue: https://cdn.prod.website-files.com/60d28872831dd0f87a178997/661ca132697136342511fa22_vCluster%20Logo.svg
+          section: UI Customization
+        - variable: logoBackgroundColor
+          label: Logo Background Color
+          description: >-
+            Color value to use as the background color for
+            the logo (#cfcfcf is a good for darker logos, #001529 for lighter logos)
+          defaultValue: '#001529'
+          section: UI Customization
+      version: 4.0.1
+    - template:
+        metadata:
+          annotations:
+            sleepmode.loft.sh/ignore-user-agents: argo*
+          labels:
+            loft.sh/import-argocd: 'true'
+        instanceTemplate:
+          metadata:
+            labels:
+              env: '{{ .Values.env }}'
+              vclusterName: '{{ .Values.loft.virtualClusterName }}'
+              domain: '{{ .Values.loft.clusterAnnotations.domain }}'
+              team: '{{ .Values.loft.project }}'
+              kyverno: '{{ .Values.kyverno }}'
+              eso: '{{ .Values.eso }}'
+              vault: '{{ .Values.vault }}'
+            annotations:
+              loft.sh/custom-links: >-
+                https://{{ .Values.loft.virtualClusterName }}.{{
+                .Values.loft.clusterAnnotations.domain }}
+        apps:
+          - name: vcluster-platform-demo
+            namespace: loft
             version: 4.0.1-beta.0
             parameters: |
               uiLogoURL: '{{ .Values.uiLogoURL }}'
@@ -405,7 +757,7 @@ spec:
         apps:
           - name: vcluster-platform-demo
             namespace: loft
-            version: 4.0.1-beta.0
+            version: 4.1.0-alpha.19
             parameters: |
               uiLogoURL: '{{ .Values.uiLogoURL }}'
               logoBackgroundColor: '{{ .Values.logoBackgroundColor }}'
@@ -580,7 +932,7 @@ spec:
           enabled: true
         helmRelease:
           chart:
-            version: 0.20.2
+            version: 0.21.0-beta.6
           values: |
             external:
               platform:
@@ -592,6 +944,9 @@ spec:
               toHost:
                 ingresses:
                   enabled: true
+                customResources:
+                  demorepositories.demo.loft.sh:
+                    enabled: true
               fromHost:
                 nodes:
                   enabled: true
@@ -633,36 +988,6 @@ spec:
               advanced:
                 proxyKubelets:
                   byIP: true
-            experimental:
-              genericSync:
-                role:
-                  extraRules:
-                    - apiGroups:
-                        - demo.loft.sh
-                      resources:
-                        - demorepositories
-                      verbs:
-                        - create
-                        - delete
-                        - patch
-                        - update
-                        - get
-                        - list
-                        - watch
-                clusterRole:
-                  extraRules:
-                    - apiGroups:
-                        - apiextensions.k8s.io
-                      resources:
-                        - customresourcedefinitions
-                      verbs:
-                        - get
-                        - list
-                        - watch
-                export:
-                  - apiVersion: demo.loft.sh/v1alpha1
-                    kind: DemoRepository
-                  
         accessPoint:
           ingress: {}
         spaceTemplate:
@@ -742,7 +1067,7 @@ spec:
             the logo (#cfcfcf is a good for darker logos, #001529 for lighter logos)
           defaultValue: '#001529'
           section: UI Customization
-      version: 0.401.0
+      version: 0.410.19
   access:
     - verbs:
         - '*'
