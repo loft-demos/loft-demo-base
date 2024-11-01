@@ -62,6 +62,9 @@ spec:
                 .Values.loft.clusterAnnotations.domain }}
           - name: vcluster-platform-demo-configure-admins
             namespace: loft
+            parameters: |
+              eso: '{{ .Values.eso }}'
+              kyverno: '{{ .Values.kyverno }}'
           - name: argocd
             namespace: argocd
             version: 7.6.7
@@ -185,6 +188,7 @@ spec:
             labels:
               argocd.argoproj.io/secret-type: cluster
               eso: '{{ .Values.eso }}'
+              kyverno: '{{ .Values.kyverno }}'
             name: cluster-local
             namespace: argocd
           stringData:
@@ -414,6 +418,9 @@ spec:
                 .Values.loft.clusterAnnotations.domain }}
           - name: vcluster-platform-demo-configure-admins
             namespace: loft
+            parameters: |
+              eso: '{{ .Values.eso }}'
+              kyverno: '{{ .Values.kyverno }}'
           - name: argocd
             namespace: argocd
             version: 7.6.7
@@ -766,6 +773,9 @@ spec:
                 .Values.loft.clusterAnnotations.domain }}
           - name: vcluster-platform-demo-configure-admins
             namespace: loft
+            parameters: |
+              eso: '{{ .Values.eso }}'
+              kyverno: '{{ .Values.kyverno }}'
           - name: argocd
             namespace: argocd
             version: 7.6.7
