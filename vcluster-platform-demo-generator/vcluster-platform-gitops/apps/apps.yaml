@@ -256,6 +256,10 @@ spec:
       label: ESO Enabled
       description: >-
         Adds a cluster annotation that denotes the vCluster Platform cluster has External Secrets Operator support.
+    - variable: kyverno
+      label: Kyverno Enabled
+      description: >-
+        Adds a cluster annotation that denotes the vCluster Platform cluster has Kyverno support.
   config:
     chart: {}
     bash:
@@ -313,6 +317,9 @@ spec:
 
         kubectl annotate clusters loft-cluster eso={{
         .Values.eso }}
+
+        kubectl annotate clusters loft-cluster kyverno={{
+        .Values.kyverno }}
 
 ---
 apiVersion: management.loft.sh/v1
