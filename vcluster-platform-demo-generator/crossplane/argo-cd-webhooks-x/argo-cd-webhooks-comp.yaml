@@ -28,7 +28,6 @@ spec:
                   name: argo-webhook-url
             events:
               - push
-              - pull_request
           managementPolicies:
             - Create
             - Observe
