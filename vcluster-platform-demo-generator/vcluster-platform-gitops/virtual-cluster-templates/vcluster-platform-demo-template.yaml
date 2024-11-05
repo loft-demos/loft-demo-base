@@ -957,11 +957,6 @@ spec:
                 customResources:
                   demorepositories.demo.loft.sh:
                     enabled: true
-              fromHost:
-                nodes:
-                  enabled: true
-                  selector:
-                    all: true
             controlPlane:
               backingStore:
                 etcd:
@@ -989,15 +984,6 @@ spec:
                     ephemeral-storage: 500Mi
                     cpu: 500m
                     memory: 1Gi
-            integrations:
-              metricsServer:
-                enabled: true
-                nodes: true
-                pods: true
-            networking:
-              advanced:
-                proxyKubelets:
-                  byIP: true
         accessPoint:
           ingress: {}
         spaceTemplate:
