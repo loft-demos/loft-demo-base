@@ -113,6 +113,14 @@ spec:
             enabled: true
             networkPolicy:
               enabled: false
+              
+          resources:
+            requests:
+              memory: 1Gi
+              cpu: 400m
+            limits:
+              memory: 6Gi
+              cpu: "2"
 
           ingress:
             enabled: true
@@ -187,6 +195,14 @@ spec:
             enabled: true
             networkPolicy:
               enabled: false
+              
+          resources:
+            requests:
+              memory: 1Gi
+              cpu: 400m
+            limits:
+              memory: 6Gi
+              cpu: "2"
 
           ingress:
             enabled: true
