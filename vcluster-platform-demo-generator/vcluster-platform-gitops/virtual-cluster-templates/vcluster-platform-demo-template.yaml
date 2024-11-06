@@ -764,7 +764,7 @@ spec:
         apps:
           - name: vcluster-platform-demo
             namespace: loft
-            version: 0.41.0-alpha.23
+            version: 0.41.0-alpha.24
             parameters: |
               uiLogoURL: '{{ .Values.uiLogoURL }}'
               logoBackgroundColor: '{{ .Values.logoBackgroundColor }}'
@@ -899,6 +899,7 @@ spec:
             labels:
               argocd.argoproj.io/secret-type: cluster
               eso: '{{ .Values.eso }}'
+              kyverno: '{{ .Values.kyverno }}'
             name: cluster-local
             namespace: argocd
           stringData:
@@ -942,7 +943,7 @@ spec:
           enabled: true
         helmRelease:
           chart:
-            version: 0.21.0-beta.7
+            version: 0.21.0-beta.8
           values: |
             external:
               platform:
@@ -1033,12 +1034,12 @@ spec:
           label: k8sVersion
           description: Please select Kubernetes version
           options:
-            - v1.31.1
+            - v1.31.2
             - v1.30.5
             - v1.29.9
             - v1.28.14
             - v1.27.16
-          defaultValue: v1.30.5
+          defaultValue: v1.31.2
           section: Kubernetes Config
         - variable: env
           label: Deployment Environment
@@ -1063,7 +1064,7 @@ spec:
             the logo (#cfcfcf is a good for darker logos, #001529 for lighter logos)
           defaultValue: '#001529'
           section: UI Customization
-      version: 0.410.23
+      version: 0.410.24
   access:
     - verbs:
         - '*'
