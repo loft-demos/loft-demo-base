@@ -185,7 +185,7 @@ spec:
       config:
         chart:
           name: vcluster-platform
-          version: 4.1.0-alpha.23
+          version: 4.1.0-alpha.24
           repoURL: https://charts.loft.sh/
         values: |-
           admin:
@@ -256,7 +256,7 @@ spec:
           label: Logo Background Color
           description: LogoBackgroundColor is the color value to use as the background color for the logo
           defaultValue: '#001529'
-      version: 0.41.0-alpha.23
+      version: 0.41.0-alpha.24
 ---
 apiVersion: management.loft.sh/v1
 kind: App
