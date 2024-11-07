@@ -386,7 +386,8 @@ spec:
           defaultValue: '#001529'
           section: UI Customization
       version: 4.0.1
-    - template:
+    - version: 0.410.0
+      template:
         metadata:
           annotations:
             sleepmode.loft.sh/ignore-user-agents: argo*
@@ -713,7 +714,6 @@ spec:
             the logo (#cfcfcf is a good for darker logos, #001529 for lighter logos)
           defaultValue: '#001529'
           section: UI Customization
-      version: 4.0.0
     - template:
         metadata:
           annotations:
