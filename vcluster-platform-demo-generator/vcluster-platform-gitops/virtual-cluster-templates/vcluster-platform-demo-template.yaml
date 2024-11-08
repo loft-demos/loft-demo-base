@@ -410,7 +410,7 @@ spec:
         apps:
           - name: vcluster-platform-demo
             namespace: loft
-            version: 0.410.1-beta.1
+            version: 0.410.2-beta.2
             parameters: |
               uiLogoURL: '{{ .Values.uiLogoURL }}'
               logoBackgroundColor: '{{ .Values.logoBackgroundColor }}'
@@ -916,7 +916,7 @@ spec:
           enabled: true
         helmRelease:
           chart:
-            version: 0.21.0-beta.8
+            version: 0.21.0-beta.10
           values: |
             external:
               platform:
