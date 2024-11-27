@@ -52,7 +52,7 @@ spec:
                 .Values.loft.clusterAnnotations.domain }}
         apps:
           - name: vcluster-platform-demo
-            namespace: loft
+            namespace: vcluster-platform
             version: 4.1.0
             parameters: |
               uiLogoURL: '{{ .Values.uiLogoURL }}'
@@ -61,7 +61,7 @@ spec:
                 {{ .Values.loft.virtualClusterName }}.{{
                 .Values.loft.clusterAnnotations.domain }}
           - name: vcluster-platform-demo-configure-admins
-            namespace: loft
+            namespace: vcluster-platform
             parameters: |
               eso: '{{ .Values.eso }}'
               kyverno: '{{ .Values.kyverno }}'
@@ -237,7 +237,7 @@ spec:
             external:
               platform:
                 autoSleep:
-                  afterInactivity: 42000
+                  afterInactivity: 39600
                 autoDelete:
                   afterInactivity: 7620000
             sync:
@@ -708,8 +708,8 @@ spec:
                 .Values.loft.clusterAnnotations.domain }}
         apps:
           - name: vcluster-platform-demo
-            namespace: loft
-            version: 0.41.0-alpha.24
+            namespace: vcluster-platform
+            version: 0.42.0-alpha.6
             parameters: |
               uiLogoURL: '{{ .Values.uiLogoURL }}'
               logoBackgroundColor: '{{ .Values.logoBackgroundColor }}'
@@ -717,7 +717,7 @@ spec:
                 {{ .Values.loft.virtualClusterName }}.{{
                 .Values.loft.clusterAnnotations.domain }}
           - name: vcluster-platform-demo-configure-admins
-            namespace: loft
+            namespace: vcluster-platform
             parameters: |
               eso: '{{ .Values.eso }}'
               kyverno: '{{ .Values.kyverno }}'
@@ -888,12 +888,12 @@ spec:
           enabled: true
         helmRelease:
           chart:
-            version: 0.21.0-beta.10
+            version: 0.22.0-alpha.1
           values: |
             external:
               platform:
                 autoSleep:
-                  afterInactivity: 34200
+                  afterInactivity: 39600
                 autoDelete:
                   afterInactivity: 7620000
             sync:
@@ -1009,7 +1009,7 @@ spec:
             the logo (#cfcfcf is a good for darker logos, #001529 for lighter logos)
           defaultValue: '#001529'
           section: UI Customization
-      version: 0.410.24
+      version: 0.420.6
   access:
     - verbs:
         - '*'
