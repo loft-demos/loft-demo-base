@@ -507,12 +507,12 @@ spec:
         EOF
 
 
-        while ! kubectl get secret ghcr-login-secret -n loft; do
+        while ! kubectl get secret ghcr-login-secret -n vcluster-platform; do
           echo "Waiting for ghcr-login-secret...";
           sleep 1; 
         done
 
-        PULL_SECRET=$(kubectl get secret ghcr-login-secret -n loft -o
+        PULL_SECRET=$(kubectl get secret ghcr-login-secret -n vcluster-platform -o
         jsonpath="{.data['\.dockerconfigjson']}")
 
         cat <<EOF | kubectl apply -f -
@@ -647,12 +647,12 @@ spec:
           sleep 1; 
         done
 
-        while ! kubectl get secret oidc-secret -n loft; do
+        while ! kubectl get secret oidc-secret -n vcluster-platform; do
           echo "Waiting for oidc-secret...";
           sleep 1; 
         done
 
-        OIDC_CLIENT_SECRET=$(kubectl get secret oidc-secret -n loft -o
+        OIDC_CLIENT_SECRET=$(kubectl get secret oidc-secret -n vcluster-platform -o
         jsonpath="{.data.clientSecret}" | base64 -d)
 
         cat <<EOF | kubectl apply -f -
