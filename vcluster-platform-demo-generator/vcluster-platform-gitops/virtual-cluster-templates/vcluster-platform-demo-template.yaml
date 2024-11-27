@@ -136,7 +136,7 @@ spec:
           apiVersion: v1
           kind: Namespace
           metadata:
-            name: loft
+            name: vcluster-platform
           ---
           apiVersion: v1
           kind: Secret
@@ -247,11 +247,6 @@ spec:
                 customResources:
                   demorepositories.demo.loft.sh:
                     enabled: true
-              fromHost:
-                nodes:
-                  enabled: true
-                  selector:
-                    all: true
             controlPlane:
               backingStore:
                 etcd:
@@ -259,12 +254,7 @@ spec:
                     enabled: true
               distro:
                 k8s:
-                  apiServer:
-                    image:
-                      tag: '{{ .Values.k8sVersion }}'
-                  controllerManager:
-                    image:
-                      tag: '{{ .Values.k8sVersion }}'
+                  version: '{{ .Values.k8sVersion }}'
               coredns:
                 embedded: true
               statefulSet:
@@ -465,7 +455,7 @@ spec:
           apiVersion: v1
           kind: Namespace
           metadata:
-            name: loft
+            name: vcluster-platform
           ---
           apiVersion: v1
           kind: Secret
@@ -792,7 +782,7 @@ spec:
           apiVersion: v1
           kind: Namespace
           metadata:
-            name: loft
+            name: vcluster-platform
           ---
           apiVersion: v1
           kind: Secret
