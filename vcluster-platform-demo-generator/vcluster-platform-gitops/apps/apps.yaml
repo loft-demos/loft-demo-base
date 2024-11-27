@@ -10,7 +10,7 @@ spec:
     team: loft-admins
   recommendedApp:
     - virtualcluster
-  defaultNamespace: loft
+  defaultNamespace: vcluster-platform
   icon: https://www.vcluster.com/pro/docs/media/vclusterpro_orange.svg
   config:
     chart:
@@ -1080,7 +1080,7 @@ spec:
                                 clientID: PATCHED
                                 component: oidcServer
                               name: loft-argocd-oidc-secret
-                              namespace: loft
+                              namespace: vcluster-platform
                             stringData:
                               clientID: PATCHED
                               clientSecret: '$OIDC_CLIENT_SECRET'
