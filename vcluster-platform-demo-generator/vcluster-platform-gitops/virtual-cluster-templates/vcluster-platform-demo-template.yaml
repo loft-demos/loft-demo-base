@@ -30,7 +30,8 @@ spec:
     spaceTemplate:
       metadata: {}
   versions:
-    - template:
+    - version: 4.1.1
+      template:
         metadata:
           annotations:
             sleepmode.loft.sh/ignore-user-agents: argo*
@@ -347,7 +348,6 @@ spec:
             the logo (#cfcfcf is a good for darker logos, #001529 for lighter logos)
           defaultValue: '#001529'
           section: UI Customization
-      version: 4.1.0
     - version: 0.410.0
       template:
         metadata:
