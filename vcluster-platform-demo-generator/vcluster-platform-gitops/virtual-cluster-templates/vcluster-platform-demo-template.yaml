@@ -834,8 +834,10 @@ spec:
           metadata:
             labels:
               argocd.argoproj.io/secret-type: cluster
+              loftDemoDomain: {{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}
               eso: '{{ .Values.eso }}'
               kyverno: '{{ .Values.kyverno }}'
+              rancher: '{{ .Values.rancher }}'
             name: cluster-local
             namespace: argocd
           stringData:
@@ -961,6 +963,12 @@ spec:
           label: Install MySQL Operator
           description: >-
             The MySQL Operator for Kubernetes is an operator for managing MySQL InnoDB Cluster setups inside a Kubernetes Cluster.
+          type: boolean
+          section: Applications to Install
+        - variable: rancher
+          label: Install Rancher
+          description: >-
+            Rancher Cluster Management
           type: boolean
           section: Applications to Install
         - variable: vault
