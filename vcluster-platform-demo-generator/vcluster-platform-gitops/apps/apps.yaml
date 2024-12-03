@@ -222,6 +222,8 @@ spec:
 
           config:
             loftHost: "{{ .Values.domain }}"
+            costControl:
+              enabled: true
             uiSettings:
               navBarButtons:
               - link: https://www.vcluster.com/docs/platform/
