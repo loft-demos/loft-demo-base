@@ -676,7 +676,8 @@ spec:
             the logo (#cfcfcf is a good for darker logos, #001529 for lighter logos)
           defaultValue: '#001529'
           section: UI Customization
-    - template:
+    - version: 0.420.7
+      template:
         metadata:
           annotations:
             sleepmode.loft.sh/ignore-user-agents: argo*
@@ -699,7 +700,7 @@ spec:
         apps:
           - name: vcluster-platform-demo
             namespace: vcluster-platform
-            version: 0.42.0-alpha.6
+            version: 0.42.0-alpha.7
             parameters: |
               uiLogoURL: '{{ .Values.uiLogoURL }}'
               logoBackgroundColor: '{{ .Values.logoBackgroundColor }}'
@@ -999,7 +1000,6 @@ spec:
             the logo (#cfcfcf is a good for darker logos, #001529 for lighter logos)
           defaultValue: '#001529'
           section: UI Customization
-      version: 0.420.6
   access:
     - verbs:
         - '*'
