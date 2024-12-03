@@ -894,6 +894,9 @@ spec:
                 customResources:
                   demorepositories.demo.loft.sh:
                     enabled: true
+              fromHost:
+                nodes:
+                  enabled: true
             controlPlane:
               backingStore:
                 etcd:
