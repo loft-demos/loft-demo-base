@@ -700,7 +700,7 @@ spec:
         apps:
           - name: vcluster-platform-demo
             namespace: vcluster-platform
-            version: 0.42.0-alpha.7
+            version: 0.42.0-alpha.8
             parameters: |
               uiLogoURL: '{{ .Values.uiLogoURL }}'
               logoBackgroundColor: '{{ .Values.logoBackgroundColor }}'
@@ -881,12 +881,12 @@ spec:
           enabled: true
         helmRelease:
           chart:
-            version: 0.22.0-alpha.1
+            version: 0.22.0-alpha.2
           values: |
             external:
               platform:
                 autoSleep:
-                  afterInactivity: 39600
+                  afterInactivity: 172800
                 autoDelete:
                   afterInactivity: 7620000
             sync:
