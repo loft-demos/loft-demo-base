@@ -968,7 +968,7 @@ spec:
         - variable: rancher
           label: Install Rancher
           description: >-
-            Rancher Cluster Management
+            Rancher Cluster Management (requires manual configuration)
           type: boolean
           section: Applications to Install
         - variable: vault
