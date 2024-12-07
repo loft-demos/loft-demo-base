@@ -307,7 +307,7 @@ spec:
         - variable: mysql
           label: Install MySQL Operator
           description: >-
-            The MySQL Operator for Kubernetes is an operator for managing MySQL InnoDB Cluster setups inside a Kubernetes Cluster.
+            Configures demo for the database connector feature utilizing the MySQL Operator to create an InnoDB Cluster and Virtual Cluster Template configured to use a database connector. 
           type: boolean
           section: Applications to Install
         - variable: vault
