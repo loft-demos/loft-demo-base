@@ -879,6 +879,15 @@ spec:
             labels:
               loft.sh/project-secret-name: innodb-cluster-creds
           type: Opaque
+          ---
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: database-connector
+            namespace: vcluster-platform
+            labels:
+              loft.sh/project-secret-name: database-connector
+          type: Opaque
           {{end}}
           ---
           apiVersion: v1
