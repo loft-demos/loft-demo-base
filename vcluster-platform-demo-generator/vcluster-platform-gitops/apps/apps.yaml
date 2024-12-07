@@ -279,6 +279,18 @@ spec:
       label: Kyverno Enabled
       description: >-
         Adds a cluster annotation that denotes the vCluster Platform cluster has Kyverno support.
+    - variable: mysql
+      label: Install MySQL Operator
+      description: >-
+        The MySQL Operator for Kubernetes is an operator for managing MySQL InnoDB Cluster setups inside a Kubernetes Cluster.
+      type: boolean
+      section: Applications to Install
+    - variable: rancher
+      label: Install Rancher
+      description: >-
+        Rancher Cluster Management (requires manual configuration)
+      type: boolean
+      section: Applications to Install
   config:
     chart: {}
     bash:
@@ -339,6 +351,12 @@ spec:
 
         kubectl annotate clusters loft-cluster kyverno={{
         .Values.kyverno }}
+
+        kubectl annotate clusters loft-cluster mysql={{
+        .Values.mysql }}
+
+        kubectl annotate clusters loft-cluster rancher={{
+        .Values.rancher }}
 
 ---
 apiVersion: management.loft.sh/v1
