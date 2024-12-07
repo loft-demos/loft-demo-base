@@ -295,13 +295,13 @@ spec:
         - variable: eso
           label: Install External Secrets Operator
           description: >-
-            External secret management for Kubernetes
+            External secret management for Kubernetes allows for demoing the ESO integration for vCluster Pro.
           type: boolean
           section: Applications to Install
         - variable: kyverno
           label: Install Kyverno
           description: >-
-            Kubernetes Native Policy Management
+            Kubernetes Native Policy Management allows for demoning the central admission control vCluster Pro distro feature.
           type: boolean
           section: Applications to Install
         - variable: mysql
