@@ -691,9 +691,6 @@ spec:
               vclusterName: '{{ .Values.loft.virtualClusterName }}'
               domain: '{{ .Values.loft.clusterAnnotations.domain }}'
               team: '{{ .Values.loft.project }}'
-              kyverno: '{{ .Values.kyverno }}'
-              eso: '{{ .Values.eso }}'
-              vault: '{{ .Values.vault }}'
             annotations:
               loft.sh/custom-links: >-
                 https://{{ .Values.loft.virtualClusterName }}.{{
@@ -866,6 +863,22 @@ spec:
           data:
             .dockerconfigjson: e30K
           type: kubernetes.io/dockerconfigjson
+          {{end}}
+          {{if .Values.mysql}}
+          ---
+          apiVersion: v1
+          kind: Namespace
+          metadata:
+            name: mysql-operator
+          ---
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: innodb-cluster-creds
+            namespace: mysql-operator
+            labels:
+              loft.sh/project-secret-name: innodb-cluster-creds
+          type: Opaque
           {{end}}
           ---
           apiVersion: v1
