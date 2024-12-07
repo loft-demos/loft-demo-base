@@ -190,6 +190,7 @@ spec:
               argocd.argoproj.io/secret-type: cluster
               eso: '{{ .Values.eso }}'
               kyverno: '{{ .Values.kyverno }}'
+              mysql: '{{ .Values.mysql }}'
             name: cluster-local
             namespace: argocd
           stringData:
@@ -839,6 +840,7 @@ spec:
               loftDemoDomain: {{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}
               eso: '{{ .Values.eso }}'
               kyverno: '{{ .Values.kyverno }}'
+              mysql: '{{ .Values.mysql }}'
               rancher: '{{ .Values.rancher }}'
             name: cluster-local
             namespace: argocd
