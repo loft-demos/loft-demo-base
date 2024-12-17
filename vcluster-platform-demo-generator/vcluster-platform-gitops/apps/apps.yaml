@@ -181,6 +181,85 @@ spec:
           description: LogoBackgroundColor is the color value to use as the background color for the logo
           defaultValue: '#001529'
       version: 0.410.2-beta.2
+    - version: 0.42.0-beta.6
+      icon: https://www.vcluster.com/pro/docs/media/vclusterpro_orange.svg
+      defaultNamespace: vcluster-platform
+      config:
+        chart:
+          name: vcluster-platform
+          version: 4.2.0-beta.6
+          repoURL: https://charts.loft.sh/
+        values: |-
+          admin:
+            create: false
+
+          isolation:
+            enabled: true
+            networkPolicy:
+              enabled: false
+              
+          resources:
+            requests:
+              memory: 1Gi
+              cpu: 400m
+            limits:
+              memory: 6Gi
+              cpu: "2"
+
+          ingress:
+            enabled: true
+            ingressClass: nginx
+            host: "{{ .Values.domain }}"
+            tls:
+              enabled: true
+              secret: ""
+
+          envValueFrom:
+            CLIENT_SECRET:
+              secretKeyRef:
+                name: oidc-secret
+                key: clientSecret
+
+          config:
+            loftHost: "{{ .Values.domain }}"
+            costControl:
+              enabled: true
+            uiSettings:
+              navBarButtons:
+              - link: https://www.vcluster.com/docs/platform/
+                position: TopEnd
+                text: vCluster Docs
+              - link: https://github.com/loft-demos/{{ .Values.loft.virtualClusterName }}-app/tree/main/vcluster-gitops
+                position: TopEnd
+                text: GitHub Repo
+              - link: https://komoplane-{{ .Values.domain }}
+                position: TopEnd
+                text: Komoplane
+              logoURL: "{{ .Values.uiLogoURL }}"
+              logoBackgroundColor: "{{ .Values.logoBackgroundColor }}"
+            auth:
+              oidc:
+                issuerUrl: https://loft.rocks/oidc
+                clientId: loft
+                clientSecret: $CLIENT_SECRET
+                redirectURI: https://{{ .Values.domain }}/auth/oidc/callback
+                groupsClaim: groups
+      parameters:
+        - variable: domain
+          label: Loft Domain
+          description: >-
+            The domain to run this Loft instance on, e.g.
+            some-customer.loft.host
+          required: true
+          placeholder: some-customer.loft.host
+        - variable: uiLogoURL
+          label: Logo logoURL
+          description: Will update the vCluster Platform config ui settings logoURL
+          defaultValue: https://www.vcluster.com/pro/docs/media/vclusterpro_orange.svg
+        - variable: logoBackgroundColor
+          label: Logo Background Color
+          description: LogoBackgroundColor is the color value to use as the background color for the logo
+          defaultValue: '#001529'
     - version: 0.42.0-beta.7
       icon: https://www.vcluster.com/pro/docs/media/vclusterpro_orange.svg
       defaultNamespace: vcluster-platform
