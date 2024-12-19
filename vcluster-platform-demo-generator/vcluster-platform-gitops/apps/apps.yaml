@@ -17,12 +17,12 @@ spec:
       name: vcluster-platform
       repoURL: https://charts.loft.sh/
   versions:
-    - version: 4.2.0
+    - version: 4.2.1
       icon: https://www.vcluster.com/pro/docs/media/vclusterpro_orange.svg
       config:
         chart:
           name: vcluster-platform
-          version: 4.2.0
+          version: 4.2.1
           repoURL: https://charts.loft.sh/
         values: |-
           admin:
@@ -263,13 +263,13 @@ spec:
           description: LogoBackgroundColor is the color value to use as the background color for the logo
           defaultValue: '#001529'
       version: 0.410.2-beta.2
-    - version: 0.42.1-rc1
+    - version: 0.42.1
       icon: https://www.vcluster.com/pro/docs/media/vclusterpro_orange.svg
       defaultNamespace: vcluster-platform
       config:
         chart:
           name: vcluster-platform
-          version: 4.2.1-rc1
+          version: 4.2.1
           repoURL: https://charts.loft.sh/
         values: |-
           admin:
