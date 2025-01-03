@@ -892,9 +892,9 @@ spec:
             external:
               platform:
                 autoSleep:
-                  afterInactivity: 432000
+                  afterInactivity: 7320000
                 autoDelete:
-                  afterInactivity: 7620000
+                  afterInactivity: 76200000
             sync:
               toHost:
                 ingresses:
