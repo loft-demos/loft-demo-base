@@ -1091,7 +1091,7 @@ spec:
                           type: string
                         prNumber:
                           description: Pull Request number
-                          type: integer
+                          type: string
                         project:
                           description: vCluster Platform project
                           type: string
