@@ -120,10 +120,10 @@ spec:
                     tls: true
           - name: crossplane
             namespace: crossplane-system
-            version: 1.16.0
+            version: 1.17.4
           - name: komoplane
             namespace: crossplane-system
-            version: 0.1.5
+            version: 0.1.6
           - name: github-repo-argo-cd-webhooks
             namespace: argocd
           - name: crossplane-manifest
@@ -435,10 +435,10 @@ spec:
                     tls: true
           - name: crossplane
             namespace: crossplane-system
-            version: 1.16.0
+            version: 1.17.4
           - name: komoplane
             namespace: crossplane-system
-            version: 0.1.5
+            version: 0.1.6
           - name: github-repo-argo-cd-webhooks
             namespace: argocd
           - name: crossplane-manifest
@@ -791,10 +791,10 @@ spec:
                     tls: true
           - name: crossplane
             namespace: crossplane-system
-            version: 1.16.0
+            version: 1.17.4
           - name: komoplane
             namespace: crossplane-system
-            version: 0.1.5
+            version: 0.1.6
           - name: github-repo-argo-cd-webhooks
             namespace: argocd
           - name: crossplane-manifest
