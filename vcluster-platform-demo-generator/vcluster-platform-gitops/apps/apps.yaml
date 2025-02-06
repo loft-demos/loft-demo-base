@@ -187,7 +187,7 @@ spec:
       config:
         chart:
           name: vcluster-platform
-          version: 4.2.2-rc.8
+          version: 4.2.2-rc.10
           repoURL: https://charts.loft.sh/
         values: |-
           admin:
