@@ -504,6 +504,7 @@ spec:
               loftDemoDomain: {{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}
               eso: '{{ .Values.eso }}'
               kyverno: '{{ .Values.kyverno }}'
+              postgres: '{{ .Values.postgres }}'
               mysql: '{{ .Values.mysql }}'
               rancher: '{{ .Values.rancher }}'
             name: cluster-local
@@ -601,12 +602,7 @@ spec:
                     enabled: true
               distro:
                 k8s:
-                  apiServer:
-                    image:
-                      tag: '{{ .Values.k8sVersion }}'
-                  controllerManager:
-                    image:
-                      tag: '{{ .Values.k8sVersion }}'
+                  version: '{{ .Values.k8sVersion }}'
               coredns:
                 embedded: true
               statefulSet:
@@ -652,6 +648,12 @@ spec:
           label: Install Kyverno
           description: >-
             Kubernetes Native Policy Management
+          type: boolean
+          section: Applications to Install
+        - variable: postgres
+          label: Install Postgres Operator
+          description: >-
+            Configures the Postgres operator manages PostgreSQL clusters on Kubernetes 
           type: boolean
           section: Applications to Install
         - variable: mysql
