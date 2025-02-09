@@ -99,12 +99,13 @@ spec:
           label: Logo Background Color
           description: LogoBackgroundColor is the color value to use as the background color for the logo
           defaultValue: '#001529'
-    - version: 4.1.1
+    - version: 0.43.0
       icon: https://www.vcluster.com/pro/docs/media/vclusterpro_orange.svg
+      defaultNamespace: vcluster-platform
       config:
         chart:
           name: vcluster-platform
-          version: 4.1.1
+          version: 4.3.0-alpha.1
           repoURL: https://charts.loft.sh/
         values: |-
           admin:
@@ -114,12 +115,13 @@ spec:
             enabled: true
             networkPolicy:
               enabled: false
+              
           resources:
             requests:
-              memory: 1Gi
+              memory: 2Gi
               cpu: 500m
             limits:
-              memory: 4Gi
+              memory: 6Gi
               cpu: "2"
 
           ingress:
@@ -138,18 +140,14 @@ spec:
 
           config:
             loftHost: "{{ .Values.domain }}"
+            costControl:
+              enabled: true
             uiSettings:
               navBarButtons:
-              - icon: https://argo-cd.readthedocs.io/en/stable/assets/logo.png
-                link: https://argocd-{{ .Values.domain }}
-                position: TopEnd
-                text: Argo CD
-              - icon: https://raw.githubusercontent.com/loft-demos/loft-demo-base/refs/heads/main/logos/vcluster.svg
-                link: https://www.vcluster.com/docs/platform/
+              - link: https://www.vcluster.com/docs/platform/
                 position: TopEnd
                 text: vCluster Docs
-              - icon: https://cdn0.iconfinder.com/data/icons/shift-logotypes/32/Github-512.png
-                link: https://github.com/loft-demos/{{ .Values.loft.virtualClusterName }}-app/tree/main/vcluster-gitops
+              - link: https://github.com/loft-demos/{{ .Values.loft.virtualClusterName }}-app/tree/main/vcluster-gitops
                 position: TopEnd
                 text: GitHub Repo
               - link: https://komoplane-{{ .Values.domain }}
@@ -164,7 +162,6 @@ spec:
                 clientSecret: $CLIENT_SECRET
                 redirectURI: https://{{ .Values.domain }}/auth/oidc/callback
                 groupsClaim: groups
-          product: vcluster-pro
       parameters:
         - variable: domain
           label: Loft Domain
@@ -176,7 +173,7 @@ spec:
         - variable: uiLogoURL
           label: Logo logoURL
           description: Will update the vCluster Platform config ui settings logoURL
-          defaultValue: https://cdn.prod.website-files.com/60d28872831dd0f87a178997/661ca132697136342511fa22_vCluster%20Logo.svg
+          defaultValue: https://www.vcluster.com/pro/docs/media/vclusterpro_orange.svg
         - variable: logoBackgroundColor
           label: Logo Background Color
           description: LogoBackgroundColor is the color value to use as the background color for the logo
