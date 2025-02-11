@@ -532,6 +532,21 @@ spec:
             .dockerconfigjson: e30K
           type: kubernetes.io/dockerconfigjson
           {{end}}
+          {{if .Values.disabletrial}}
+          ---
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: loft-cert
+            namespace: vcluster-platform
+            labels:
+              loft.sh/project-secret-name: vcluster-platform-license-cert
+          data:
+            ca.crt: ""
+            tls.crt: ""
+            tls.key: ""
+          type: kubernetes.io/tls
+          {{end}}
           {{if .Values.mysql}}
           ---
           apiVersion: v1
@@ -694,6 +709,12 @@ spec:
             - qa
             - prod
           defaultValue: dev
+          section: Kubernetes Config
+        - variable: disabletrial
+          label: Disable Trial
+          description: >-
+            Disable trial license.
+          type: boolean
           section: Kubernetes Config
         - variable: uiLogoURL
           label: UI Logo uiLogoURL
