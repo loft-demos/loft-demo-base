@@ -390,6 +390,14 @@ spec:
                     url: https://argocd-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}
                     create: true
                     application.resourceTrackingMethod: annotation
+                    globalProjects: |-
+                      - labelSelector:
+                          matchExpressions:
+                            - key: use-global-project-settings
+                              operator: In
+                              values:
+                                - 'true'
+                        projectName: global-project
                   params:
                     "server.insecure": true
                     timeout.reconciliation: 0 
