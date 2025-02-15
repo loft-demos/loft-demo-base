@@ -502,6 +502,7 @@ spec:
             labels:
               argocd.argoproj.io/secret-type: cluster
               loftDemoDomain: {{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}
+              resolveDNS: '{{ .Values.resolveDNS }}'
               eso: '{{ .Values.eso }}'
               kyverno: '{{ .Values.kyverno }}'
               postgres: '{{ .Values.postgres }}'
@@ -689,6 +690,12 @@ spec:
             An identity-based secrets and encryption management system.
           type: boolean
           section: Applications to Install
+        - variable: resolveDNS
+          label: Resolve DNS
+          description: >-
+            This feature allows custom DNS rules in a vCluster, enabling communication with host cluster services and services in other vCluster instances.
+          type: boolean
+          section: Feature Examples
         - variable: k8sVersion
           label: k8sVersion
           description: Please select Kubernetes version
