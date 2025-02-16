@@ -195,24 +195,6 @@ spec:
             name: in-cluster
             server: https://kubernetes.default.svc
           type: Opaque
-          {{if .Values.eso}}
-          ---
-          apiVersion: v1
-          kind: Namespace
-          metadata:
-            name: eso-demo
-          ---
-          apiVersion: v1
-          kind: Secret
-          metadata:
-            name: ghcr-login-secret
-            namespace: eso-demo
-            labels:
-              loft.sh/project-secret-name: ghcr-login-secret
-          data:
-            .dockerconfigjson: e30K
-          type: kubernetes.io/dockerconfigjson
-          {{end}}
           ---
           apiVersion: v1
           kind: Namespace
@@ -523,24 +505,6 @@ spec:
             name: in-cluster
             server: https://kubernetes.default.svc
           type: Opaque
-          {{if .Values.eso}}
-          ---
-          apiVersion: v1
-          kind: Namespace
-          metadata:
-            name: eso-demo
-          ---
-          apiVersion: v1
-          kind: Secret
-          metadata:
-            name: ghcr-login-secret
-            namespace: eso-demo
-            labels:
-              loft.sh/project-secret-name: ghcr-login-secret
-          data:
-            .dockerconfigjson: e30K
-          type: kubernetes.io/dockerconfigjson
-          {{end}}
           {{if .Values.disabletrial}}
           ---
           apiVersion: v1
@@ -882,49 +846,6 @@ spec:
             name: in-cluster
             server: https://kubernetes.default.svc
           type: Opaque
-          {{if .Values.eso}}
-          ---
-          apiVersion: v1
-          kind: Namespace
-          metadata:
-            name: eso-demo
-          ---
-          apiVersion: v1
-          kind: Secret
-          metadata:
-            name: ghcr-login-secret
-            namespace: eso-demo
-            labels:
-              loft.sh/project-secret-name: ghcr-login-secret
-          data:
-            .dockerconfigjson: e30K
-          type: kubernetes.io/dockerconfigjson
-          {{end}}
-          {{if .Values.mysql}}
-          ---
-          apiVersion: v1
-          kind: Namespace
-          metadata:
-            name: mysql-operator
-          ---
-          apiVersion: v1
-          kind: Secret
-          metadata:
-            name: innodb-cluster-creds
-            namespace: mysql-operator
-            labels:
-              loft.sh/project-secret-name: innodb-cluster-creds
-          type: Opaque
-          ---
-          apiVersion: v1
-          kind: Secret
-          metadata:
-            name: database-connector
-            namespace: vcluster-platform
-            labels:
-              loft.sh/project-secret-name: database-connector
-          type: Opaque
-          {{end}}
           ---
           apiVersion: v1
           kind: Namespace
@@ -1238,49 +1159,6 @@ spec:
             name: in-cluster
             server: https://kubernetes.default.svc
           type: Opaque
-          {{if .Values.eso}}
-          ---
-          apiVersion: v1
-          kind: Namespace
-          metadata:
-            name: eso-demo
-          ---
-          apiVersion: v1
-          kind: Secret
-          metadata:
-            name: ghcr-login-secret
-            namespace: eso-demo
-            labels:
-              loft.sh/project-secret-name: ghcr-login-secret
-          data:
-            .dockerconfigjson: e30K
-          type: kubernetes.io/dockerconfigjson
-          {{end}}
-          {{if .Values.mysql}}
-          ---
-          apiVersion: v1
-          kind: Namespace
-          metadata:
-            name: mysql-operator
-          ---
-          apiVersion: v1
-          kind: Secret
-          metadata:
-            name: innodb-cluster-creds
-            namespace: mysql-operator
-            labels:
-              loft.sh/project-secret-name: innodb-cluster-creds
-          type: Opaque
-          ---
-          apiVersion: v1
-          kind: Secret
-          metadata:
-            name: database-connector
-            namespace: vcluster-platform
-            labels:
-              loft.sh/project-secret-name: database-connector
-          type: Opaque
-          {{end}}
           ---
           apiVersion: v1
           kind: Namespace
