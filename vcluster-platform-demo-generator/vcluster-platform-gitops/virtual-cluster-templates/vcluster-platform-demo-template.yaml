@@ -620,12 +620,6 @@ spec:
             Configures the Postgres operator manages PostgreSQL clusters on Kubernetes 
           type: boolean
           section: Applications to Install
-        - variable: mysql
-          label: Install MySQL Operator
-          description: >-
-            The MySQL Operator for Kubernetes is an operator for managing MySQL InnoDB Cluster setups inside a Kubernetes Cluster and may be used with the vCluster Platform database connector feature.
-          type: boolean
-          section: Applications to Install
         - variable: rancher
           label: Install Rancher
           description: >-
@@ -638,6 +632,12 @@ spec:
             An identity-based secrets and encryption management system.
           type: boolean
           section: Applications to Install
+        - variable: mysql
+          label: vCluster Platform Database Connector
+          description: >-
+            Installs the MySQL Operator for Kubernetes and creates a MySQL InnoDB Cluster configured to be used with the vCluster Platform database connector feature and a Virtual Cluster Template.
+          type: boolean
+          section: Feature Examples
         - variable: resolveDNS
           label: Resolve DNS
           description: >-
