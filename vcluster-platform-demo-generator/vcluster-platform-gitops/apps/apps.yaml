@@ -17,16 +17,26 @@ spec:
       name: vcluster-platform
       repoURL: https://charts.loft.sh/
   versions:
-    - version: 4.2.1
+    - version: 4.2.2
       icon: https://www.vcluster.com/pro/docs/media/vclusterpro_orange.svg
       config:
         chart:
           name: vcluster-platform
-          version: 4.2.1
+          version: 4.2.2
           repoURL: https://charts.loft.sh/
         values: |-
           admin:
             create: false
+
+          image: ghcr.io/loft-demos/vcluster-platform
+          securityContext:
+            allowPrivilegeEscalation: false
+            privileged: false
+            capabilities:
+              drop:
+                - ALL
+            runAsUser: 998
+            runAsGroup: 998
 
           isolation:
             enabled: true
