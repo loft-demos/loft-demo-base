@@ -28,7 +28,7 @@ spec:
           admin:
             create: false
 
-          image: ghcr.io/loft-demos/vcluster-platform
+          image: ghcr.io/loft-demos/vcluster-platform:4.2.2
           securityContext:
             allowPrivilegeEscalation: false
             privileged: false
