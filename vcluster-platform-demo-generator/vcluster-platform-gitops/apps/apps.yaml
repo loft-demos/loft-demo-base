@@ -35,8 +35,8 @@ spec:
             capabilities:
               drop:
                 - ALL
-            runAsUser: 998
-            runAsGroup: 998
+            runAsUser: 1001
+            runAsGroup: 1001
 
           isolation:
             enabled: true
