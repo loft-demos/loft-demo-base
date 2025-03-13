@@ -331,7 +331,7 @@ spec:
             the logo (#cfcfcf is a good for darker logos, #001529 for lighter logos)
           defaultValue: '#001529'
           section: UI Customization
-    - version: 0.430.7
+    - version: 0.430.10
       template:
         metadata:
           annotations:
@@ -352,7 +352,7 @@ spec:
         apps:
           - name: vcluster-platform-demo
             namespace: vcluster-platform
-            version: 0.430.7
+            version: 0.430.10
             parameters: |
               uiLogoURL: '{{ .Values.uiLogoURL }}'
               logoBackgroundColor: '{{ .Values.logoBackgroundColor }}'
@@ -539,7 +539,7 @@ spec:
           enabled: true
         helmRelease:
           chart:
-            version: 0.22.4
+            version: 0.23.0
           values: |
             external:
               platform:
