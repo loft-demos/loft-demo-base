@@ -493,6 +493,7 @@ spec:
             labels:
               argocd.argoproj.io/secret-type: cluster
               loftDemoDomain: {{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}
+              flux: 'true'
               resolveDNS: '{{ .Values.resolveDNS }}'
               eso: '{{ .Values.eso }}'
               kyverno: '{{ .Values.kyverno }}'
