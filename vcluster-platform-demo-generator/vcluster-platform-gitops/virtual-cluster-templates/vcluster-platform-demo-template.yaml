@@ -286,7 +286,7 @@ spec:
             apiVersion: v1
             kind: Secret
             metadata:
-              name: pr-github-receiver-token
+              name: flux-webhook-receiver-token
               labels:
                 loft.sh/project-secret-name: pr-github-receiver-token
             type: Opaque
@@ -631,7 +631,7 @@ spec:
             apiVersion: v1
             kind: Secret
             metadata:
-              name: pr-github-receiver-token
+              name: flux-webhook-receiver-token
               labels:
                 loft.sh/project-secret-name: pr-github-receiver-token
             type: Opaque
