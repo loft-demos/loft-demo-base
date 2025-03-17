@@ -282,14 +282,6 @@ spec:
             type: Opaque
             stringData:
               url: "https://flux-webhook-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}/hook/97184ed7cbe13e33d4548c249d31f957b6af9b47fc2227a682936b3b352cf932"
-            ---
-            apiVersion: v1
-            kind: Secret
-            metadata:
-              name: flux-webhook-receiver-token
-              labels:
-                loft.sh/project-secret-name: pr-github-receiver-token
-            type: Opaque
       parameters:
         - variable: eso
           label: Install External Secrets Operator
@@ -627,14 +619,6 @@ spec:
             type: Opaque
             stringData:
               url: "https://flux-webhook-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}/hook/97184ed7cbe13e33d4548c249d31f957b6af9b47fc2227a682936b3b352cf932"
-            ---
-            apiVersion: v1
-            kind: Secret
-            metadata:
-              name: flux-webhook-receiver-token
-              labels:
-                loft.sh/project-secret-name: pr-github-receiver-token
-            type: Opaque
       parameters:
         - variable: eso
           label: Install External Secrets Operator
