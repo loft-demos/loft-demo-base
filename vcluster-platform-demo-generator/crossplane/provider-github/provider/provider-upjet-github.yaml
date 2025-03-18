@@ -4,7 +4,7 @@ metadata:
   name: provider-github
 spec:
   ignoreCrossplaneConstraints: false
-  package: coopnorge/provider-github:v0.10.0
+  package: crossplane-contrib/provider-upjet-github:v0.18.0
   packagePullPolicy: IfNotPresent
   revisionActivationPolicy: Automatic
   revisionHistoryLimit: 1
