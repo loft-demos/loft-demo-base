@@ -7,4 +7,5 @@ jobs:
     # You need to use the INSTALLATION_NAME from the previous step
     runs-on: v3k53cvp3aqm2x
     steps:
-    - run: echo "🎉 This job uses runner scale set runners running on " $(uname -a) 
+    - run: echo "🎉 This job uses runner scale set runners running on " $(uname -a)
+    - run: sleep 20
