@@ -8,3 +8,5 @@ jobs:
     runs-on: kubepi-test
     steps:
     - run: echo "🎉 This job uses runner scale set runners!"
+    - run: sleep 100
+    - run: echo uname + " arc runner job complete"
