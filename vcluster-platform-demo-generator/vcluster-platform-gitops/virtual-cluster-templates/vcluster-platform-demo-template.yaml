@@ -502,7 +502,9 @@ spec:
             labels:
               argocd.argoproj.io/secret-type: cluster
               loftDemoDomain: {{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}
+              vnode: '{{ .Values.vnode }}'
               flux: 'true'
+              virtualScheduler: '{{ .Values.virtualScheduler }}'
               resolveDNS: '{{ .Values.resolveDNS }}'
               eso: '{{ .Values.eso }}'
               kyverno: '{{ .Values.kyverno }}'
