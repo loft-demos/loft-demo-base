@@ -518,7 +518,7 @@ spec:
             name: in-cluster
             server: https://kubernetes.default.svc
           type: Opaque
-          {{if .Values.disabletrial}}
+          {{if not .Values.enableTrial}}
           ---
           apiVersion: v1
           kind: Secret
@@ -697,10 +697,10 @@ spec:
             - prod
           defaultValue: dev
           section: Kubernetes Config
-        - variable: disabletrial
-          label: Disable Trial
+        - variable: enableTrial
+          label: Enable Trial
           description: >-
-            Disable trial license.
+            Enables use of trial license. Certain Platform features may not be enabled.
           type: boolean
           section: Kubernetes Config
         - variable: uiLogoURL
