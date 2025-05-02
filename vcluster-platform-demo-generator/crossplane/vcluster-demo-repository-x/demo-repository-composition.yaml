@@ -18,6 +18,7 @@ spec:
         metadata:
           name: repo-name
         spec:
+          deletionPolicy: Delete
           forProvider:
             description: vCluster Platform Demo repository used for vCluster Platform GitOps and demo examples
             name: repo-name
