@@ -30,7 +30,7 @@ spec:
     spaceTemplate:
       metadata: {}
   versions:
-    - version: 4.3.02
+    - version: 4.3.0
       template:
         metadata:
           annotations:
@@ -51,7 +51,7 @@ spec:
         apps:
           - name: vcluster-platform-demo
             namespace: vcluster-platform
-            version: 4.3.02
+            version: 4.3.0
             parameters: |
               uiLogoURL: '{{ .Values.uiLogoURL }}'
               logoBackgroundColor: '{{ .Values.logoBackgroundColor }}'
