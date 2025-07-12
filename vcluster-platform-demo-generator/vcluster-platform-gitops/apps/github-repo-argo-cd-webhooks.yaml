@@ -1,0 +1,174 @@
+apiVersion: management.loft.sh/v1
+kind: App
+metadata:
+  name: github-repo-argo-cd-webhooks
+spec:
+  displayName: GitHub Repo with Argo CD Webhooks
+  owner:
+    team: loft-admins
+  config:
+    chart: {}
+    bash:
+      script: >
+        kubectl wait --for condition=established --timeout=60s
+        crd/applicationsets.argoproj.io
+
+
+        while ! kubectl get crd applicationsets.argoproj.io; do
+          echo "Waiting for argo cd applicationset crd...";
+          sleep 1; 
+        done
+
+
+        kubectl wait --for condition=established --timeout=60s
+        crd/applicationsets.argoproj.io
+
+
+        while ! kubectl get crd applicationsets.argoproj.io; do
+          echo "Waiting for argo cd applicationset crd...";
+          sleep 1; 
+        done
+
+
+        POD=$(kubectl get pod -n argocd -l
+        app.kubernetes.io/component=applicationset-controller -o
+        jsonpath="{.items[0].metadata.name}")
+
+        kubectl delete pod -n argocd $POD
+
+
+        cat <<EOF | kubectl apply -f -
+
+        apiVersion: demo.loft.sh/v1alpha1
+
+        kind: DemoRepository
+
+        metadata:
+          name: github-repo
+          namespace: default
+        spec:
+          name: "{{ .Values.loft.virtualClusterName }}-app"
+          loftDemoDomain: "{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}"
+          virtualClusterName: "{{ .Values.loft.virtualClusterName }}"
+          virtualClusterNamespace: "{{ .Values.loft.virtualClusterNamespace }}"
+        EOF
+
+
+        while ! kubectl get secret ghcr-login-secret -n vcluster-platform; do
+          echo "Waiting for ghcr-login-secret...";
+          sleep 1; 
+        done
+
+        PULL_SECRET=$(kubectl get secret ghcr-login-secret -n vcluster-platform -o
+        jsonpath="{.data['\.dockerconfigjson']}")
+
+        cat <<EOF | kubectl apply -f -
+
+        apiVersion: argoproj.io/v1alpha1
+
+        kind: Application
+
+        metadata:
+          name: vcluster-gitops
+          namespace: argocd
+        spec:
+          destination:
+            server: https://kubernetes.default.svc
+          project: default
+          source:
+            path: vcluster-gitops
+            repoURL: https://github.com/loft-demos/{{ .Values.loft.virtualClusterName }}-app.git
+            targetRevision: HEAD
+            kustomize:
+              patches:
+                - target:
+                    kind: SharedSecret
+                    name: ghcr-login-secret
+                  patch: |-
+                    - op: replace
+                      path: /spec/data/.dockerconfigjson
+                      value: $PULL_SECRET
+                - target:
+                    kind: Project
+                    name: auth-core
+                  patch: |-
+                    - op: replace
+                      path: /spec/argoCD/sso/host
+                      value: "https://argocd-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}"
+                - target:
+                    kind: Project
+                    name: default
+                  patch: |-
+                    - op: replace
+                      path: /spec/argoCD/sso/host
+                      value: "https://argocd-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}"
+                - target:
+                    kind: Project
+                    name: api-framework
+                  patch: |-
+                    - op: replace
+                      path: /spec/argoCD/sso/host
+                      value: "https://argocd-api-framework-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}"
+          syncPolicy:
+            automated:
+              prune: true
+        EOF
+
+        cat <<EOF | kubectl apply -f -
+
+        apiVersion: argoproj.io/v1alpha1
+
+        kind: ApplicationSet
+
+        metadata:
+          name: pr-vcluster
+          namespace: argocd
+        spec:
+          generators:
+            - pullRequest:
+                github:
+                  appSecretName: loft-demo-org-cred
+                  labels:
+                    - create-prvcluster
+                  owner: loft-demos
+                  repo: {{ .Values.loft.virtualClusterName }}-app
+                requeueAfterSeconds: 30
+                template:
+                  metadata: {}
+                  spec:
+                    destination: {}
+                    project: ''
+          template:
+            metadata:
+              name: {{ .Values.loft.virtualClusterName }}-app-pr-{{`{{number}}`}}
+            spec:
+              destination:
+                name: in-cluster
+                namespace: p-api-framework
+              info:
+                - name: PRvCluster Argo CD URL
+                  value: https://argocd-{{ .Values.loft.virtualClusterName }}-app-pr-{{`{{number}}`}}.{{ .Values.loft.clusterAnnotations.domain }}
+                - name: GitHub PR
+                  value: https://github.com/loft-demos/{{ .Values.loft.virtualClusterName }}-app/pull/{{`{{number}}`}}
+              project: default
+              source:
+                kustomize:
+                  namePrefix: {{ .Values.loft.virtualClusterName }}-app-pr-{{`{{number}}`}}-
+                  patches:
+                    - patch: |-
+                        - op: replace
+                          path: /spec/repo
+                          value: {{ .Values.loft.virtualClusterName }}-app
+                        - op: replace
+                          path: /spec/prNumber
+                          value: '{{`{{number}}`}}'
+                      target:
+                        kind: PullRequestEnvironment
+                        name: vcluster
+                path: kustomize-pr/
+                repoURL: https://github.com/loft-demos/{{ .Values.loft.virtualClusterName }}-app.git
+                targetRevision: '{{`{{head_sha}}`}}'
+              syncPolicy:
+                automated:
+                  selfHeal: true
+        EOF
