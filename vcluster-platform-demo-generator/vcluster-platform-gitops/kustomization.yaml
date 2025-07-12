@@ -7,6 +7,7 @@ resources:
 - apps/crossplane.yaml
 - apps/komoplane.yaml
 - apps/github-repo-argo-cd-webhooks.yaml
+- apps/crossplane-manifests.yaml
 - apps/vcluster-platform-demo-configure-admins.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
