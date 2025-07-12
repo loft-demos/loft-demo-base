@@ -1,0 +1,507 @@
+apiVersion: management.loft.sh/v1
+kind: App
+metadata:
+  name: crossplane-manifests
+spec:
+  displayName: Crossplane Manifests
+  owner:
+    team: loft-admins
+  config:
+    chart: {}
+    bash:
+      script: >
+        kubectl wait --for condition=established --timeout=60s
+        crd/providers.pkg.crossplane.io
+
+        while ! kubectl get crd providers.pkg.crossplane.io; do
+          echo "Waiting for crossplane providers.pkg.crossplane.io crd...";
+          sleep 1; 
+        done
+
+        while ! kubectl get secret oidc-secret -n vcluster-platform; do
+          echo "Waiting for oidc-secret...";
+          sleep 1; 
+        done
+
+        OIDC_CLIENT_SECRET=$(kubectl get secret oidc-secret -n vcluster-platform -o
+        jsonpath="{.data.clientSecret}" | base64 -d)
+
+        cat <<EOF | kubectl apply -f -
+
+        apiVersion: v1 
+
+        kind: ServiceAccount 
+
+        metadata:
+          name: kubernetes-provider-cluster-admin
+        --- 
+
+        apiVersion: pkg.crossplane.io/v1 
+
+        kind: Provider 
+
+        metadata:
+          name: provider-kubernetes
+        spec:
+          package: "xpkg.upbound.io/crossplane-contrib/provider-kubernetes:v0.14.0"
+          runtimeConfigRef:
+            apiVersion: pkg.crossplane.io/v1beta1
+            kind: DeploymentRuntimeConfig
+            name: provider-kubernetes
+        --- 
+
+        apiVersion: pkg.crossplane.io/v1beta1 
+
+        kind: DeploymentRuntimeConfig 
+
+        metadata:
+          name: provider-kubernetes
+        spec:
+          serviceAccountTemplate:
+            metadata:
+              name: provider-kubernetes
+        --- 
+
+        apiVersion: rbac.authorization.k8s.io/v1 
+
+        kind: ClusterRoleBinding 
+
+        metadata:
+          name: provider-kubernetes-cluster-admin
+        subjects:
+          - kind: ServiceAccount
+            name: provider-kubernetes
+            namespace: crossplane-system
+        roleRef:
+          kind: ClusterRole
+          name: cluster-admin
+          apiGroup: rbac.authorization.k8s.io
+
+        EOF
+
+        while ! kubectl get crd providerconfigs.kubernetes.crossplane.io; do
+          echo "Waiting for crossplane providerconfigs.kubernetes.crossplane.io crd...";
+          sleep 1; 
+        done
+
+
+        cat <<EOF | kubectl apply -f -
+
+        --- 
+
+        apiVersion: kubernetes.crossplane.io/v1alpha1 
+
+        kind: ProviderConfig 
+
+        metadata:
+          name: kubernetes-provider
+        spec:
+          credentials:
+            source: InjectedIdentity
+
+        EOF
+
+        cat <<EOF | kubectl apply -f -
+        
+        apiVersion: pkg.crossplane.io/v1
+        
+        kind: Provider
+        
+        metadata:
+          name: provider-github
+        spec:
+          ignoreCrossplaneConstraints: false
+          package: coopnorge/provider-github:v0.10.0
+          packagePullPolicy: IfNotPresent
+          revisionActivationPolicy: Automatic
+          revisionHistoryLimit: 1
+          skipDependencyResolution: false
+
+        EOF
+
+        while ! kubectl get crd providerconfigs.github.upbound.io; do
+          echo "Waiting for crossplane providerconfigs.github.upbound.io crd...";
+          sleep 1; 
+        done
+
+
+        cat <<EOF | kubectl apply -f -
+
+        apiVersion: github.upbound.io/v1beta1
+        
+        kind: ProviderConfig
+        
+        metadata:
+          name: github-provider-config
+        spec:
+          credentials:
+            secretRef:
+              key: credentials
+              name: github-provider-secret
+              namespace: crossplane-system
+            source: Secret
+
+        EOF
+
+
+        cat <<EOF | kubectl apply -f -
+        
+        apiVersion: apiextensions.crossplane.io/v1
+        
+        kind: CompositeResourceDefinition
+        
+        metadata:
+          name: xargocdwebhooks.demo.loft.sh
+        spec:
+          claimNames:
+            kind: ArgoCDWebhook
+            plural: argocdwebhooks
+          defaultCompositeDeletePolicy: Background
+          defaultCompositionUpdatePolicy: Automatic
+          group: demo.loft.sh
+          names:
+            kind: XArgoCDWebhook
+            plural: xargocdwebhooks
+          versions:
+            - name: v1alpha1
+              referenceable: true
+              schema:
+                openAPIV3Schema:
+                  description: >-
+                    Creates webhooks for an Argo CD Application server and ApplicationSet server.
+                  properties:
+                    spec:
+                      properties:
+                        repoName:
+                          description: Repo name
+                          type: string
+                        virtualClusterNamespace:
+                          description: Namespace for vCluster instance
+                          type: string
+                      required:
+                        - repoName
+                        - virtualClusterNamespace
+                      type: object
+                  type: object
+              served: true
+        EOF
+
+
+        cat <<EOF | kubectl apply -f -
+
+        apiVersion: apiextensions.crossplane.io/v1
+        
+        kind: Composition
+        
+        metadata:
+          labels:
+            crossplane.io/xrd: xargocdwebhooks.demo.loft.sh
+          name: argocdwebhook
+        spec:
+          compositeTypeRef:
+            apiVersion: demo.loft.sh/v1alpha1
+            kind: XArgoCDWebhook
+          mode: Resources
+          publishConnectionDetailsWithStoreConfigRef:
+            name: default
+          resources:
+            - base:
+                apiVersion: repo.github.upbound.io/v1alpha1
+                kind: RepositoryWebhook
+                metadata:
+                  name: argo-webhook
+                spec:
+                  forProvider:
+                    active: true
+                    configuration:
+                      - contentType: json
+                        insecureSsl: false
+                        urlSecretRef:
+                          key: url
+                          name: argo-webhook-url
+                    events:
+                      - push
+                      - pull_request
+                  managementPolicies:
+                    - Create
+                    - Observe
+                  providerConfigRef:
+                    name: github-provider-config
+              name: argo-webhook
+              patches:
+                - fromFieldPath: metadata.name
+                  toFieldPath: metadata.name
+                  transforms:
+                    - string:
+                        fmt: '%s-webhook'
+                        type: Format
+                      type: string
+                  type: FromCompositeFieldPath
+                - fromFieldPath: spec.repoName
+                  toFieldPath: spec.forProvider.repository
+                  type: FromCompositeFieldPath
+                - fromFieldPath: spec.virtualClusterNamespace
+                  toFieldPath: spec.forProvider.configuration[0].urlSecretRef.namespace
+                  type: FromCompositeFieldPath
+              readinessChecks:
+                - matchCondition:
+                    status: 'True'
+                    type: Ready
+                  type: MatchCondition
+            - base:
+                apiVersion: repo.github.upbound.io/v1alpha1
+                kind: RepositoryWebhook
+                metadata:
+                  name: argo-appset-webhook
+                spec:
+                  forProvider:
+                    active: true
+                    configuration:
+                      - contentType: json
+                        insecureSsl: false
+                        urlSecretRef:
+                          key: url
+                          name: argo-appset-webhook-url
+                    events:
+                      - push
+                      - pull_request
+                  managementPolicies:
+                    - Create
+                    - Observe
+                  providerConfigRef:
+                    name: github-provider-config
+              name: argo-appset-webhook
+              patches:
+                - fromFieldPath: metadata.name
+                  toFieldPath: metadata.name
+                  transforms:
+                    - string:
+                        fmt: '%s-appset-webhook'
+                        type: Format
+                      type: string
+                  type: FromCompositeFieldPath
+                - fromFieldPath: spec.repoName
+                  toFieldPath: spec.forProvider.repository
+                  type: FromCompositeFieldPath
+                - fromFieldPath: spec.virtualClusterNamespace
+                  toFieldPath: spec.forProvider.configuration[0].urlSecretRef.namespace
+                  type: FromCompositeFieldPath
+              readinessChecks:
+                - matchCondition:
+                    status: 'True'
+                    type: Ready
+                  type: MatchCondition
+        EOF
+
+
+        cat <<EOF | kubectl apply -f -
+
+        apiVersion: pkg.crossplane.io/v1beta1
+
+        kind: Function
+
+        metadata:
+          name: function-patch-and-transform
+        spec:
+          ignoreCrossplaneConstraints: false
+          package: xpkg.upbound.io/crossplane-contrib/function-patch-and-transform:v0.6.0
+          packagePullPolicy: IfNotPresent
+          revisionActivationPolicy: Automatic
+          revisionHistoryLimit: 1
+          runtimeConfigRef:
+            apiVersion: pkg.crossplane.io/v1beta1
+            kind: DeploymentRuntimeConfig
+            name: default
+          skipDependencyResolution: false
+        ---
+
+        apiVersion: apiextensions.crossplane.io/v1
+
+        kind: CompositeResourceDefinition
+
+        metadata:
+          name: xpullrequestenvironments.virtualcluster.demo.loft.sh
+        spec:
+          claimNames:
+            kind: PullRequestEnvironment
+            plural: pullrequestenvironments
+          defaultCompositeDeletePolicy: Background
+          defaultCompositionUpdatePolicy: Automatic
+          group: virtualcluster.demo.loft.sh
+          names:
+            kind: XPullRequestEnvironment
+            plural: xpullrequestenvironments
+          versions:
+            - name: v1alpha1
+              referenceable: true
+              schema:
+                openAPIV3Schema:
+                  description: >-
+                    A PullRequestEnvironment for virtual clusters is a composite
+                    resource that represents a vCluster with ArgoCD installed and
+                    configured with an ApplicationSet for a GitHub Pull Request.
+                  properties:
+                    spec:
+                      properties:
+                        k8sVersion:
+                          description: The Kubernetes version of the vCluster instance
+                          type: string
+                        prNumber:
+                          description: Pull Request number
+                          type: string
+                        project:
+                          description: vCluster Platform project
+                          type: string
+                        repo:
+                          description: Application repository name
+                          type: string
+                      required:
+                        - repo
+                        - project
+                        - k8sVersion
+                      type: object
+                  type: object
+              served: true
+        ---
+
+        apiVersion: apiextensions.crossplane.io/v1
+
+        kind: Composition
+
+        metadata:
+          creationTimestamp: '2024-07-15T20:28:55Z'
+          generation: 5
+          labels:
+            crossplane.io/xrd: xpullrequestenvironments.virtualcluster.demo.loft.sh
+          name: pullrequestenvironments
+        spec:
+          compositeTypeRef:
+            apiVersion: virtualcluster.demo.loft.sh/v1alpha1
+            kind: XPullRequestEnvironment
+          mode: Pipeline
+          pipeline:
+            - functionRef:
+                name: function-patch-and-transform
+              input:
+                apiVersion: pt.fn.crossplane.io/v1beta1
+                kind: Resources
+                resources:
+                  - base:
+                      apiVersion: kubernetes.crossplane.io/v1alpha2
+                      kind: Object
+                      spec:
+                        forProvider:
+                          manifest:
+                            apiVersion: management.loft.sh/v1
+                            kind: VirtualClusterInstance
+                            metadata: {}
+                            spec:
+                              clusterRef:
+                                cluster: loft-cluster
+                              owner:
+                                team: api-framework
+                              templateRef:
+                                name: pull-request-vcluster
+                                version: 1.0.x
+                        providerConfigRef:
+                          name: kubernetes-provider
+                        readiness:
+                          policy: DeriveFromObject
+                    name: vcluster
+                    patches:
+                      - fromFieldPath: metadata.name
+                        toFieldPath: spec.forProvider.manifest.metadata.name
+                      - fromFieldPath: spec.project
+                        toFieldPath: spec.forProvider.manifest.metadata.namespace
+                        transforms:
+                          - string:
+                              fmt: p-%s
+                              type: Format
+                            type: string
+                        type: FromCompositeFieldPath
+                      - combine:
+                          strategy: string
+                          string:
+                            fmt: |
+                              k8sVersion: '%s'
+                              prnumber: '%s'
+                              reponame: '%s'
+                          variables:
+                            - fromFieldPath: spec.k8sVersion
+                            - fromFieldPath: spec.prNumber
+                            - fromFieldPath: spec.repo
+                        toFieldPath: spec.forProvider.manifest.spec.parameters
+                        type: CombineFromComposite
+                    readinessChecks:
+                      - fieldPath: status.atProvider.manifest.status.phase
+                        matchString: Ready
+                        type: MatchString
+                  - base:
+                      apiVersion: kubernetes.crossplane.io/v1alpha2
+                      kind: Object
+                      spec:
+                        forProvider:
+                          manifest:
+                            apiVersion: v1
+                            kind: Secret
+                            metadata:
+                              annotations:
+                                argoHost: PATCHED
+                              labels:
+                                clientID: PATCHED
+                                component: oidcServer
+                              name: loft-argocd-oidc-secret
+                              namespace: vcluster-platform
+                            stringData:
+                              clientID: PATCHED
+                              clientSecret: '$OIDC_CLIENT_SECRET'
+                              name: 'Loft'
+                              redirectURIs: PATCHED
+                        providerConfigRef:
+                          name: kubernetes-provider
+                    name: loft-argocd-oidc-secret
+                    patches:
+                      - fromFieldPath: metadata.name
+                        toFieldPath: spec.forProvider.manifest.metadata.name
+                        transforms:
+                          - string:
+                              fmt: argocd-oidc-%s
+                              type: Format
+                            type: string
+                      - fromFieldPath: metadata.name
+                        toFieldPath: spec.forProvider.manifest.metadata.labels["clientID"]
+                        transforms:
+                          - string:
+                              fmt: argocd-%s
+                              type: Format
+                            type: string
+                      - fromFieldPath: metadata.name
+                        toFieldPath: spec.forProvider.manifest.metadata.annotations["argoHost"]
+                        transforms:
+                          - string:
+                              fmt: https://argocd-%s.{{ .Values.loft.clusterAnnotations.domain }}
+                              type: Format
+                            type: string
+                      - fromFieldPath: metadata.name
+                        toFieldPath: spec.forProvider.manifest.stringData.clientID
+                        transforms:
+                          - string:
+                              fmt: argocd-%s
+                              type: Format
+                            type: string
+                      - fromFieldPath: metadata.name
+                        toFieldPath: spec.forProvider.manifest.stringData.redirectURIs
+                        transforms:
+                          - string:
+                              fmt: https://argocd-%s.{{ .Values.loft.clusterAnnotations.domain }}/auth/callback
+                              type: Format
+                            type: string
+              step: patch-and-transform
+          publishConnectionDetailsWithStoreConfigRef:
+            name: default
+        EOF
+        
+  parameters:
+    - variable: vClusterName
+      label: vCluster Name
+      description: Name of vCluster using App
