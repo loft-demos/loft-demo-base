@@ -5,7 +5,7 @@ metadata:
 spec:
   displayName: 'Demo GitOps '
   description: >-
-    Provides Argo CD Applications for a HVC Platform Demo Environment Generator
+    Provides Argo CD Applications for a vCluster Platform Demo Environment Generator
     GitOps and Crossplane configuration
   owner:
     team: loft-admins
