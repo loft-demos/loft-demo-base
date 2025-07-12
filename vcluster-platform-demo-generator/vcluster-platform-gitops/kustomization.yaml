@@ -4,6 +4,7 @@ resources:
 - project-secrets/project-secrets.yaml
 - apps/apps.yaml
 - apps/argocd.yaml
+- apps/crossplane.yaml
 - apps/vcluster-platform-demo-configure-admins.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
