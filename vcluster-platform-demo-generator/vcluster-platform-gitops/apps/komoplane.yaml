@@ -1,0 +1,43 @@
+apiVersion: management.loft.sh/v1
+kind: App
+metadata:
+  name: komoplane
+spec:
+  displayName: Komoplane
+  description: >-
+    Komodor's Crossplane Tool is a project to experiment with visualizing
+    Crossplane resources.
+  owner:
+    team: loft-admins
+  recommendedApp:
+    - virtualcluster
+  defaultNamespace: crossplane-system
+  icon: >-
+    https://raw.githubusercontent.com/komodorio/komoplane/main/pkg/frontend/src/assets/logo_dark_text.svg
+  config:
+    chart:
+      name: komoplane
+      repoURL: https://helm-charts.komodor.io
+  versions:
+    - defaultNamespace: crossplane-system
+      icon: >-
+        https://raw.githubusercontent.com/komodorio/komoplane/main/pkg/frontend/src/assets/logo_dark_text.svg
+      config:
+        chart:
+          name: komoplane
+          version: 0.1.6
+          repoURL: https://helm-charts.komodor.io
+        values: |-
+          ingress:
+            enabled: true
+            className: "nginx"
+            annotations: {}
+            hosts:
+              - host: komoplane-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}
+                paths:
+                  - path: /
+                    pathType: ImplementationSpecific
+            tls:
+              - hosts:
+                  - komoplane-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}
+      version: 0.1.6
