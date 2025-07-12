@@ -2,7 +2,7 @@ resources:
 - virtual-cluster-templates/vcluster-platform-demo-template.yaml
 - projects/projects.yaml
 - project-secrets/project-secrets.yaml
-- apps/apps.yaml
+- apps/vcluster-platform.yaml
 - apps/argocd.yaml
 - apps/crossplane.yaml
 - apps/komoplane.yaml
