@@ -1,0 +1,24 @@
+apiVersion: management.loft.sh/v1
+kind: App
+metadata:
+  name: crossplane
+spec:
+  displayName: Crossplane
+  owner:
+    team: loft-admins
+  recommendedApp:
+    - cluster
+  defaultNamespace: crossplane-system
+  icon: https://docs.crossplane.io/img/crossplane-logo.svg
+  config:
+    chart:
+      name: crossplane
+      repoURL: https://charts.crossplane.io/stable
+  versions:
+    - icon: https://docs.crossplane.io/img/crossplane-logo.svg
+      config:
+        chart:
+          name: crossplane
+          version: 1.17.4
+          repoURL: https://charts.crossplane.io/stable
+      version: 1.17.4
