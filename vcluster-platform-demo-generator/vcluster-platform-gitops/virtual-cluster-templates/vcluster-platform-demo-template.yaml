@@ -315,7 +315,7 @@ spec:
         - variable: vnode
           label: vNode with vCluster
           description: >-
-            The use case examples installed will highlight the integration of vNode with vCluster and can be used to demonstrate the hard-mulitenant isolation provided by vNode for vCluster workloads.
+            The use case examples installed will highlight the integration of vNode with vCluster and can be used to demonstrate the hard-mulitenant isolation provided by vNode for vCluster workloads (requires some manual configuration).
           type: boolean
           section: Use Case Examples
         - variable: mysql
@@ -342,22 +342,22 @@ spec:
             Showcase how ESO integrates with vCluster.
           type: boolean
           section: Use Case Examples
-        - variable: kyverno
-          label: Install Kyverno
+        - variable: rancher
+          label: vCluster Rancher Operator
           description: >-
-            Kubernetes Native Policy Management
+            Installs Rancher Cluster Management platform (requires some manual configuration) with the vCluster Rancher Operator and vCluster Platform integration examples
           type: boolean
-          section: Applications to Install
+          section: Use Case Examples
+        - variable: kyverno
+          label: Central Admission Control
+          description: >-
+            Showcase how to use Kyverno with the Centeral Admission control vCluster feature
+          type: boolean
+          section: Use Case Examples
         - variable: postgres
           label: Install Postgres Operator
           description: >-
             Configures the Postgres operator manages PostgreSQL clusters on Kubernetes 
-          type: boolean
-          section: Applications to Install
-        - variable: rancher
-          label: Install Rancher
-          description: >-
-            Rancher Cluster Management (requires manual configuration)
           type: boolean
           section: Applications to Install
         - variable: vault
