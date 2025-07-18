@@ -241,14 +241,17 @@ spec:
           enabled: true
         helmRelease:
           chart:
-            version: 0.23.0
+            version: 0.26.0
           values: |
+            sleepMode:
+              enabled: true
+              autoSleep:
+                afterInactivity: 8h
+              timeZone: America/New_York
+              autoWakeup:
+                schedule: 0 7 * * *
             external:
               platform:
-                autoSleep:
-                  afterInactivity: 7320000
-                  autoWakeup:
-                    schedule: 0 7 * * *
                 autoDelete:
                   afterInactivity: 43200000
             sync:
@@ -618,12 +621,15 @@ spec:
           chart:
             version: 0.26.0
           values: |
+            sleepMode:
+              enabled: true
+              autoSleep:
+                afterInactivity: 9h
+              timeZone: America/New_York
+              autoWakeup:
+                schedule: 0 7 * * *
             external:
               platform:
-                autoSleep:
-                  afterInactivity: 7320000
-                  autoWakeup:
-                    schedule: 0 7 * * *
                 autoDelete:
                   afterInactivity: 43200000
             sync:
