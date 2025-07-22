@@ -500,8 +500,8 @@ spec:
           publishConnectionDetailsWithStoreConfigRef:
             name: default
         EOF
-        
   parameters:
     - variable: vClusterName
       label: vCluster Name
       description: Name of vCluster using App
+  defaultNamespace: crossplane-system 
