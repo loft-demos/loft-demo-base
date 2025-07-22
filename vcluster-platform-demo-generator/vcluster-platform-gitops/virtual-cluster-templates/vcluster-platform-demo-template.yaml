@@ -518,12 +518,12 @@ spec:
           - name: komoplane
             namespace: crossplane-system
             version: 0.1.6
-          - name: github-repo-argo-cd-webhooks
-            namespace: argocd
           - name: crossplane-manifest
             namespace: crossplane-system
             parameters: |
               vClusterName: '{{ .Values.loft.virtualClusterName }}'
+          - name: github-repo-argo-cd-webhooks
+            namespace: argocd
         objects: |
           apiVersion: v1
           kind: Namespace
