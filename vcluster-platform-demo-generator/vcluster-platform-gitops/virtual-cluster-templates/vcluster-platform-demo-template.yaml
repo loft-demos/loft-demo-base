@@ -28,7 +28,8 @@ spec:
     spaceTemplate:
       metadata: {}
   versions:
-    - template:
+    - version: 0.440.10
+      template:
         metadata:
           labels:
             loft.sh/import-argocd: 'true'
@@ -434,8 +435,8 @@ spec:
             a good for darker logos, #001529 for lighter logos)
           defaultValue: '#001529'
           section: UI Customization
-      version: 0.440.10
-    - template:
+    - version: 4.3.4
+      template:
         metadata:
           labels:
             loft.sh/import-argocd: 'true'
@@ -729,6 +730,12 @@ spec:
           type: boolean
           defaultValue: 'false'
           section: Use Case Examples
+        - variable: namespaceSync
+          label: Namespace Sync
+          description: This demo use case syncs vCluster namespaces to matching physical namespaces so Argo CD Applications created inside a vCluster appear and sync with the same, easy to identify name into a shared Argo CD instance running on the host cluster. 
+          type: boolean
+          defaultValue: 'false'
+          section: Use Case Examples
         - variable: mysql
           label: vCluster Platform Database Connector
           description: >-
@@ -832,7 +839,6 @@ spec:
             a good for darker logos, #001529 for lighter logos)
           defaultValue: '#001529'
           section: UI Customization
-      version: 4.3.4
     - template:
         metadata:
           labels:
