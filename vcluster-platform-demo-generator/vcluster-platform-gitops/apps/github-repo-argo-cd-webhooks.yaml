@@ -36,24 +36,6 @@ spec:
 
         kubectl delete pod -n argocd $POD
 
-
-        cat <<EOF | kubectl apply -f -
-
-        apiVersion: demo.loft.sh/v1alpha1
-
-        kind: DemoRepository
-
-        metadata:
-          name: github-repo
-          namespace: default
-        spec:
-          name: "{{ .Values.loft.virtualClusterName }}-app"
-          loftDemoDomain: "{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}"
-          virtualClusterName: "{{ .Values.loft.virtualClusterName }}"
-          virtualClusterNamespace: "{{ .Values.loft.virtualClusterNamespace }}"
-        EOF
-
-
         while ! kubectl get secret ghcr-login-secret -n vcluster-platform; do
           echo "Waiting for ghcr-login-secret...";
           sleep 1; 
