@@ -504,4 +504,5 @@ spec:
     - variable: vClusterName
       label: vCluster Name
       description: Name of vCluster using App
+      defaultValue: '{{ .Values.loft.virtualClusterName }}'
   defaultNamespace: crossplane-system 
