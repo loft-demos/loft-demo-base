@@ -121,13 +121,6 @@ spec:
                       nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
                     hostname: argocd-appset-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}
                     tls: true
-          - name: crossplane
-            namespace: crossplane-system
-            version: 1.17.4
-          - name: komoplane
-            namespace: crossplane-system
-            version: 0.1.6
-          - name: crossplane-manifest
           - name: github-repo-argo-cd-webhooks
         objects: |
           apiVersion: demo.loft.sh/v1alpha1
@@ -529,13 +522,6 @@ spec:
                       nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
                     hostname: argocd-appset-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}
                     tls: true
-          - name: crossplane
-            namespace: crossplane-system
-            version: 1.17.4
-          - name: komoplane
-            namespace: crossplane-system
-            version: 0.1.6
-          - name: crossplane-manifests
           - name: github-repo-argo-cd-webhooks
         objects: |
           apiVersion: demo.loft.sh/v1alpha1
