@@ -196,6 +196,7 @@ spec:
             labels:
               argocd.argoproj.io/secret-type: cluster
               loftDemoDomain: {{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}
+              crossplane: 'true'
               vnode: '{{ .Values.vnode }}'
               flux: 'true'
               virtualScheduler: '{{ .Values.virtualScheduler }}'
@@ -603,6 +604,7 @@ spec:
             labels:
               argocd.argoproj.io/secret-type: cluster
               loftDemoDomain: {{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}
+              crossplane: 'true'
               vnode: '{{ .Values.vnode }}'
               flux: 'true'
               virtualScheduler: '{{ .Values.virtualScheduler }}'
