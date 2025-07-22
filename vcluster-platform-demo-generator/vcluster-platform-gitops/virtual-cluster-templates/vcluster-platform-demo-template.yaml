@@ -323,6 +323,12 @@ spec:
           type: boolean
           defaultValue: 'false'
           section: Use Case Examples
+        - variable: namespaceSync
+          label: Namespace Sync
+          description: This demo use case syncs vCluster namespaces to matching physical namespaces so Argo CD Applications created inside a vCluster appear and sync with the same, easy to identify name into a shared Argo CD instance running on the host cluster. 
+          type: boolean
+          defaultValue: 'false'
+          section: Use Case Examples
         - variable: mysql
           label: vCluster Platform Database Connector
           description: >-
