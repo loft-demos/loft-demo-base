@@ -128,12 +128,19 @@ spec:
             namespace: crossplane-system
             version: 0.1.6
           - name: crossplane-manifest
-            namespace: crossplane-system
-            parameters: |
-              vClusterName: '{{ .Values.loft.virtualClusterName }}'
           - name: github-repo-argo-cd-webhooks
-            namespace: argocd
         objects: |
+          apiVersion: demo.loft.sh/v1alpha1
+          kind: DemoRepository
+          metadata:
+            name: github-repo
+            namespace: default
+          spec:
+            name: "{{ .Values.loft.virtualClusterName }}-app"
+            loftDemoDomain: "{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}"
+            virtualClusterName: "{{ .Values.loft.virtualClusterName }}"
+            virtualClusterNamespace: "{{ .Values.loft.virtualClusterNamespace }}"
+          ---
           apiVersion: v1
           kind: Namespace
           metadata:
@@ -528,11 +535,19 @@ spec:
             namespace: crossplane-system
             version: 0.1.6
           - name: crossplane-manifests
-            namespace: crossplane-system
-            parameters: |
-              vClusterName: '{{ .Values.loft.virtualClusterName }}'
           - name: github-repo-argo-cd-webhooks
         objects: |
+          apiVersion: demo.loft.sh/v1alpha1
+          kind: DemoRepository
+          metadata:
+            name: github-repo
+            namespace: default
+          spec:
+            name: "{{ .Values.loft.virtualClusterName }}-app"
+            loftDemoDomain: "{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}"
+            virtualClusterName: "{{ .Values.loft.virtualClusterName }}"
+            virtualClusterNamespace: "{{ .Values.loft.virtualClusterNamespace }}"
+          ---
           apiVersion: v1
           kind: Namespace
           metadata:
