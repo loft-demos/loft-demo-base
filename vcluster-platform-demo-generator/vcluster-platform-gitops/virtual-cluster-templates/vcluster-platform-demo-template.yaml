@@ -82,7 +82,6 @@ spec:
                     "server.insecure": true
                     timeout.reconciliation: 0
                     application.namespaces: "argo-apps-*"
-                    applicationsetcontroller.namespaces: "argo-apps-*"
                   secret:
                     createSecret: true
                   rbac:
@@ -491,7 +490,6 @@ spec:
                     "server.insecure": true
                     timeout.reconciliation: 0
                     application.namespaces: "argo-apps-*"
-                    applicationsetcontroller.namespaces: "argo-apps-*"
                   secret:
                     createSecret: true
                   rbac:
