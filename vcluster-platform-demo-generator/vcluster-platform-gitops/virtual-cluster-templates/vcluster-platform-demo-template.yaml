@@ -28,7 +28,7 @@ spec:
     spaceTemplate:
       metadata: {}
   versions:
-    - version: 0.440.12
+    - version: 4.3.5
       template:
         metadata:
           labels:
@@ -49,7 +49,7 @@ spec:
         apps:
           - name: vcluster-platform-demo
             namespace: vcluster-platform
-            version: 0.440.12
+            version: 4.3.5
             parameters: |
               uiLogoURL: '{{ .Values.uiLogoURL }}'
               logoBackgroundColor: '{{ .Values.logoBackgroundColor }}'
@@ -247,7 +247,7 @@ spec:
             sleepMode:
               enabled: true
               autoSleep:
-                afterInactivity: 8h
+                afterInactivity: 9h
               timeZone: America/New_York
               autoWakeup:
                 schedule: 0 7 * * *
@@ -321,8 +321,7 @@ spec:
           description: >-
             The use case examples installed will highlight the integration of
             vNode with vCluster and can be used to demonstrate the
-            hard-mulitenant isolation provided by vNode for vCluster workloads
-            (requires some manual configuration).
+            hard-mulitenant isolation provided by vNode for vCluster workloads.
           type: boolean
           defaultValue: 'false'
           section: Use Case Examples
@@ -374,13 +373,11 @@ spec:
           defaultValue: 'false'
           section: Use Case Examples
         - variable: kyverno
-          label: Central Admission Control
-          description: >-
-            Showcase how to use Kyverno with the Centeral Admission control
-            vCluster feature
+          label: Install Kyverno
+          description: Kubernetes Native Policy Management
           type: boolean
           defaultValue: 'false'
-          section: Use Case Examples
+          section: Applications to Install
         - variable: postgres
           label: Install Postgres Operator
           description: >-
@@ -399,11 +396,11 @@ spec:
           label: k8sVersion
           description: Please select Kubernetes version
           options:
-            - v1.32.1
-            - v1.31.5
+            - v1.33.3
+            - v1.32.7
+            - v1.31.11
             - v1.30.9
-            - v1.29.13
-          defaultValue: v1.31.5
+          defaultValue: v1.32.7
           section: Kubernetes Config
         - variable: env
           label: Deployment Environment
@@ -437,7 +434,7 @@ spec:
             a good for darker logos, #001529 for lighter logos)
           defaultValue: '#001529'
           section: UI Customization
-    - version: 0.440.11
+    - version: 0.440.12
       template:
         metadata:
           labels:
@@ -458,7 +455,7 @@ spec:
         apps:
           - name: vcluster-platform-demo
             namespace: vcluster-platform
-            version: 0.440.11
+            version: 0.440.12
             parameters: |
               uiLogoURL: '{{ .Values.uiLogoURL }}'
               logoBackgroundColor: '{{ .Values.logoBackgroundColor }}'
@@ -1252,320 +1249,6 @@ spec:
             a good for darker logos, #001529 for lighter logos)
           defaultValue: '#001529'
           section: UI Customization
-    - template:
-        metadata:
-          labels:
-            loft.sh/import-argocd: 'true'
-          annotations:
-            sleepmode.loft.sh/ignore-user-agents: argo*
-        instanceTemplate:
-          metadata:
-            labels:
-              domain: '{{ .Values.loft.clusterAnnotations.domain }}'
-              env: '{{ .Values.env }}'
-              eso: '{{ .Values.eso }}'
-              kyverno: '{{ .Values.kyverno }}'
-              team: '{{ .Values.loft.project }}'
-              vault: '{{ .Values.vault }}'
-              vclusterName: '{{ .Values.loft.virtualClusterName }}'
-            annotations:
-              loft.sh/custom-links: >-
-                https://{{ .Values.loft.virtualClusterName }}.{{
-                .Values.loft.clusterAnnotations.domain }}
-        apps:
-          - name: vcluster-platform-demo
-            namespace: vcluster-platform
-            version: 4.2.2
-            parameters: |
-              uiLogoURL: '{{ .Values.uiLogoURL }}'
-              logoBackgroundColor: '{{ .Values.logoBackgroundColor }}'
-              domain: >-
-                {{ .Values.loft.virtualClusterName }}.{{
-                .Values.loft.clusterAnnotations.domain }}
-          - name: vcluster-platform-demo-configure-admins
-            namespace: vcluster-platform
-          - name: argocd
-            namespace: argocd
-            version: 2.14.2
-            parameters: |
-              appValues: |-
-                global:
-                  domain: argocd-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}
-                configs:
-                  cm:
-                    create: true
-                    application.resourceTrackingMethod: annotation
-                    url: https://argocd-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}
-                  params:
-                    "server.insecure": true
-                    timeout.reconciliation: 0 
-                  secret:
-                    createSecret: true
-                  rbac:
-                    policy.csv: |-
-                      g, Administration, role:admin
-                      g, Sales, role:admin
-                      g, Engineering, role:admin
-                server:
-                  ingress:
-                    enabled: true
-                    annotations:
-                      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-                      nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-                    ingressClassName: "nginx"
-                    hostname: argocd-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}
-                    tls: true
-                  ingressGrpc:
-                    enabled: true
-                    annotations: 
-                      nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
-                    ingressClassName: "nginx"
-                    hostname: argocd-grpc-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}
-                    tls: true
-                repoServer:
-                  resources:
-                    requests:
-                      cpu: 500m
-                      memory: 512Mi
-                    limits:
-                      cpu: 1000m
-                      memory: 1Gi
-                ## ApplicationSet controller
-                applicationSet:
-                  enabled: true
-                  ingress:
-                    enabled: true
-                    ingressClassName: "nginx"
-                    annotations:
-                      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-                    hostname: argocd-appset-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}
-                    tls: true
-          - name: crossplane
-            namespace: crossplane-system
-            version: 1.17.4
-          - name: komoplane
-            namespace: crossplane-system
-            version: 0.1.6
-          - name: github-repo-argo-cd-webhooks
-            namespace: argocd
-          - name: crossplane-manifest
-            namespace: crossplane-system
-            parameters: |
-              vClusterName: '{{ .Values.loft.virtualClusterName }}'
-        objects: |
-          apiVersion: v1
-          kind: Namespace
-          metadata:
-            name: vcluster-platform
-          ---
-          apiVersion: v1
-          kind: Secret
-          metadata:
-            name: oidc-secret
-            namespace: vcluster-platform
-            labels:
-              loft.sh/project-secret-name: oidc-secret
-          type: Opaque
-          ---
-          apiVersion: v1
-          kind: Secret
-          metadata:
-            name: ghcr-login-secret
-            namespace: vcluster-platform
-            labels:
-              loft.sh/project-secret-name: ghcr-login-secret
-          data:
-            .dockerconfigjson: e30K
-          type: kubernetes.io/dockerconfigjson
-          ---
-          apiVersion: v1
-          kind: Namespace
-          metadata:
-            name: argocd
-          ---
-          apiVersion: v1
-          kind: Secret
-          metadata:
-            name: loft-demo-org-cred
-            namespace: argocd
-            labels:
-              argocd.argoproj.io/secret-type: repo-creds
-              loft.sh/project-secret-name: loft-demo-org-cred
-          type: Opaque
-          ---
-          apiVersion: v1
-          kind: Secret
-          metadata:
-            name: oidc-secret
-            namespace: argocd
-            labels:
-              loft.sh/project-secret-name: oidc-secret
-          type: Opaque
-          ---
-          apiVersion: v1
-          kind: Secret
-          metadata:
-            labels:
-              argocd.argoproj.io/secret-type: cluster
-              flux: 'true'
-              eso: '{{ .Values.eso }}'
-              kyverno: '{{ .Values.kyverno }}'
-              mysql: '{{ .Values.mysql }}'
-            name: cluster-local
-            namespace: argocd
-          stringData:
-            config: '{"tlsClientConfig":{"insecure":false}}'
-            name: in-cluster
-            server: https://kubernetes.default.svc
-          type: Opaque
-          ---
-          apiVersion: v1
-          kind: Namespace
-          metadata:
-            name: crossplane-system
-          ---
-          apiVersion: v1
-          kind: Secret
-          metadata:
-            name: github-provider-secret
-            namespace: crossplane-system
-            labels:
-              loft.sh/project-secret-name: crossplane-github-provider-secret
-          type: Opaque
-        pro:
-          enabled: true
-        helmRelease:
-          chart:
-            version: 0.22.4
-          values: |
-            external:
-              platform:
-                autoSleep:
-                  afterInactivity: 39600
-                  autoWakeup:
-                    schedule: 30 7 * * *
-                autoDelete:
-                  afterInactivity: 7620000
-            sync:
-              toHost:
-                ingresses:
-                  enabled: true
-                customResources:
-                  demorepositories.demo.loft.sh:
-                    enabled: true
-            controlPlane:
-              backingStore:
-                etcd:
-                  embedded:
-                    enabled: true
-              distro:
-                k8s:
-                  version: '{{ .Values.k8sVersion }}'
-              coredns:
-                embedded: true
-              statefulSet:
-                resources:
-                  # Limits are resource limits for the container
-                  limits:
-                    ephemeral-storage: 8Gi
-                    memory: 4Gi
-                    cpu: 2
-                  # Requests are minimal resources that will be consumed by the container
-                  requests:
-                    ephemeral-storage: 1Gi
-                    cpu: 500m
-                    memory: 1Gi
-        accessPoint:
-          ingress: {}
-        spaceTemplate:
-          metadata: {}
-          objects: |-
-            apiVersion: v1
-            kind: Secret
-            metadata:
-              name: argo-webhook-url
-            type: Opaque
-            stringData:
-              url: "https://argocd-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}/api/webhook"
-            ---
-            apiVersion: v1
-            kind: Secret
-            metadata:
-              name: argo-appset-webhook-url
-            type: Opaque
-            stringData:
-              url: "https://argocd-appset-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}/api/webhook"
-            ---
-            apiVersion: v1
-            kind: Secret
-            metadata:
-              name: flux-webhook-url
-            type: Opaque
-            stringData:
-              url: "https://flux-webhook-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}/hook/97184ed7cbe13e33d4548c249d31f957b6af9b47fc2227a682936b3b352cf932"
-      parameters:
-        - variable: eso
-          label: Install External Secrets Operator
-          description: >-
-            External secret management for Kubernetes allows for demoing the ESO
-            integration for vCluster Pro.
-          type: boolean
-          section: Applications to Install
-        - variable: kyverno
-          label: Install Kyverno
-          description: >-
-            Kubernetes Native Policy Management allows for demoning the central
-            admission control vCluster Pro distro feature.
-          type: boolean
-          section: Applications to Install
-        - variable: mysql
-          label: Install MySQL Operator
-          description: >-
-            Configures the database connector feature utilizing the MySQL
-            Operator to create an InnoDB Cluster, and a Virtual Cluster Template
-            configured to use the database connector. 
-          type: boolean
-          section: Applications to Install
-        - variable: vault
-          label: Install Vault
-          description: An identity-based secrets and encryption management system.
-          type: boolean
-          section: Applications to Install
-        - variable: k8sVersion
-          label: k8sVersion
-          description: Please select Kubernetes version
-          options:
-            - v1.31.1
-            - v1.30.5
-            - v1.29.9
-            - v1.28.14
-          defaultValue: v1.30.5
-          section: Kubernetes Config
-        - variable: env
-          label: Deployment Environment
-          description: >-
-            Environment for deployments for this vCluster used as cluster label
-            for Argo CD ApplicationSet Cluster Generator
-          options:
-            - dev
-            - qa
-            - prod
-          defaultValue: dev
-          section: Kubernetes Config
-        - variable: uiLogoURL
-          label: UI Logo uiLogoURL
-          description: Allows overriding default ui settings logo
-          defaultValue: >-
-            https://cdn.prod.website-files.com/60d28872831dd0f87a178997/661ca132697136342511fa22_vCluster%20Logo.svg
-          section: UI Customization
-        - variable: logoBackgroundColor
-          label: Logo Background Color
-          description: >-
-            Color value to use as the background color for the logo (#cfcfcf is
-            a good for darker logos, #001529 for lighter logos)
-          defaultValue: '#001529'
-          section: UI Customization
-      version: 4.2.2
   access:
     - verbs:
         - '*'
