@@ -72,13 +72,14 @@ spec:
                       value: $PULL_SECRET
           syncPolicy:
             automated:
-              prune: true    
+              prune: true
+              selfHeal: true
             syncOptions:
             - CreateNamespace=true
             retry:
-              limit: 10
+              limit: 14
               backoff:
-                duration: 10s 
+                duration: 2s 
                 factor: 2 
                 maxDuration: 2m
         EOF
