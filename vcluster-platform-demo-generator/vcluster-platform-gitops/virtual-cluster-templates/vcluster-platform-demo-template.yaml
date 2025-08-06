@@ -247,7 +247,7 @@ spec:
             sleepMode:
               enabled: true
               autoSleep:
-                afterInactivity: 9h
+                afterInactivity: 12h
               timeZone: America/New_York
               autoWakeup:
                 schedule: 0 7 * * *
@@ -653,7 +653,7 @@ spec:
             sleepMode:
               enabled: true
               autoSleep:
-                afterInactivity: 8h
+                afterInactivity: 10h
               timeZone: America/New_York
               autoWakeup:
                 schedule: 0 7 * * *
