@@ -358,50 +358,50 @@ spec:
             status: 'True'
             type: Ready
           type: MatchCondition
-    - base:
-        apiVersion: repo.github.upbound.io/v1alpha1
-        kind: RepositoryWebhook
-        metadata:
-          name: flux-webhook
-        spec:
-          forProvider:
-            active: true
-            configuration:
-              - contentType: json
-                insecureSsl: false
-                secretSecretRef:
-                  key: token
-                  name: pr-github-receiver-token
-                  namespace: p-demo
-                urlSecretRef:
-                  key: url
-                  name: flux-webhook-url
-            events:
-              - push
-              - pull_request
-          managementPolicies:
-            - Create
-            - Observe
-          providerConfigRef:
-            name: github-provider-config
-      name: flux-webhook
-      patches:
-        - fromFieldPath: metadata.name
-          toFieldPath: metadata.name
-          transforms:
-            - string:
-                fmt: '%s-flux-webhook'
-                type: Format
-              type: string
-          type: FromCompositeFieldPath
-        - fromFieldPath: spec.name
-          toFieldPath: spec.forProvider.repository
-          type: FromCompositeFieldPath
-        - fromFieldPath: spec.virtualClusterNamespace
-          toFieldPath: spec.forProvider.configuration[0].urlSecretRef.namespace
-          type: FromCompositeFieldPath
-      readinessChecks:
-        - matchCondition:
-            status: 'True'
-            type: Ready
-          type: MatchCondition
+    # - base:
+    #     apiVersion: repo.github.upbound.io/v1alpha1
+    #     kind: RepositoryWebhook
+    #     metadata:
+    #       name: flux-webhook
+    #     spec:
+    #       forProvider:
+    #         active: true
+    #         configuration:
+    #           - contentType: json
+    #             insecureSsl: false
+    #             secretSecretRef:
+    #               key: token
+    #               name: pr-github-receiver-token
+    #               namespace: p-demo
+    #             urlSecretRef:
+    #               key: url
+    #               name: flux-webhook-url
+    #         events:
+    #           - push
+    #           - pull_request
+    #       managementPolicies:
+    #         - Create
+    #         - Observe
+    #       providerConfigRef:
+    #         name: github-provider-config
+    #   name: flux-webhook
+    #   patches:
+    #     - fromFieldPath: metadata.name
+    #       toFieldPath: metadata.name
+    #       transforms:
+    #         - string:
+    #             fmt: '%s-flux-webhook'
+    #             type: Format
+    #           type: string
+    #       type: FromCompositeFieldPath
+    #     - fromFieldPath: spec.name
+    #       toFieldPath: spec.forProvider.repository
+    #       type: FromCompositeFieldPath
+    #     - fromFieldPath: spec.virtualClusterNamespace
+    #       toFieldPath: spec.forProvider.configuration[0].urlSecretRef.namespace
+    #       type: FromCompositeFieldPath
+    #   readinessChecks:
+    #     - matchCondition:
+    #         status: 'True'
+    #         type: Ready
+    #       type: MatchCondition
