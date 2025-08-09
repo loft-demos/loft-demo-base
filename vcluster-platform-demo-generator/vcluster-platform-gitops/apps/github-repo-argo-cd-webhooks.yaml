@@ -62,6 +62,40 @@ spec:
           -l app.kubernetes.io/name=argocd-repo-server \
           --timeout=300s
 
+        # Wait until the Service has at least one endpoint on port 8081
+        
+        echo "Waiting for argocd-repo-server endpoints on :8081..."
+        for i in {1..120}; do
+        
+          # count endpointslices with a matching port 8081
+          
+          EP_OK=$(kubectl -n argocd get endpointslices \
+            -l kubernetes.io/service-name=argocd-repo-server \
+            -o json | jq '[.items[]
+              | .ports[]?
+              | select((.port==8081) or (.name=="https" or .name=="grpc" or .name=="server") and (.port!=null))
+            ] | length')
+        
+          # fallback if EndpointSlice API isn’t available
+          
+          SVC_OK=$(kubectl -n argocd get endpoints argocd-repo-server -o json 2>/dev/null \
+            | jq '[.subsets[]? | .ports[]? | select(.port==8081)] | length' 2>/dev/null || echo 0)
+        
+          if [ "${EP_OK:-0}" -gt 0 ] || [ "${SVC_OK:-0}" -gt 0 ]; then
+          
+            echo "Endpoints present."
+            
+            break
+          fi
+          
+          sleep 2
+          
+          if [ $i -eq 120 ]; then
+            echo "Timed out waiting for repo-server endpoints on :8081"; exit 1
+          fi
+          
+        done
+
         cat <<EOF | kubectl apply -f -
 
         apiVersion: argoproj.io/v1alpha1
