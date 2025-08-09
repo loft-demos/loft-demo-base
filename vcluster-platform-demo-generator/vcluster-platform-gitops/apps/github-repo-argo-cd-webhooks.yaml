@@ -37,8 +37,11 @@ spec:
         kubectl delete pod -n argocd $POD
 
         while ! kubectl get secret ghcr-login-secret -n vcluster-platform; do
+        
           echo "Waiting for ghcr-login-secret...";
+          
           sleep 1; 
+          
         done
 
         PULL_SECRET=$(kubectl get secret ghcr-login-secret -n vcluster-platform -o
@@ -65,6 +68,7 @@ spec:
         # Wait until the Service has at least one endpoint on port 8081
         
         echo "Waiting for argocd-repo-server endpoints on :8081..."
+        
         for i in {1..120}; do
         
           # count endpointslices with a matching port 8081
@@ -86,12 +90,15 @@ spec:
             echo "Endpoints present."
             
             break
+            
           fi
           
           sleep 2
           
           if [ $i -eq 120 ]; then
+          
             echo "Timed out waiting for repo-server endpoints on :8081"; exit 1
+            
           fi
           
         done
