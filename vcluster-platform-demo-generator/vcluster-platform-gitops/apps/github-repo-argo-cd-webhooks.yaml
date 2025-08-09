@@ -44,6 +44,20 @@ spec:
         PULL_SECRET=$(kubectl get secret ghcr-login-secret -n vcluster-platform -o
         jsonpath="{.data['\.dockerconfigjson']}")
 
+        # 1) Rollout completion for the StatefulSet (best)
+        kubectl rollout status -n argocd statefulset/argocd-application-controller --timeout=300s
+        
+        # 2) And ensure at least one controller pod is Ready
+        kubectl wait -n argocd --for=condition=Ready pod \
+          -l app.kubernetes.io/name=argocd-application-controller \
+          --timeout=300s
+        
+        # (Recommended) repo-server too, to avoid 8081 dial errors
+        kubectl rollout status -n argocd deploy/argocd-repo-server --timeout=300s || true
+        kubectl wait -n argocd --for=condition=Ready pod \
+          -l app.kubernetes.io/name=argocd-repo-server \
+          --timeout=300s
+
         cat <<EOF | kubectl apply -f -
 
         apiVersion: argoproj.io/v1alpha1
