@@ -74,6 +74,11 @@ spec:
               - link: https://komoplane-{{ .Values.domain }}
                 position: TopEnd
                 text: Komoplane
+              {{if .Values.rancher}}
+              - link: https://rancher-{{ .Values.domain }}
+                position: TopEnd
+                text: Rancher
+              {{end}}
               logoURL: "{{ .Values.uiLogoURL }}"
               logoBackgroundColor: "{{ .Values.logoBackgroundColor }}"
             auth:
