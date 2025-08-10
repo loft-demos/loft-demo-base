@@ -99,6 +99,12 @@ spec:
           label: Logo Background Color
           description: LogoBackgroundColor is the color value to use as the background color for the logo
           defaultValue: '#001529'
+        - variable: rancher
+          label: Create Rancher Platform Link
+          description: >-
+            Cretes Rancher Cluster Management platform link if true
+          type: boolean
+          defaultValue: 'false'
     - version: 0.440.12
       icon: https://raw.githubusercontent.com/loft-demos/loft-demo-base/refs/heads/main/logos/vCluster_Horizontal_2colors_reversed-2.svg
       defaultNamespace: vcluster-platform
