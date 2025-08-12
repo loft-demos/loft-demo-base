@@ -266,6 +266,8 @@ spec:
               fromHost:
                 nodes:
                   enabled: true
+                ingressClasses:
+                  enabled: true
             controlPlane:
               backingStore:
                 etcd:
