@@ -90,6 +90,11 @@ spec:
                 clientSecret: $CLIENT_SECRET
                 redirectURI: https://{{ .Values.domain }}/auth/oidc/callback
                 groupsClaim: groups
+
+          # Configures structured logging within Loft
+          logging:
+            encoding: console # Can be either json or console
+            level: error # Can be either: debug, info, error
       parameters:
         - variable: domain
           label: Loft Domain
