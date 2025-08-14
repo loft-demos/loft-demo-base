@@ -61,7 +61,7 @@ spec:
             namespace: vcluster-platform
           - name: argocd
             namespace: argocd
-            version: 2.14.2
+            version: 2.14.11
             parameters: |
               appValues: |-
                 global:
@@ -830,7 +830,7 @@ spec:
             a good for darker logos, #001529 for lighter logos)
           defaultValue: '#001529'
           section: UI Customization
-    - version: 0.440.12
+    - version: 0.440.14
       template:
         metadata:
           labels:
@@ -851,7 +851,7 @@ spec:
         apps:
           - name: vcluster-platform-demo
             namespace: vcluster-platform
-            version: 0.440.12
+            version: 0.440.14
             parameters: |
               uiLogoURL: '{{ .Values.uiLogoURL }}'
               logoBackgroundColor: '{{ .Values.logoBackgroundColor }}'
@@ -862,7 +862,7 @@ spec:
             namespace: vcluster-platform
           - name: argocd
             namespace: argocd
-            version: 2.14.11
+            version: 3.0.12
             parameters: |
               appValues: |-
                 global:
@@ -1044,15 +1044,15 @@ spec:
           enabled: true
         helmRelease:
           chart:
-            version: 0.26.0
+            version: 0.27.0
           values: |
             sleepMode:
               enabled: true
               autoSleep:
-                afterInactivity: 10h
+                afterInactivity: 14h
               timeZone: America/New_York
               autoWakeup:
-                schedule: 0 7 * * *
+                schedule: 0 4 * * 1-5
             external:
               platform:
                 autoDelete:
