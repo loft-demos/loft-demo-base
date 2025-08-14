@@ -71,6 +71,8 @@ spec:
                     url: https://argocd-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}
                     create: true
                     application.resourceTrackingMethod: annotation
+                    timeout.reconciliation: 3d
+                    timeout.reconciliation.jitter: 2m
                     globalProjects: |-
                       - labelSelector:
                           matchExpressions:
@@ -871,6 +873,8 @@ spec:
                   cm:
                     url: https://argocd-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}
                     create: true
+                    timeout.reconciliation: 3d
+                    timeout.reconciliation.jitter: 2m
                     application.resourceTrackingMethod: annotation
                     globalProjects: |-
                       - labelSelector:
