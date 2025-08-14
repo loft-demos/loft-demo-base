@@ -212,97 +212,13 @@ spec:
             Cretes Rancher Cluster Management platform link if true
           type: boolean
           defaultValue: 'false'
-    - version: 0.440.12
+    - version: 0.440.14
       icon: https://raw.githubusercontent.com/loft-demos/loft-demo-base/refs/heads/main/logos/vCluster_Horizontal_2colors_reversed-2.svg
       defaultNamespace: vcluster-platform
       config:
         chart:
           name: vcluster-platform
-          version: 4.4.0-alpha.12
-          repoURL: https://charts.loft.sh/
-        values: |-
-          admin:
-            create: false
-
-          isolation:
-            enabled: true
-            networkPolicy:
-              enabled: false
-              
-          resources:
-            requests:
-              memory: 2Gi
-              cpu: 500m
-            limits:
-              memory: 6Gi
-              cpu: "2"
-
-          ingress:
-            enabled: true
-            ingressClass: nginx
-            host: "{{ .Values.domain }}"
-            tls:
-              enabled: true
-              secret: ""
-
-          envValueFrom:
-            CLIENT_SECRET:
-              secretKeyRef:
-                name: oidc-secret
-                key: clientSecret
-
-          config:
-            loftHost: "{{ .Values.domain }}"
-            costControl:
-              enabled: true
-            imageBuilder:
-              enabled: false
-            uiSettings:
-              navBarButtons:
-              - link: https://www.vcluster.com/docs/platform/
-                position: TopEnd
-                text: vCluster Docs
-              - link: https://github.com/loft-demos/{{ .Values.loft.virtualClusterName }}-app/tree/main/vcluster-gitops
-                position: TopEnd
-                text: GitHub Repo
-              - link: https://headlamp-{{ .Values.domain }}
-                position: TopEnd
-                text: Headlamp
-              - link: https://komoplane-{{ .Values.domain }}
-                position: TopEnd
-                text: Komoplane
-              logoURL: "{{ .Values.uiLogoURL }}"
-              logoBackgroundColor: "{{ .Values.logoBackgroundColor }}"
-            auth:
-              oidc:
-                issuerUrl: https://loft.rocks/oidc
-                clientId: loft
-                clientSecret: $CLIENT_SECRET
-                redirectURI: https://{{ .Values.domain }}/auth/oidc/callback
-                groupsClaim: groups
-      parameters:
-        - variable: domain
-          label: Loft Domain
-          description: >-
-            The domain to run this Loft instance on, e.g.
-            some-customer.loft.host
-          required: true
-          placeholder: some-customer.loft.host
-        - variable: uiLogoURL
-          label: Logo logoURL
-          description: Will update the vCluster Platform config ui settings logoURL
-          defaultValue: https://raw.githubusercontent.com/loft-demos/loft-demo-base/refs/heads/main/logos/vCluster_Horizontal_2colors_reversed-2.svg
-        - variable: logoBackgroundColor
-          label: Logo Background Color
-          description: LogoBackgroundColor is the color value to use as the background color for the logo
-          defaultValue: '#001529'
-    - version: 4.3.3
-      icon: https://raw.githubusercontent.com/loft-demos/loft-demo-base/refs/heads/main/logos/vCluster_Horizontal_2colors_reversed-2.svg
-      defaultNamespace: vcluster-platform
-      config:
-        chart:
-          name: vcluster-platform
-          version: 4.3.3
+          version: 4.4.0-alpha.14
           repoURL: https://charts.loft.sh/
         values: |-
           admin:
