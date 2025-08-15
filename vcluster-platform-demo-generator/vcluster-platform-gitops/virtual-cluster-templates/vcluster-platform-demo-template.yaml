@@ -253,7 +253,7 @@ spec:
                 afterInactivity: 12h
               timeZone: America/New_York
               autoWakeup:
-                schedule: 0 7 * * *
+                schedule: 0 5 * * 1-5
             external:
               platform:
                 autoDelete:
@@ -654,7 +654,7 @@ spec:
                 afterInactivity: 12h
               timeZone: America/New_York
               autoWakeup:
-                schedule: 0 7 * * *
+                schedule: 0 5 * * 1-5
             external:
               platform:
                 autoDelete:
