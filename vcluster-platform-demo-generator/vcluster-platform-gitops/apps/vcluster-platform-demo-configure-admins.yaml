@@ -68,6 +68,35 @@ spec:
 
         echo "acess key before patch: $ACCESS_KEY"
 
+        TIMEOUT=60
+        SLEEP=2
+        
+        end=$((SECONDS+TIMEOUT))
+        
+        echo "[INFO] Waiting until OwnedAccessKey can be created..."
+        
+        while (( SECONDS < end )); do
+        
+          if kubectl api-resources --api-group=management.loft.sh \
+            | grep -q '^ownedaccesskeys'; then
+            
+            if kubectl auth can-i --quiet create ownedaccesskeys.management.loft.sh; then
+            
+              echo "[INFO] OwnedAccessKey is creatable."
+              
+              exit 0
+              
+            fi
+            
+          fi
+          
+          sleep "$SLEEP"
+          
+        done
+        
+        echo "[ERROR] Timed out waiting for OwnedAccessKey" >&2
+
+
         OUTPUT=$(cat <<EOF | kubectl apply -f -
 
         apiVersion: management.loft.sh/v1
