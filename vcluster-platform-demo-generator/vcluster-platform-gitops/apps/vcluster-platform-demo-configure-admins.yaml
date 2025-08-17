@@ -66,6 +66,8 @@ spec:
         ACCESS_KEY=$(kubectl get secret demo-admin-access-key -n vcluster-platform -o
         jsonpath="{.data['accessKey']}")
 
+        ACCESS_KEY=$(printf '%s' "$ACCESS_KEY_B64" | base64 -d)
+
         echo "acess key before patch: $ACCESS_KEY"
 
         TIMEOUT=60
