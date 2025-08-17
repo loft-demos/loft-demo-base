@@ -10,7 +10,7 @@ spec:
   config:
     chart: {}
     bash:
-      script: >-
+      script: >|
         kubectl wait --for condition=established --timeout=60s
         crd/teams.storage.loft.sh
 
@@ -84,7 +84,7 @@ spec:
             
               echo "[INFO] OwnedAccessKey is creatable."
               
-              exit 0
+              break
               
             fi
             
@@ -93,8 +93,6 @@ spec:
           sleep "$SLEEP"
           
         done
-        
-        echo "[ERROR] Timed out waiting for OwnedAccessKey" >&2
 
 
         OUTPUT=$(cat <<EOF | kubectl apply -f -
