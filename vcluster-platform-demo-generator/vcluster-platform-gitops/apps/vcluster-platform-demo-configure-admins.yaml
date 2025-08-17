@@ -68,7 +68,7 @@ spec:
 
         echo "acess key before patch: $ACCESS_KEY"
 
-        RESOURCE_NAME=$(cat <<EOF | kubectl apply -f - -o jsonpath='{.metadata.name}'
+        OUTPUT=$(cat <<EOF | kubectl apply -f -
 
         apiVersion: management.loft.sh/v1
         
