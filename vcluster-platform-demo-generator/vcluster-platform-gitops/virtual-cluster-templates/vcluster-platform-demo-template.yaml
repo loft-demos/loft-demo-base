@@ -71,6 +71,9 @@ spec:
                     url: https://argocd-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}
                     create: true
                     application.resourceTrackingMethod: annotation
+                    resource.customizations.ignoreDifferences.management.loft.sh_VirtualClusterInstance: |
+                      jsonPointers:
+                        - /spec/parameters
                     timeout.reconciliation: 3d
                     timeout.reconciliation.jitter: 2m
                     globalProjects: |-
@@ -483,6 +486,9 @@ spec:
                     url: https://argocd-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}
                     create: true
                     application.resourceTrackingMethod: annotation
+                    resource.customizations.ignoreDifferences.management.loft.sh_VirtualClusterInstance: |
+                      jsonPointers:
+                        - /spec/parameters
                     globalProjects: |-
                       - labelSelector:
                           matchExpressions:
@@ -894,6 +900,9 @@ spec:
                     timeout.reconciliation: 3d
                     timeout.reconciliation.jitter: 2m
                     application.resourceTrackingMethod: annotation
+                    resource.customizations.ignoreDifferences.management.loft.sh_VirtualClusterInstance: |
+                      jsonPointers:
+                        - /spec/parameters
                     globalProjects: |-
                       - labelSelector:
                           matchExpressions:
