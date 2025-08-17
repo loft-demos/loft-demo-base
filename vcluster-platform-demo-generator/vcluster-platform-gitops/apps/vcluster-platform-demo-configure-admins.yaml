@@ -10,7 +10,7 @@ spec:
   config:
     chart: {}
     bash:
-      script: >|
+      script: >-
         kubectl wait --for condition=established --timeout=60s
         crd/teams.storage.loft.sh
 
