@@ -55,6 +55,39 @@ spec:
                 - loft-admins
         EOF
 
+        ACCESS_KEY=$(kubectl get secret demo-admin-access-key -n vcluster-platform -o
+        jsonpath="{.data['accessKye']}")
+
+        RESOURCE_NAME=$(cat <<EOF | kubectl apply -f - -o jsonpath='{.metadata.name}'
+
+        apiVersion: management.loft.sh/v1
+        
+        kind: OwnedAccessKey
+        
+        metadata:
+          creationTimestamp: null
+          name: "demo-env-admin-access-key"
+        spec:
+          displayName: "demo-env-admin-access-key"
+          type: User
+          team: loft-admins
+          key: $ACCESS_KEY
+        status: {}
+        
+        EOF
+        
+        )
+
+        RESOURCE_NAME=$(echo "$OUTPUT" | awk '{print $1}' | cut -d'/' -f2)
+
+
+        kubectl patch accesskey.storage.loft.sh $RESOURCE_NAME \
+          --type='merge' \
+          -p='{"spec":{"key":"'"$ACCESS_KEY"'"}}'
+
+        ACCESS_KEY=$(kubectl get accesskey $RESOURCE_NAME  -o jsonpath="{.spec.key}")
+
+        echo "acess key after patch: $ACCESS_KEY"
 
         kubectl annotate clusters loft-cluster domainPrefix={{
         .Values.loft.virtualClusterName }}
