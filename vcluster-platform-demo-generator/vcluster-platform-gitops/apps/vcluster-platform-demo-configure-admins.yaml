@@ -55,8 +55,18 @@ spec:
                 - loft-admins
         EOF
 
+        while ! kubectl get secret demo-admin-access-key -n vcluster-platform; do
+        
+          echo "Waiting for demo-admin-access-key...";
+          
+          sleep 1; 
+          
+        done
+
         ACCESS_KEY=$(kubectl get secret demo-admin-access-key -n vcluster-platform -o
-        jsonpath="{.data['accessKye']}")
+        jsonpath="{.data['accessKey']}")
+
+        echo "acess key before patch: $ACCESS_KEY"
 
         RESOURCE_NAME=$(cat <<EOF | kubectl apply -f - -o jsonpath='{.metadata.name}'
 
