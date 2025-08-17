@@ -55,25 +55,49 @@ spec:
                 - loft-admins
         EOF
 
-        while ! kubectl get secret demo-admin-access-key -n vcluster-platform; do
         
-          echo "Waiting for demo-admin-access-key...";
-          
-          sleep 1; 
-          
-        done
-
-        ACCESS_KEY=$(kubectl get secret demo-admin-access-key -n vcluster-platform -o
-        jsonpath="{.data['accessKey']}")
-
-        ACCESS_KEY=$(printf '%s' "$ACCESS_KEY_B64" | base64 -d)
-
-        echo "acess key before patch: $ACCESS_KEY"
-
+        SECRET_NS="vcluster-platform"
+        
+        SECRET_NAME="demo-admin-access-key"
+        
         TIMEOUT=60
+        
         SLEEP=2
         
         end=$((SECONDS+TIMEOUT))
+
+        echo "[INFO] Waiting for secret ${SECRET_NAME} in ns ${SECRET_NS} with populated accessKey..."
+        
+        ACCESS_KEY_B64=""
+        
+        while (( SECONDS < end )); do
+        
+          # Try to grab the field (may be empty or missing)
+          
+          ACCESS_KEY_B64=$(kubectl get secret "$SECRET_NAME" -n "$SECRET_NS" \
+            -o jsonpath="{.data.accessKey}" 2>/dev/null || true)
+        
+          if [[ -n "$ACCESS_KEY_B64" ]]; then
+          
+            # decode it
+            
+            ACCESS_KEY=$(printf '%s' "$ACCESS_KEY_B64" | base64 -d)
+            
+            if [[ -n "$ACCESS_KEY" ]]; then
+            
+              echo "[INFO] Got accessKey (length=${#ACCESS_KEY})"
+              
+              break
+              
+            fi
+            
+          fi
+        
+          echo "[INFO] Still waiting..."
+          
+          sleep "$SLEEP"
+          
+        done
         
         echo "[INFO] Waiting until OwnedAccessKey can be created..."
         
@@ -96,6 +120,8 @@ spec:
           
         done
 
+        echo "acess key before patch: $ACCESS_KEY"
+        
 
         OUTPUT=$(cat <<EOF | kubectl apply -f -
 
