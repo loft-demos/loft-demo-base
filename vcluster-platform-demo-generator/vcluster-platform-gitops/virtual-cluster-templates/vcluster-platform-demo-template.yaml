@@ -856,7 +856,7 @@ spec:
             a good for darker logos, #001529 for lighter logos)
           defaultValue: '#001529'
           section: UI Customization
-    - version: 0.440.19
+    - version: 0.440.20
       template:
         metadata:
           labels:
@@ -877,7 +877,7 @@ spec:
         apps:
           - name: vcluster-platform-demo
             namespace: vcluster-platform
-            version: 0.440.19
+            version: 0.440.20
             parameters: |
               uiLogoURL: '{{ .Values.uiLogoURL }}'
               logoBackgroundColor: '{{ .Values.logoBackgroundColor }}'
@@ -917,7 +917,6 @@ spec:
                     application.namespaces: "argo-apps-*"
                   secret:
                     createSecret: true
-                    argocdServerAdminPassword: '$2y$10$W6801KUpS78oelYiuYPQxOG.VVm8hyz64mu02MwPPkDgSdYCj4XGW'
                   rbac:
                     policy.csv: |-
                       g, Administration, role:admin
