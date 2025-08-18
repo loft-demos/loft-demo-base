@@ -212,13 +212,13 @@ spec:
             Cretes Rancher Cluster Management platform link if true
           type: boolean
           defaultValue: 'false'
-    - version: 0.440.19
+    - version: 0.440.20
       icon: https://raw.githubusercontent.com/loft-demos/loft-demo-base/refs/heads/main/logos/vCluster_Horizontal_2colors_reversed-2.svg
       defaultNamespace: vcluster-platform
       config:
         chart:
           name: vcluster-platform
-          version: 4.4.0-alpha.19
+          version: 4.4.0-alpha.20
           repoURL: https://charts.loft.sh/
         values: |-
           admin:
