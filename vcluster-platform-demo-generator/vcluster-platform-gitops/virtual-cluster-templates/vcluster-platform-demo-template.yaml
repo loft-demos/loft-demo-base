@@ -862,7 +862,7 @@ spec:
             a good for darker logos, #001529 for lighter logos)
           defaultValue: '#001529'
           section: UI Customization
-    - version: 0.440.21
+    - version: 0.440.22
       template:
         metadata:
           labels:
@@ -883,7 +883,7 @@ spec:
         apps:
           - name: vcluster-platform-demo
             namespace: vcluster-platform
-            version: 0.440.21
+            version: 0.440.22
             parameters: |
               uiLogoURL: '{{ .Values.uiLogoURL }}'
               logoBackgroundColor: '{{ .Values.logoBackgroundColor }}'
@@ -894,7 +894,7 @@ spec:
             namespace: vcluster-platform
           - name: argocd
             namespace: argocd
-            version: 3.0.12
+            version: 3.0.22
             parameters: |
               appValues: |-
                 global:
@@ -1279,7 +1279,7 @@ spec:
             a good for darker logos, #001529 for lighter logos)
           defaultValue: '#001529'
           section: UI Customization
-    - version: 0.440.20
+    - version: 0.440.21
       template:
         metadata:
           labels:
@@ -1300,7 +1300,7 @@ spec:
         apps:
           - name: vcluster-platform-demo
             namespace: vcluster-platform
-            version: 0.440.20
+            version: 0.440.21
             parameters: |
               uiLogoURL: '{{ .Values.uiLogoURL }}'
               logoBackgroundColor: '{{ .Values.logoBackgroundColor }}'
@@ -1658,11 +1658,11 @@ spec:
           label: k8sVersion
           description: Please select Kubernetes version
           options:
-            - v1.32.1
-            - v1.31.5
-            - v1.30.9
-            - v1.29.13
-          defaultValue: v1.31.5
+            - v1.33.4
+            - v1.32.8
+            - v1.31.12
+            - v1.30.15
+          defaultValue: v1.33.4
           section: Kubernetes Config
         - variable: env
           label: Deployment Environment
