@@ -862,7 +862,7 @@ spec:
             a good for darker logos, #001529 for lighter logos)
           defaultValue: '#001529'
           section: UI Customization
-    - version: 0.440.22
+    - version: 0.440.24
       template:
         metadata:
           labels:
@@ -883,7 +883,7 @@ spec:
         apps:
           - name: vcluster-platform-demo
             namespace: vcluster-platform
-            version: 0.440.22
+            version: 0.440.24
             parameters: |
               uiLogoURL: '{{ .Values.uiLogoURL }}'
               logoBackgroundColor: '{{ .Values.logoBackgroundColor }}'
