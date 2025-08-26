@@ -894,7 +894,7 @@ spec:
             namespace: vcluster-platform
           - name: argocd
             namespace: argocd
-            version: 3.0.22
+            version: 3.0.12
             parameters: |
               appValues: |-
                 global:
