@@ -862,7 +862,7 @@ spec:
             a good for darker logos, #001529 for lighter logos)
           defaultValue: '#001529'
           section: UI Customization
-    - version: 0.440.24
+    - version: 0.440.27
       template:
         metadata:
           labels:
@@ -883,7 +883,7 @@ spec:
         apps:
           - name: vcluster-platform-demo
             namespace: vcluster-platform
-            version: 0.440.24
+            version: 0.440.27
             parameters: |
               uiLogoURL: '{{ .Values.uiLogoURL }}'
               logoBackgroundColor: '{{ .Values.logoBackgroundColor }}'
@@ -1042,6 +1042,7 @@ spec:
             labels:
               argocd.argoproj.io/secret-type: cluster
               loftDemoDomain: {{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}
+              autoSnapshots: '{{ .Values.autoSnapshots }}'
               crossplane: 'true'
               vnode: '{{ .Values.vnode }}'
               flux: 'true'
@@ -1162,6 +1163,12 @@ spec:
             stringData:
               url: "https://argocd-appset-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}/api/webhook"
       parameters:
+        - variable: autoSnapshots
+          label: Automatic Snapshots
+          description: This demo use case creates a Virtual Cluster Instance from a template. The automatic snapshots that are pushed to a GitHub Container Registry. 
+          type: boolean
+          defaultValue: 'false'
+          section: Use Case Examples
         - variable: vnode
           label: vNode with vCluster
           description: >-
