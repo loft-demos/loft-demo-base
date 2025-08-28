@@ -1320,6 +1320,8 @@ spec:
                 .Values.loft.clusterAnnotations.domain }}
           - name: vcluster-platform-demo-configure-admins
             namespace: vcluster-platform
+            parameters: |
+              sleepTimeZone: '{{ .Values.sleepTimeZone }}'
           - name: argocd
             namespace: argocd
             version: 3.0.12
