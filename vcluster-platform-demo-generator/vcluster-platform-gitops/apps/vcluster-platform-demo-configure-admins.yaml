@@ -60,3 +60,18 @@ spec:
 
         kubectl annotate clusters loft-cluster domain={{
         .Values.loft.clusterAnnotations.domain }}
+
+        kubectl annotate clusters loft-cluster sleepTimeZone={{
+        .Values.sleepTimeZone }}
+  parameters:
+    - variable: sleepTimeZone
+      label: Sleep Time Zone
+      description: >-
+        Environment for deployments for this vCluster used as cluster label
+        for Argo CD ApplicationSet Cluster Generator
+      type: string
+      options:
+        - 'America/Los_Angeles'
+        - 'America/New_York'
+        - 'Europe/London'
+      defaultValue: 'America/New_York'
