@@ -9,7 +9,7 @@ metadata:
   name: connectedhostclusters
 spec:
   compositeTypeRef:
-    apiVersion: virtualcluster.demo.vclsuter.com/v1alpha1
+    apiVersion: virtualcluster.demo.vcluster.com/v1alpha1
     kind: XConnectedHostCluster
   mode: Pipeline
   pipeline:
