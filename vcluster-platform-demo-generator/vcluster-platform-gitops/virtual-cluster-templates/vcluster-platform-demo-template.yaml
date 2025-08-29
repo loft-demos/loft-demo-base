@@ -862,7 +862,7 @@ spec:
             a good for darker logos, #001529 for lighter logos)
           defaultValue: '#001529'
           section: UI Customization
-    - version: 0.440.27
+    - version: 0.440.30
       template:
         metadata:
           labels:
@@ -883,7 +883,7 @@ spec:
         apps:
           - name: vcluster-platform-demo
             namespace: vcluster-platform
-            version: 0.440.27
+            version: 0.440.30
             parameters: |
               uiLogoURL: '{{ .Values.uiLogoURL }}'
               logoBackgroundColor: '{{ .Values.logoBackgroundColor }}'
@@ -892,6 +892,8 @@ spec:
                 .Values.loft.clusterAnnotations.domain }}
           - name: vcluster-platform-demo-configure-admins
             namespace: vcluster-platform
+            parameters: |
+              sleepTimeZone: '{{ .Values.sleepTimeZone }}'
           - name: argocd
             namespace: argocd
             version: 3.0.12
@@ -1099,7 +1101,7 @@ spec:
               enabled: true
               autoSleep:
                 afterInactivity: 14h
-              timeZone: America/New_York
+              timeZone: '{{ .Values.sleepTimeZone }}'
               autoWakeup:
                 schedule: 0 4 * * 1-5
             external:
@@ -1251,24 +1253,38 @@ spec:
         - variable: k8sVersion
           label: k8sVersion
           description: Please select Kubernetes version
+          type: string
           options:
             - v1.33.4
             - v1.32.8
             - v1.31.12
             - v1.30.15
           defaultValue: v1.33.4
-          section: Kubernetes Config
+          section: vCluster Config
+        - variable: sleepTimeZone
+          label: Sleep Time Zone
+          description: >-
+            Environment for deployments for this vCluster used as cluster label
+            for Argo CD ApplicationSet Cluster Generator
+          type: string
+          options:
+            - 'America/Los_Angeles'
+            - 'America/New_York'
+            - 'Europe/London'
+          defaultValue: 'America/New_York'
+          section: vCluster Config
         - variable: env
           label: Deployment Environment
           description: >-
             Environment for deployments for this vCluster used as cluster label
             for Argo CD ApplicationSet Cluster Generator
+          type: string
           options:
             - dev
             - qa
             - prod
           defaultValue: dev
-          section: Kubernetes Config
+          section: vCluster Config
         - variable: enableTrial
           label: Enable Trial
           description: >-
@@ -1276,18 +1292,20 @@ spec:
             enabled.
           type: boolean
           defaultValue: 'false'
-          section: Kubernetes Config
+          section: vCluster Config
         - variable: uiLogoURL
           label: UI Logo uiLogoURL
           description: Allows overriding default ui settings logo
           defaultValue: >-
             https://raw.githubusercontent.com/loft-demos/loft-demo-base/refs/heads/main/logos/vCluster_Horizontal_2colors_reversed-2.svg
+          type: string
           section: UI Customization
         - variable: logoBackgroundColor
           label: Logo Background Color
           description: >-
             Color value to use as the background color for the logo (#cfcfcf is
             a good for darker logos, #001529 for lighter logos)
+          type: string
           defaultValue: '#001529'
           section: UI Customization
     - version: 0.440.29
