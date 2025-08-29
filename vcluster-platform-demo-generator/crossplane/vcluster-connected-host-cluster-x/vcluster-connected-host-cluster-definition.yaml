@@ -30,9 +30,13 @@ spec:
                 sleepTimeZone:
                   description: Timezone used for sleep mode configuration.
                   type: string
+                demoName:
+                  description: Name of demo vCluster.
+                  type: string
               required:
                 - k8sVersion
                 - sleepTimeZone
+                - demoName
               type: object
           type: object
       served: true

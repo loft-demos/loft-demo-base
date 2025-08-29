@@ -66,7 +66,6 @@ spec:
                   
             sync:
               toHost:
-                pods:
                 ingresses:
                   enabled: true
             controlPlane:

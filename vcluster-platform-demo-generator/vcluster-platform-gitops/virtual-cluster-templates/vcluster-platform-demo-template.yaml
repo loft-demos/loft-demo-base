@@ -781,6 +781,7 @@ spec:
             spec:
               k8sVersion: "{{ .Values.k8sVersion }}"
               sleepTimeZone: "{{ .Values.sleepTimeZone }}"
+              demoName: "{{ .Values.loft.virtualClusterName }}"
             {{end}}
       parameters:
         - variable: connectedHostCluster

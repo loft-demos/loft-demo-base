@@ -43,17 +43,25 @@ spec:
                 readiness:
                   policy: DeriveFromObject
             patches:
-              - fromFieldPath: metadata.name
+              - fromFieldPath: spec.demoName
                 toFieldPath: spec.forProvider.manifest.metadata.name
+                transforms:
+                  - string:
+                      fmt: connected-host-cluster-%s
+                      type: Format
+                    type: string
+                type: FromCompositeFieldPath
               - combine:
                   strategy: string
                   string:
                     fmt: |
                       k8sVersion: '%s'
                       sleepTimeZone: '%s'
+                      demoName: '%s'
                   variables:
                     - fromFieldPath: spec.k8sVersion
                     - fromFieldPath: spec.sleepTimeZone
+                    - fromFieldPath: spec.demoName
                 toFieldPath: spec.forProvider.manifest.spec.parameters
                 type: CombineFromComposite
             readinessChecks:
