@@ -1091,6 +1091,12 @@ spec:
             labels:
               loft.sh/project-secret-name: crossplane-github-provider-secret
           type: Opaque
+          ---
+          apiVersion: node.k8s.io/v1
+          kind: RuntimeClass
+          metadata:
+            name: vnode
+          handler: vnode
         pro:
           enabled: true
         helmRelease:
