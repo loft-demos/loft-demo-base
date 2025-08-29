@@ -772,7 +772,23 @@ spec:
             type: Opaque
             stringData:
               url: "https://argocd-appset-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}/api/webhook"
+            {{if .Values.connectedHostCluster}}
+            ---
+            apiVersion: virtualcluster.demo.vcluster.com/v1alpha1
+            kind: ConnectedHostCluster
+            metadata:
+              name: connected-host-cluster-{{ .Values.loft.virtualClusterName }}
+            spec:
+              k8sVersion: "{{ .Values.k8sVersion }}"
+              sleepTimeZone: "{{ .Values.sleepTimeZone }}"
+            {{end}}
       parameters:
+        - variable: connectedHostCluster
+          label: Connected Host Cluster
+          description: Creates a connected host cluster as a vCluster using Crossplane so it will be deleted when this demo vCluster is deleted.
+          type: boolean
+          defaultValue: 'false'
+          section: Use Case Examples
         - variable: autoSnapshots
           label: Automatic Snapshots
           description: This demo use case creates a Virtual Cluster Instance from a template. The automatic snapshots that are pushed to a GitHub Container Registry. 
@@ -1318,8 +1334,7 @@ spec:
         - variable: sleepTimeZone
           label: Sleep Time Zone
           description: >-
-            Environment for deployments for this vCluster used as cluster label
-            for Argo CD ApplicationSet Cluster Generator
+            Timezone used for sleep mode configuration.
           type: string
           options:
             - 'America/Los_Angeles'

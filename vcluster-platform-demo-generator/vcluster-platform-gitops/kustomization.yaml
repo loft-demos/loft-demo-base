@@ -1,11 +1,10 @@
 resources:
 - virtual-cluster-templates/vcluster-platform-demo-template.yaml
+- virtual-cluster-templates/connected-host-cluster-template.yaml
 - projects/projects.yaml
 - project-secrets/project-secrets.yaml
 - apps/vcluster-platform.yaml
 - apps/argocd.yaml
-- apps/crossplane.yaml
-- apps/komoplane.yaml
 - apps/github-repo-argo-cd-webhooks.yaml
 - apps/crossplane-manifests.yaml
 - apps/vcluster-platform-demo-configure-admins.yaml

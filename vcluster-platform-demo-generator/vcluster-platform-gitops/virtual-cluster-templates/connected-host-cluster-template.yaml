@@ -1,0 +1,154 @@
+kind: VirtualClusterTemplate
+apiVersion: management.loft.sh/v1
+metadata:
+  name: connected-host-cluster
+  labels:
+    patchType: versioned
+spec:
+  displayName: Connected Host Cluster Virtual Cluster Template
+  description: This virtual cluster template deploys a vCluster to be used as a connected host cluster.
+  owner:
+    team: loft-admins
+  template:
+    metadata: {}
+    instanceTemplate:
+      metadata: {}
+    pro: {}
+    helmRelease:
+      chart:
+        version: 0.24.0
+      values: |-
+        sync:
+          toHost:
+            ingresses:
+              enabled: true
+
+        # Checkout https://vcluster.com/pro/docs/ for more config options
+    accessPoint:
+      ingress: {}
+    spaceTemplate:
+      metadata: {}
+  versions:
+    - version: 1.0.0
+      template:
+        metadata:
+          annotations:
+            sleepmode.loft.sh/ignore-user-agents: argo*
+        instanceTemplate:
+          metadata:
+            annotations:
+              loft.sh/custom-links: >-
+                Helm-Dashboard=https://helm-dashboard-{{ .Values.loft.virtualClusterName }}-{{ .Values.loft.clusterAnnotations.domainPrefix }}.{{ .Values.loft.clusterAnnotations.domain }}
+            labels:
+              env: '{{ .Values.env }}'
+              demos.vcluster.com/project: '{{ .Values.loft.project }}'
+              demos.vcluster.com/owner: '{{ or (and .Values.loft.user .Values.loft.user.name) (and .Values.loft.team .Values.loft.team.name) }}'
+        apps:
+          - name: helm-dashboard
+            namespace: helm-dashboard
+        pro:
+          enabled: true
+        helmRelease:
+          chart:
+            version: 0.27.0
+          values: |
+            sleepMode:
+              enabled: true
+              autoSleep:
+                afterInactivity: 14h
+              timeZone: '{{ .Values.sleepTimeZone }}'
+              autoWakeup:
+                schedule: 0 4 * * 1-5
+            external:
+              platform:
+                autoDelete:
+                  afterInactivity: 43200000
+                  
+            sync:
+              toHost:
+                pods:
+                ingresses:
+                  enabled: true
+            controlPlane:
+              distro:
+                k8s:
+                  image:
+                    tag: "{{ .Values.k8sVersion }}"
+              statefulSet:
+                persistence:
+                  volumeClaim:
+                    size: 10Gi
+                    storageClass: premium-rwo
+                resources:
+                  # Limits are resource limits for the container
+                  limits:
+                    ephemeral-storage: 8Gi
+                    memory: 4Gi
+                    cpu: 2
+                  # Requests are minimal resources that will be consumed by the container
+                  requests:
+                    ephemeral-storage: 500Mi
+                    cpu: 500m
+                    memory: 1Gi
+              # Use an embedded managed etcd server instead of using the default SQLite backend
+              backingStore:
+                etcd:
+                  embedded:
+                    enabled: true
+              coredns:
+                embedded: true
+
+        accessPoint:
+          ingress: {}
+        spaceTemplate:
+          metadata: {}
+      parameters:
+        - variable: k8sVersion
+          label: k8sVersion
+          description: Please select Kubernetes version
+          type: string
+          options:
+            - v1.33.4
+            - v1.32.8
+            - v1.31.12
+            - v1.30.15
+          defaultValue: v1.33.4
+          section: vCluster Config
+        - variable: sleepTimeZone
+          label: Sleep Time Zone
+          description: >-
+            Timezone used for sleep mode configuration.
+          type: string
+          options:
+            - 'America/Los_Angeles'
+            - 'America/New_York'
+            - 'Europe/London'
+          defaultValue: 'America/New_York'
+          section: vCluster Config
+    - template:
+        metadata: {}
+        instanceTemplate:
+          metadata: {}
+        pro:
+          enabled: true
+        helmRelease:
+          chart:
+            version: 0.26.0
+          values: |-
+            sync:
+              toHost:
+                ingresses:
+                  enabled: true
+            # Checkout https://vcluster.com/pro/docs/ for more config options
+        accessPoint:
+          ingress: {}
+        spaceTemplate:
+          metadata: {}
+      version: 0.0.0
+  access:
+    - verbs:
+        - '*'
+      subresources:
+        - '*'
+      users:
+        - admin

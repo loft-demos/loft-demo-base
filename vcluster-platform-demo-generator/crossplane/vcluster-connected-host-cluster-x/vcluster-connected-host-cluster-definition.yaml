@@ -1,0 +1,38 @@
+apiVersion: apiextensions.crossplane.io/v1
+
+kind: CompositeResourceDefinition
+
+metadata:
+  name: xconnectedhostclusters.virtualcluster.demo.vcluster.com
+spec:
+  claimNames:
+    kind: ConnectedHostCluster
+    plural: connectedhostclusters
+  defaultCompositeDeletePolicy: Background
+  defaultCompositionUpdatePolicy: Automatic
+  group: virtualcluster.demo.vcluster.com
+  names:
+    kind: XConnectedHostCluster
+    plural: xconnectedhostclusters
+  versions:
+    - name: v1alpha1
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          description: >-
+            A ConnectedHostCluster as a vCluster.
+          properties:
+            spec:
+              properties:
+                k8sVersion:
+                  description: The Kubernetes version of the vCluster instance
+                  type: string
+                sleepTimeZone:
+                  description: Timezone used for sleep mode configuration.
+                  type: string
+              required:
+                - k8sVersion
+                - sleepTimeZone
+              type: object
+          type: object
+      served: true

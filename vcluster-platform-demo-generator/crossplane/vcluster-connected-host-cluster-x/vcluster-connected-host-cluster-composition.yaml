@@ -1,0 +1,65 @@
+
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  creationTimestamp: '2024-07-15T20:28:55Z'
+  generation: 5
+  labels:
+    crossplane.io/xrd: xconnectedhostclusters.virtualcluster.demo.vcluster.com
+  name: connectedhostclusters
+spec:
+  compositeTypeRef:
+    apiVersion: virtualcluster.demo.vclsuter.com/v1alpha1
+    kind: XConnectedHostCluster
+  mode: Pipeline
+  pipeline:
+    - functionRef:
+        name: function-patch-and-transform
+      input:
+        apiVersion: pt.fn.crossplane.io/v1beta1
+        kind: Resources
+        resources:
+          - name: vcluster
+            base:
+              apiVersion: kubernetes.crossplane.io/v1alpha2
+              kind: Object
+              spec:
+                forProvider:
+                  manifest:
+                    apiVersion: management.loft.sh/v1
+                    kind: VirtualClusterInstance
+                    metadata:
+                      namespace: p-host-cluster
+                    spec:
+                      clusterRef:
+                        cluster: loft-cluster
+                      owner:
+                        team: loft-admins
+                      templateRef:
+                        name: connected-host-cluster
+                        version: 1.0.x
+                providerConfigRef:
+                  name: kubernetes-provider
+                readiness:
+                  policy: DeriveFromObject
+            patches:
+              - fromFieldPath: metadata.name
+                toFieldPath: spec.forProvider.manifest.metadata.name
+              - combine:
+                  strategy: string
+                  string:
+                    fmt: |
+                      k8sVersion: '%s'
+                      sleepTimeZone: '%s'
+                  variables:
+                    - fromFieldPath: spec.k8sVersion
+                    - fromFieldPath: spec.sleepTimeZone
+                toFieldPath: spec.forProvider.manifest.spec.parameters
+                type: CombineFromComposite
+            readinessChecks:
+              - fieldPath: status.atProvider.manifest.status.phase
+                matchString: Ready
+                type: MatchString
+      step: patch-and-transform
+  publishConnectionDetailsWithStoreConfigRef:
+    name: default

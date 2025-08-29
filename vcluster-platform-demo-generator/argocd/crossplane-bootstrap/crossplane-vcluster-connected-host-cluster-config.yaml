@@ -1,0 +1,31 @@
+# The Argo CD Application for the Crossplane vCluster Demo Repository Composite Resource Definition and Composition
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: crossplane-vcluster-connected-host-cluster-config
+  namespace: argocd
+  labels:
+    crossplane.demos.loft.sh: crossplane
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/loft-demos/loft-demo-base
+    targetRevision: HEAD
+    path: vcluster-platform-demo-generator/crossplane/vcluster-connected-host-cluster-x
+  destination:
+    namespace: default
+    server: https://kubernetes.default.svc
+  syncPolicy:
+    automated:
+      prune: true    
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s 
+        factor: 2 
+        maxDuration: 1m
