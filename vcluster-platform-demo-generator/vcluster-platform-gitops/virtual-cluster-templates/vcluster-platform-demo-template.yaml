@@ -464,7 +464,7 @@ spec:
           type: string
           defaultValue: '#001529'
           section: UI Customization
-    - version: 0.440.30
+    - version: 0.440.31
       template:
         metadata:
           labels:
@@ -485,7 +485,7 @@ spec:
         apps:
           - name: vcluster-platform-demo
             namespace: vcluster-platform
-            version: 0.440.30
+            version: 0.440.31
             parameters: |
               uiLogoURL: '{{ .Values.uiLogoURL }}'
               logoBackgroundColor: '{{ .Values.logoBackgroundColor }}'
@@ -647,6 +647,7 @@ spec:
               argocd.argoproj.io/secret-type: cluster
               loftDemoDomain: {{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}
               autoSnapshots: '{{ .Values.autoSnapshots }}'
+              connectedHostCluster: '{{ .Values.connectedHostCluster }}'
               crossplane: 'true'
               vnode: '{{ .Values.vnode }}'
               flux: 'true'
@@ -933,7 +934,7 @@ spec:
           type: string
           defaultValue: '#001529'
           section: UI Customization
-    - version: 0.440.29
+    - version: 0.440.30
       template:
         metadata:
           labels:
@@ -954,7 +955,7 @@ spec:
         apps:
           - name: vcluster-platform-demo
             namespace: vcluster-platform
-            version: 0.440.29
+            version: 0.440.30
             parameters: |
               uiLogoURL: '{{ .Values.uiLogoURL }}'
               logoBackgroundColor: '{{ .Values.logoBackgroundColor }}'
@@ -1116,6 +1117,7 @@ spec:
               argocd.argoproj.io/secret-type: cluster
               loftDemoDomain: {{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}
               autoSnapshots: '{{ .Values.autoSnapshots }}'
+              connectedHostCluster: '{{ .Values.connectedHostCluster }}'
               crossplane: 'true'
               vnode: '{{ .Values.vnode }}'
               flux: 'true'
@@ -1162,6 +1164,12 @@ spec:
             labels:
               loft.sh/project-secret-name: crossplane-github-provider-secret
           type: Opaque
+          ---
+          apiVersion: node.k8s.io/v1
+          kind: RuntimeClass
+          metadata:
+            name: vnode
+          handler: vnode
         pro:
           enabled: true
         helmRelease:
@@ -1235,7 +1243,24 @@ spec:
             type: Opaque
             stringData:
               url: "https://argocd-appset-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}/api/webhook"
+            {{if .Values.connectedHostCluster}}
+            ---
+            apiVersion: virtualcluster.demo.vcluster.com/v1alpha1
+            kind: ConnectedHostCluster
+            metadata:
+              name: connected-host-cluster-{{ .Values.loft.virtualClusterName }}
+            spec:
+              k8sVersion: "{{ .Values.k8sVersion }}"
+              sleepTimeZone: "{{ .Values.sleepTimeZone }}"
+              demoName: "{{ .Values.loft.virtualClusterName }}"
+            {{end}}
       parameters:
+        - variable: connectedHostCluster
+          label: Connected Host Cluster
+          description: Creates a connected host cluster as a vCluster using Crossplane so it will be deleted when this demo vCluster is deleted.
+          type: boolean
+          defaultValue: 'false'
+          section: Use Case Examples
         - variable: autoSnapshots
           label: Automatic Snapshots
           description: This demo use case creates a Virtual Cluster Instance from a template. The automatic snapshots that are pushed to a GitHub Container Registry. 
@@ -1335,7 +1360,8 @@ spec:
         - variable: sleepTimeZone
           label: Sleep Time Zone
           description: >-
-            Timezone used for sleep mode configuration.
+            Environment for deployments for this vCluster used as cluster label
+            for Argo CD ApplicationSet Cluster Generator
           type: string
           options:
             - 'America/Los_Angeles'

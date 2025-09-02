@@ -1,0 +1,115 @@
+kind: App
+apiVersion: management.loft.sh/v1
+metadata:
+  name: generate-vcluster-kubeconfig
+spec:
+  displayName: generate-vcluster-kubeconfig
+  owner:
+    team: loft-admins
+  config:
+    chart: {}
+    bash:
+      podSecurityContext:
+        fsGroup: 0
+      securityContext:
+        capabilities:
+          drop:
+            - ALL
+        privileged: false
+        runAsUser: 999
+        runAsGroup: 999
+        runAsNonRoot: true
+        allowPrivilegeEscalation: false
+      clusterRole: 'cluster-admin'
+      image: ghcr.io/loft-demos/vcluster-bash-app:0.27.1-rc.1
+      script: >
+
+        OUTPUT=$(cat <<EOF | kubectl apply -f -
+
+        apiVersion: management.loft.sh/v1
+        
+        kind: OwnedAccessKey
+        
+        metadata:
+          creationTimestamp: null
+          name: "flux-{{ .Values.loft.virtualClusterName }}"
+        spec:
+          displayName: "flux-{{ .Values.loft.virtualClusterName }}"
+          ttl: 1728000
+          type: User
+          team: loft-admins
+          key: $ACCESS_KEY
+          scope:
+            virtualClusters:
+            - project: "{{ .Values.loft.project }}"
+              virtualCluster: "{{ .Values.loft.virtualClusterName }}"
+        status: {}
+        
+        EOF
+        
+        )
+
+        RESOURCE_NAME=$(echo "$OUTPUT" | awk '{print $1}' | cut -d'/' -f2)
+
+        ACCESS_KEY=$(kubectl get accesskey $RESOURCE_NAME  -o jsonpath="{.spec.key}")
+
+        cat <<EOF | tee temp_kubeconfig.tmpl
+        
+        apiVersion: v1
+        
+        kind: Config
+        
+        clusters:
+        
+        - cluster:
+            server: https://{{ .Values.loft.clusterAnnotations.domainPrefix }}.{{ .Values.loft.clusterAnnotations.domain }}/kubernetes/project/{{ .Values.loft.project }}/virtualcluster/{{ .Values.loft.virtualClusterName }}
+            insecure-skip-tls-verify: true
+          name: loft
+        contexts:
+        
+        - context:
+            cluster: loft
+            user: loft
+          name: loft
+        current-context: loft
+        
+        users:
+        
+        - name: loft
+          user:
+            token: $ACCESS_KEY
+        
+        EOF
+        
+        envsubst < temp_kubeconfig.tmpl > vcluster-kubeconfig.yaml
+
+        KUBECONFIG_B64=$(base64 -w0 vcluster-kubeconfig.yaml)
+        
+        kubectl apply -f - <<EOF
+
+        apiVersion: management.loft.sh/v1
+
+        kind: ProjectSecret
+
+        metadata:
+
+          name: vc-{{ .Values.loft.virtualClusterName }}-connected-flux-kubeconfig
+
+          namespace: p-demo
+
+          labels:
+
+            loft.sh/project-secret: "true"
+
+        spec:
+
+          displayName: vc-{{ .Values.loft.virtualClusterName }}-connected-flux-kubeconfig
+
+          type: Opaque
+
+          data:
+
+            config: ${KUBECONFIG_B64}
+        
+        EOF
+
