@@ -95,7 +95,7 @@ spec:
 
           name: vc-{{ .Values.loft.virtualClusterName }}-connected-flux-kubeconfig
 
-          namespace: p-demo
+          namespace: p-demos
 
         spec:
 
