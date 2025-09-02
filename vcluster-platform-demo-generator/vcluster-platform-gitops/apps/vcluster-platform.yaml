@@ -244,6 +244,8 @@ spec:
             tls:
               enabled: true
               secret: ""
+              
+          insecureSkipVerify: true
 
           envValueFrom:
             CLIENT_SECRET:

@@ -36,9 +36,6 @@ spec:
             sleepmode.loft.sh/ignore-user-agents: argo*
         instanceTemplate:
           metadata:
-            annotations:
-              loft.sh/custom-links: >-
-                Helm-Dashboard=https://helm-dashboard-{{ .Values.loft.virtualClusterName }}-{{ .Values.loft.clusterAnnotations.domainPrefix }}.{{ .Values.loft.clusterAnnotations.domain }}
             labels:
               env: '{{ .Values.env }}'
               demos.vcluster.com/project: '{{ .Values.loft.project }}'
