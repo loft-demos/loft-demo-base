@@ -97,15 +97,9 @@ spec:
 
           namespace: p-demo
 
-          labels:
-
-            loft.sh/project-secret: "true"
-
         spec:
 
           displayName: vc-{{ .Values.loft.virtualClusterName }}-connected-flux-kubeconfig
-
-          type: Opaque
 
           data:
 
