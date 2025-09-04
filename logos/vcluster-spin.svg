@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <g>
+    <animateTransform attributeName="transform"
+                      attributeType="XML"
+                      type="rotate"
+                      from="0 256 256"
+                      to="360 256 256"
+                      dur="6s"
+                      repeatCount="indefinite"/>
+    <image href="https://www.vcluster.com/docs/media/rebranding/vCluster_favicon_docs_orange.svg"
+           x="56" y="56" height="400" width="400"/>
+  </g>
+</svg>
