@@ -464,7 +464,7 @@ spec:
           type: string
           defaultValue: '#001529'
           section: UI Customization
-    - version: 4.4.02
+    - version: 0.440.202
       template:
         metadata:
           labels:
@@ -485,7 +485,7 @@ spec:
         apps:
           - name: vcluster-platform-demo
             namespace: vcluster-platform
-            version: 4.4.02
+            version: 0.440.202
             parameters: |
               uiLogoURL: '{{ .Values.uiLogoURL }}'
               logoBackgroundColor: '{{ .Values.logoBackgroundColor }}'
