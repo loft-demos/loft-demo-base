@@ -55,6 +55,7 @@ spec:
           forProvider:
             branch: main
             file: helm-chart/Chart.yaml
+            commitMessage: "seed: [run replace-text]"
             overwriteOnCreate: true
             repository: repo-name
           managementPolicies:
