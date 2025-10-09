@@ -1593,7 +1593,7 @@ spec:
               flux: 'true'
               virtualScheduler: '{{ .Values.virtualScheduler }}'
               resolveDNS: '{{ .Values.resolveDNS }}'
-              eso: '{{ .Values.eso }}'
+              eso: 'true'
               kyverno: '{{ .Values.kyverno }}'
               postgres: '{{ .Values.postgres }}'
               mysql: '{{ .Values.mysql }}'
@@ -1776,12 +1776,6 @@ spec:
           description: >-
             Showcase how to enable the virtual scheduler feature and use
             third-party schedulers (Volcano, KAI, etc) inside of a vCluster.
-          type: boolean
-          defaultValue: 'false'
-          section: Use Case Examples
-        - variable: eso
-          label: External Secrets Operator Integration
-          description: Showcase how ESO integrates with vCluster.
           type: boolean
           defaultValue: 'false'
           section: Use Case Examples
