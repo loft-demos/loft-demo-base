@@ -17,13 +17,13 @@ spec:
       name: vcluster-platform
       repoURL: https://charts.loft.sh/
   versions:
-    - version: 4.3.5
+    - version: 4.3.8
       icon: https://raw.githubusercontent.com/loft-demos/loft-demo-base/refs/heads/main/logos/vCluster_Horizontal_2colors_reversed-2.svg
       defaultNamespace: vcluster-platform
       config:
         chart:
           name: vcluster-platform
-          version: 4.3.5
+          version: 4.3.8
           repoURL: https://charts.loft.sh/
         values: |-
           admin:
@@ -203,13 +203,13 @@ spec:
           label: Logo Background Color
           description: LogoBackgroundColor is the color value to use as the background color for the logo
           defaultValue: '#001529'
-    - version: 0.450.9
+    - version: 4.5.0
       icon: https://raw.githubusercontent.com/loft-demos/loft-demo-base/refs/heads/main/logos/vCluster_Horizontal_2colors_reversed-2.svg
       defaultNamespace: vcluster-platform
       config:
         chart:
           name: vcluster-platform
-          version: 4.5.0-alpha.9
+          version: 4.5.0
           repoURL: https://charts.loft.sh/
         values: |-
           admin:
