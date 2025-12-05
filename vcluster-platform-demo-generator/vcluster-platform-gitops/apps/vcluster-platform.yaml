@@ -450,13 +450,13 @@ spec:
           label: Logo Background Color
           description: LogoBackgroundColor is the color value to use as the background color for the logo
           defaultValue: '#001529'
-    - version: 1.460.1
+    - version: 1.460.3
       icon: https://raw.githubusercontent.com/loft-demos/loft-demo-base/refs/heads/main/logos/vCluster_Horizontal_2colors_reversed-2.svg
       defaultNamespace: vcluster-platform
       config:
         chart:
           name: vcluster-platform
-          version: 4.6.0-next.1
+          version: 4.6.0-next.3
           repoURL: https://charts.loft.sh/
         values: |-
           admin:
