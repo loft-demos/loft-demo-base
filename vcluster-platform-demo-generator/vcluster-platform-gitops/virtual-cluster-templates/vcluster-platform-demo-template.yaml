@@ -1209,7 +1209,7 @@ spec:
           enabled: true
         helmRelease:
           chart:
-            version: 0.27.0
+            version: 0.30.2
           values: |
             sleepMode:
               enabled: true
@@ -2143,7 +2143,7 @@ spec:
           enabled: true
         helmRelease:
           chart:
-            version: 0.30.0
+            version: 0.30.2
           values: |
             sleepMode:
               enabled: true
@@ -2367,7 +2367,7 @@ spec:
           type: string
           defaultValue: '#001529'
           section: UI Customization
-    - version: 1.460.1
+    - version: 1.460.3
       template:
         metadata:
           labels:
@@ -2388,7 +2388,7 @@ spec:
         apps:
           - name: vcluster-platform-demo
             namespace: vcluster-platform
-            version: 1.460.1
+            version: 1.460.3
             parameters: |
               uiLogoURL: '{{ .Values.uiLogoURL }}'
               logoBackgroundColor: '{{ .Values.logoBackgroundColor }}'
@@ -2607,7 +2607,7 @@ spec:
           enabled: true
         helmRelease:
           chart:
-            version: 0.30.0
+            version: 0.30.2
           values: |
             sleepMode:
               enabled: true
