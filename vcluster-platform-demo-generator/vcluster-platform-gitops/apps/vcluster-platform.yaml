@@ -362,7 +362,7 @@ spec:
         - variable: uiLogoURL
           label: Logo logoURL
           description: Will update the vCluster Platform config ui settings logoURL
-          defaultValue: https://raw.githubusercontent.com/loft-demos/loft-demo-base/refs/heads/main/logos/vCluster_Horizontal_2colors_reversed-2.svg
+          defaultValue: https://raw.githubusercontent.com/loft-demos/loft-demo-base/refs/heads/main/logos/vcluster-black.svg
         - variable: logoBackgroundColor
           label: Logo Background Color
           description: LogoBackgroundColor is the color value to use as the background color for the logo
@@ -448,13 +448,13 @@ spec:
         - variable: uiLogoURL
           label: Logo logoURL
           description: Will update the vCluster Platform config ui settings logoURL
-          defaultValue: https://raw.githubusercontent.com/loft-demos/loft-demo-base/refs/heads/main/logos/vCluster_Horizontal_2colors_reversed-2.svg
+          defaultValue: https://raw.githubusercontent.com/loft-demos/loft-demo-base/refs/heads/main/logos/vcluster-black.svg
         - variable: logoBackgroundColor
           label: Logo Background Color
           description: LogoBackgroundColor is the color value to use as the background color for the logo
           defaultValue: '#001529'
     - version: 1.460.4
-      icon: https://raw.githubusercontent.com/loft-demos/loft-demo-base/refs/heads/main/logos/vCluster_Horizontal_2colors_reversed-2.svg
+      icon: https://raw.githubusercontent.com/loft-demos/loft-demo-base/refs/heads/main/logos/vcluster-2025.svg
       defaultNamespace: vcluster-platform
       config:
         chart:
@@ -534,7 +534,7 @@ spec:
         - variable: uiLogoURL
           label: Logo logoURL
           description: Will update the vCluster Platform config ui settings logoURL
-          defaultValue: https://raw.githubusercontent.com/loft-demos/loft-demo-base/refs/heads/main/logos/vCluster_Horizontal_2colors_reversed-2.svg
+          defaultValue: https://raw.githubusercontent.com/loft-demos/loft-demo-base/refs/heads/main/logos/vcluster-black.svg
         - variable: logoBackgroundColor
           label: Logo Background Color
           description: LogoBackgroundColor is the color value to use as the background color for the logo
