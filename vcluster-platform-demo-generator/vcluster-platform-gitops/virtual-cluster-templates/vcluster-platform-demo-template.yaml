@@ -2368,7 +2368,7 @@ spec:
           type: string
           defaultValue: '#001529'
           section: UI Customization
-    - version: 0.460.9
+    - version: 0.470.4
       template:
         metadata:
           labels:
@@ -2389,7 +2389,7 @@ spec:
         apps:
           - name: vcluster-platform-demo
             namespace: vcluster-platform
-            version: 0.460.9
+            version: 0.470.4
             parameters: |
               uiLogoURL: '{{ .Values.uiLogoURL }}'
               logoBackgroundColor: '{{ .Values.logoBackgroundColor }}'
@@ -2402,7 +2402,7 @@ spec:
               sleepTimeZone: '{{ .Values.sleepTimeZone }}'
           - name: argocd
             namespace: argocd
-            version: 3.1.9
+            version: 3.2.6
             parameters: |
               appValues: |-
                 global:

@@ -98,7 +98,6 @@ spec:
         - variable: uiLogoURL
           label: Logo logoURL
           description: Will update the vCluster Platform config ui settings logoURL
-          defaultValue: https://raw.githubusercontent.com/loft-demos/loft-demo-base/refs/heads/main/logos/vcluster-black.svg
         - variable: logoBackgroundColor
           label: Logo Background Color
           description: LogoBackgroundColor is the color value to use as the background color for the logo
@@ -453,13 +452,13 @@ spec:
           label: Logo Background Color
           description: LogoBackgroundColor is the color value to use as the background color for the logo
           defaultValue: '#001529'
-    - version: 0.460.9
+    - version: 0.470.4
       icon: https://raw.githubusercontent.com/loft-demos/loft-demo-base/refs/heads/main/logos/vCluster_Horizontal_2colors_reversed-2.svg
       defaultNamespace: vcluster-platform
       config:
         chart:
           name: vcluster-platform
-          version: 4.6.0-alpha.9
+          version: 4.7.0-alpha.4
           repoURL: https://charts.loft.sh/
         values: |-
           admin:
@@ -534,7 +533,6 @@ spec:
         - variable: uiLogoURL
           label: Logo logoURL
           description: Will update the vCluster Platform config ui settings logoURL
-          defaultValue: https://raw.githubusercontent.com/loft-demos/loft-demo-base/refs/heads/main/logos/vcluster-black.svg
         - variable: logoBackgroundColor
           label: Logo Background Color
           description: LogoBackgroundColor is the color value to use as the background color for the logo
