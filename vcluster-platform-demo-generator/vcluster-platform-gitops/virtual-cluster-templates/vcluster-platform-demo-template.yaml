@@ -480,8 +480,6 @@ spec:
         - variable: uiLogoURL
           label: UI Logo uiLogoURL
           description: Allows overriding default ui settings logo
-          defaultValue: >-
-            https://raw.githubusercontent.com/loft-demos/loft-demo-base/refs/heads/main/logos/vCluster_Horizontal_2colors_reversed-2.svg
           type: string
           section: UI Customization
         - variable: logoBackgroundColor
@@ -2608,7 +2606,7 @@ spec:
           enabled: true
         helmRelease:
           chart:
-            version: 0.30.2
+            version: 0.31.0
           values: |
             sleepMode:
               enabled: true
@@ -2820,8 +2818,6 @@ spec:
         - variable: uiLogoURL
           label: UI Logo uiLogoURL
           description: Allows overriding default ui settings logo
-          defaultValue: >-
-            https://raw.githubusercontent.com/loft-demos/loft-demo-base/refs/heads/main/logos/vCluster_Horizontal_2colors_reversed-2.svg
           type: string
           section: UI Customization
         - variable: logoBackgroundColor
