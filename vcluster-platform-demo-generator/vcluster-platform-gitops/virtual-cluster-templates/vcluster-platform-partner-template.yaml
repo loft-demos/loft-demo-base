@@ -478,7 +478,7 @@ spec:
           label: Admin Email
           description: Your admin email for vCluster Platform
           type: string
-          validation: '.+@.+\\..+'
+          validation: '^[^@\s]+@[^@\s]+\.[^@\s]+$'
           section: vCluster Platform Config
   access:
     - verbs:
