@@ -53,16 +53,10 @@ spec:
               
           insecureSkipVerify: true
 
-          envValueFrom:
-            CLIENT_SECRET:
-              secretKeyRef:
-                name: oidc-secret
-                key: clientSecret
-
           config:
             loftHost: '{{ .Values.domain }}''
             costControl:
-              enabled: true
+              enabled: false
             imageBuilder:
               enabled: false
             uiSettings:
@@ -73,17 +67,11 @@ spec:
               - link: https://github.com/loft-demos/{{ .Values.loft.virtualClusterName }}-app/tree/main/vcluster-gitops
                 position: TopEnd
                 text: GitHub Repo
-              - link: https://headlamp-{{ .Values.domain }}
-                position: TopEnd
-                text: Headlamp
-              - link: https://komoplane-{{ .Values.domain }}
-                position: TopEnd
-                text: Komoplane
               logoURL: "{{ .Values.uiLogoURL }}"
               logoBackgroundColor: "{{ .Values.logoBackgroundColor }}"
       parameters:
         - variable: domain
-          label: Loft Domain
+          label: vCluster Platform Domain
           description: >-
             The domain to run this Loft instance on, e.g.
             some-customer.loft.host
