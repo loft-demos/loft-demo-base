@@ -5,6 +5,7 @@ resources:
 - projects/projects.yaml
 - project-secrets/project-secrets.yaml
 - apps/vcluster-platform.yaml
+- apps/vcluster-platform-partner.yaml
 - apps/argocd.yaml
 - apps/github-repo-argo-cd-webhooks.yaml
 - apps/crossplane-manifests.yaml
