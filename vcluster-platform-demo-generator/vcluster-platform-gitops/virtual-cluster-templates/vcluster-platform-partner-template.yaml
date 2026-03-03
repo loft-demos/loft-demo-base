@@ -479,6 +479,7 @@ spec:
           description: Allows overriding default ui settings logo
           type: string
           section: UI Customization
+          defaultValue: ''
         - variable: logoBackgroundColor
           label: Logo Background Color
           description: >-
