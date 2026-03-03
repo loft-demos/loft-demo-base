@@ -261,7 +261,7 @@ spec:
             sleep:
               auto:
                 afterInactivity: 9h
-                timeZone: '{{ .Values.sleepTimeZone }}'
+                timezone: '{{ .Values.sleepTimeZone }}'
             sync:
               toHost:
                 ingresses:
