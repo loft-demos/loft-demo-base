@@ -56,6 +56,12 @@ spec:
               domain: >-
                 {{ .Values.loft.virtualClusterName }}.{{
                 .Values.loft.clusterAnnotations.domain }}
+          - name: vcluster-platform-demo-configure-admins
+            namespace: vcluster-platform
+            parameters: |
+              sleepTimeZone: '{{ .Values.sleepTimeZone }}'
+              username: '{{ .Values.username }}'
+              email: '{{ .Values.email }}'
           - name: argocd
             namespace: argocd
             version: 3.2.6

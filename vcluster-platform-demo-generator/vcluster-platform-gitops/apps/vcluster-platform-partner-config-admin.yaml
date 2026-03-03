@@ -26,7 +26,7 @@ spec:
         metadata:
           name: '{{ .Values.username }}'
         spec:
-          displayName: '{{ .Values.displayName }}'
+          displayName: '{{ .Values.username }}'
           username: '{{ .Values.username }}'
           email: '{{ .Values.email }}'
           subject: '{{ .Values.email }}'
