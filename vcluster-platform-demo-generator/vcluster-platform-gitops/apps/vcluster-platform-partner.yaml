@@ -46,7 +46,7 @@ spec:
           ingress:
             enabled: true
             ingressClass: nginx
-            host: '{{ .Values.domain }}''
+            host: '{{ .Values.domain }}'
             tls:
               enabled: true
               secret: ""
@@ -54,7 +54,7 @@ spec:
           insecureSkipVerify: true
 
           config:
-            loftHost: '{{ .Values.domain }}''
+            loftHost: '{{ .Values.domain }}'
             costControl:
               enabled: false
             imageBuilder:
