@@ -1,12 +1,12 @@
 apiVersion: management.loft.sh/v1
 kind: VirtualClusterTemplate
 metadata:
-  name: vcluster-platform-demo
+  name: vcluster-platform-partner-template
 spec:
-  displayName: vCluster Platform Demo
+  displayName: vCluster Platform Partner Environments
   description: >-
-    This virtual cluster template deploys a vCluster Platform Hierarchical Demo
-    Environment that includes Crossplane, Argo CD, and a dedicated GitHub
+    This virtual cluster template deploys a vCluster Platform Demo
+    Environment for partners that includes Crossplane, Argo CD, and a dedicated GitHub
     repository for platform GitOps and demo examples.
   owner:
     team: loft-admins
