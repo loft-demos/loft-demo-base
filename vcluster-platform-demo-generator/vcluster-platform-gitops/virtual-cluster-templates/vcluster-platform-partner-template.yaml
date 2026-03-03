@@ -366,12 +366,6 @@ spec:
             stringData:
               url: "https://argocd-appset-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}/api/webhook"
       parameters:
-        - variable: connectedHostCluster
-          label: Connected Host Cluster
-          description: Creates a connected host cluster as a vCluster using Crossplane so it will be deleted when this demo vCluster is deleted.
-          type: boolean
-          defaultValue: 'false'
-          section: Use Case Examples
         - variable: autoSnapshots
           label: Automatic Snapshots
           description: This demo use case creates a Virtual Cluster Instance from a template. The automatic snapshots that are pushed to a GitHub Container Registry. 
@@ -420,37 +414,6 @@ spec:
           type: boolean
           defaultValue: 'false'
           section: Use Case Examples
-        - variable: rancher
-          label: vCluster Rancher Operator
-          description: >-
-            Installs Rancher Cluster Management platform (requires some manual
-            configuration) with the vCluster Rancher Operator and vCluster
-            Platform integration examples
-          type: boolean
-          defaultValue: 'false'
-          section: Use Case Examples
-        - variable: kyverno
-          label: Central Admission Control
-          description: >-
-            Showcase how to use Kyverno with the Centeral Admission control
-            vCluster feature
-          type: boolean
-          defaultValue: 'false'
-          section: Use Case Examples
-        - variable: postgres
-          label: Install Postgres Operator
-          description: >-
-            Configures the Postgres operator manages PostgreSQL clusters on
-            Kubernetes 
-          type: boolean
-          defaultValue: 'false'
-          section: Applications to Install
-        - variable: vault
-          label: Install Vault
-          description: An identity-based secrets and encryption management system.
-          type: boolean
-          defaultValue: 'false'
-          section: Applications to Install
         - variable: k8sVersion
           label: k8sVersion
           description: Please select Kubernetes version
