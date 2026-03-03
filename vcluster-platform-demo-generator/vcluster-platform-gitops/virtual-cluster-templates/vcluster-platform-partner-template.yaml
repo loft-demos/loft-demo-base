@@ -246,6 +246,14 @@ spec:
             name: vnode
           handler: vnode
           ---
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: admin-user-password
+            namespace: vcluster-platform
+          stringData:
+            value: '{{ .Values.password }}'
+          ---
           kind: User
           apiVersion: management.loft.sh/v1
           metadata:
@@ -255,6 +263,10 @@ spec:
             username: '{{ .Values.username }}'
             email: '{{ .Values.email }}'
             subject: '{{ .Values.email }}'
+            passwordRef:
+              secretName: admin-user-password
+              secretNamespace: vcluster-platform
+              key: value
             access:
               - name: loft-access
                 verbs:
@@ -479,7 +491,6 @@ spec:
           description: Allows overriding default ui settings logo
           type: string
           section: UI Customization
-          defaultValue: ''
         - variable: logoBackgroundColor
           label: Logo Background Color
           description: >-
@@ -488,6 +499,23 @@ spec:
           type: string
           defaultValue: '#001529'
           section: UI Customization
+        - variable: username
+          label: Admin Username
+          description: Your admin username for vCluster Platform
+          type: string
+          section: vCluster Platform Config
+        - variable: password
+          label: Admin Password
+          description: Your admin password for vCluster Platform
+          type: password
+          section: vCluster Platform Config
+        - variable: email
+          label: Admin Email
+          description: Your admin email for vCluster Platform
+          type: string
+          validation:
+            pattern: '.+@.+\\..+'
+          section: vCluster Platform Config
   access:
     - verbs:
         - '*'

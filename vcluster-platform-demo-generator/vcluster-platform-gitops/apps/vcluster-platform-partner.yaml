@@ -28,6 +28,7 @@ spec:
         values: |-
           admin:
             create: true
+            username: admin
 
           isolation:
             enabled: true
