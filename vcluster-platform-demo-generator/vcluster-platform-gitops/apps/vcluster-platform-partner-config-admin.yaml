@@ -1,10 +1,10 @@
 apiVersion: management.loft.sh/v1
 kind: App
 metadata:
-  name: vcluster-platform-demo-configure-admins
+  name: vcluster-platform-partner-config-admin
 spec:
-  displayName: vCluster Platform Demo Configure Admins
-  description: Configures SSO Groups that should get admin privileges
+  displayName: vCluster Platform Partner Config Admin
+  description: Configures admin user for partner demo vCluster Platform
   owner:
     team: loft-admins
   config:
