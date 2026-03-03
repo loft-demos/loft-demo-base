@@ -503,18 +503,19 @@ spec:
           label: Admin Username
           description: Your admin username for vCluster Platform
           type: string
+          required: true
           section: vCluster Platform Config
         - variable: password
           label: Admin Password
           description: Your admin password for vCluster Platform
           type: password
+          required: true
           section: vCluster Platform Config
         - variable: email
           label: Admin Email
           description: Your admin email for vCluster Platform
           type: string
-          validation:
-            pattern: '.+@.+\\..+'
+          validation: '.+@.+\\..+'
           section: vCluster Platform Config
   access:
     - verbs:
