@@ -256,14 +256,12 @@ spec:
             version: 0.32.1
           values: |
             deletion:
-              afterInactivity: 366h
-            sleepMode:
-              enabled: true
-              autoSleep:
-                afterInactivity: 14h
-              timeZone: '{{ .Values.sleepTimeZone }}'
-              autoWakeup:
-                schedule: 0 4 * * 1-5
+              auto:
+                afterInactivity: 366h
+            sleep:
+              auto:
+                afterInactivity: 9h
+                timeZone: '{{ .Values.sleepTimeZone }}'
             sync:
               toHost:
                 ingresses:
