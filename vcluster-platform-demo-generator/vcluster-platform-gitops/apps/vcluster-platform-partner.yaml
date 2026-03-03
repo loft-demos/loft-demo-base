@@ -64,11 +64,11 @@ spec:
               - link: https://www.vcluster.com/docs/platform/
                 position: TopEnd
                 text: vCluster Docs
-              - link: https://github.com/loft-demos/{{ .Values.loft.virtualClusterName }}-app/tree/main/vcluster-gitops
+              - link: 'https://github.com/loft-demos/{{ .Values.loft.virtualClusterName }}-app/tree/main/vcluster-gitops'
                 position: TopEnd
                 text: GitHub Repo
-              logoURL: "{{ .Values.uiLogoURL }}"
-              logoBackgroundColor: "{{ .Values.logoBackgroundColor }}"
+              logoURL: '{{ .Values.uiLogoURL }}'
+              logoBackgroundColor: '{{ .Values.logoBackgroundColor }}'
       parameters:
         - variable: domain
           label: vCluster Platform Domain
