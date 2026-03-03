@@ -56,7 +56,7 @@ spec:
               domain: >-
                 {{ .Values.loft.virtualClusterName }}.{{
                 .Values.loft.clusterAnnotations.domain }}
-          - name: vcluster-platform-demo-configure-admins
+          - name: vcluster-platform-partner-config-admin
             namespace: vcluster-platform
             parameters: |
               sleepTimeZone: '{{ .Values.sleepTimeZone }}'
