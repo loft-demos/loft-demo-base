@@ -15,8 +15,12 @@ spec:
   allowedTemplates:
     - kind: VirtualClusterTemplate
       group: storage.loft.sh
-      name: vcluster-platform-demo
+      name: vcluster-platform-partner-template
       isDefault: true
+    - kind: VirtualClusterTemplate
+      group: storage.loft.sh
+      name: vcluster-platform-demo
+      isDefault: false
   members:
     - kind: Team
       group: storage.loft.sh
