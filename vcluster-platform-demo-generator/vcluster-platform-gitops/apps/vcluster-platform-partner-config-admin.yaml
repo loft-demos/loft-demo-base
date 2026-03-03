@@ -1,0 +1,87 @@
+apiVersion: management.loft.sh/v1
+kind: App
+metadata:
+  name: vcluster-platform-demo-configure-admins
+spec:
+  displayName: vCluster Platform Demo Configure Admins
+  description: Configures SSO Groups that should get admin privileges
+  owner:
+    team: loft-admins
+  config:
+    chart: {}
+    bash:
+      script: >-
+        set -euo pipefail
+
+        echo "Waiting for Loft management APIService..."
+        kubectl wait --for=condition=Available --timeout=300s apiservice/v1.management.loft.sh
+
+        echo "Applying admin user (desired state) via management API..."
+        cat <<'EOF' | kubectl apply --server-side --field-manager=vcp-bootstrap -f -
+
+        kind: User
+
+        apiVersion: management.loft.sh/v1
+
+        metadata:
+          name: '{{ .Values.username }}'
+        spec:
+          displayName: '{{ .Values.displayName }}'
+          username: '{{ .Values.username }}'
+          email: '{{ .Values.email }}'
+          subject: '{{ .Values.email }}'
+          passwordRef:
+            secretName: admin-user-password
+            secretNamespace: vcluster-platform
+            key: value
+          access:
+            - name: loft-access
+              verbs:
+                - get
+                - bind
+                - create
+                - deletekey
+                - getkey
+                - updatekey
+                - createkey
+              subresources:
+                - accesskeys
+                - clusters
+                - profile
+                - permissions
+                - object-permissions
+              users:
+                - '{{ .Values.username }}'
+        status:
+          teams:
+            - loft-admins
+        EOF
+
+        echo "Waiting for User to appear..."
+        kubectl get users.management.loft.sh {{ .Values.username }}
+
+        kubectl annotate clusters loft-cluster domainPrefix={{
+        .Values.loft.virtualClusterName }}
+
+        kubectl annotate clusters loft-cluster domain={{
+        .Values.loft.clusterAnnotations.domain }}
+
+        kubectl annotate clusters loft-cluster sleepTimeZone={{
+        .Values.sleepTimeZone }}
+  parameters:
+    - variable: username
+      label: Admin Username
+      description: Your admin username for vCluster Platform
+      type: string
+      required: true
+    - variable: email
+      label: Admin Email
+      description: Your admin email for vCluster Platform
+      type: string
+    - variable: sleepTimeZone
+      label: Sleep Time Zone
+      description: >-
+        Environment for deployments for this vCluster used as cluster label
+        for Argo CD ApplicationSet Cluster Generator
+      type: string
+
