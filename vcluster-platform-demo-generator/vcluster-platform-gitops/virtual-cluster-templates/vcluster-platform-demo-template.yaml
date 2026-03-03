@@ -268,17 +268,15 @@ spec:
           chart:
             version: 0.32.1
           values: |
-            sleepMode:
-              enabled: true
-              autoSleep:
+            deletion:
+              auto:
+                afterInactivity: 366h
+            sleep:
+              auto:
                 afterInactivity: 14h
-              timeZone: '{{ .Values.sleepTimeZone }}'
-              autoWakeup:
-                schedule: 0 4 * * 1-5
-            external:
-              platform:
-                autoDelete:
-                  afterInactivity: 43200000
+                wakeup:
+                  schedule: 0 4 * * 1-5
+                timezone: '{{ .Values.sleepTimeZone }}'
             sync:
               toHost:
                 ingresses:
