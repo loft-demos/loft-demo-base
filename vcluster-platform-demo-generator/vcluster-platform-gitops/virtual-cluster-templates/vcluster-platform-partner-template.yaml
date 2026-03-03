@@ -47,7 +47,7 @@ spec:
                 https://{{ .Values.loft.virtualClusterName }}.{{
                 .Values.loft.clusterAnnotations.domain }}
         apps:
-          - name: vcluster-platform-demo
+          - name: vcluster-platform-partner
             namespace: vcluster-platform
             version: 4.7.0
             parameters: |
@@ -56,10 +56,6 @@ spec:
               domain: >-
                 {{ .Values.loft.virtualClusterName }}.{{
                 .Values.loft.clusterAnnotations.domain }}
-          - name: vcluster-platform-demo-configure-admins
-            namespace: vcluster-platform
-            parameters: |
-              sleepTimeZone: '{{ .Values.sleepTimeZone }}'
           - name: argocd
             namespace: argocd
             version: 3.2.6
@@ -249,6 +245,37 @@ spec:
           metadata:
             name: vnode
           handler: vnode
+          ---
+          kind: User
+          apiVersion: management.loft.sh/v1
+          metadata:
+            name: '{{ .Values.username }}'
+          spec:
+            displayName: '{{ .Values.displayName }}'
+            username: '{{ .Values.username }}'
+            email: '{{ .Values.email }}'
+            subject: '{{ .Values.email }}'
+            access:
+              - name: loft-access
+                verbs:
+                  - get
+                  - bind
+                  - create
+                  - deletekey
+                  - getkey
+                  - updatekey
+                  - createkey
+                subresources:
+                  - accesskeys
+                  - clusters
+                  - profile
+                  - permissions
+                  - object-permissions
+                users:
+                  - '{{ .Values.username }}'
+          status:
+            teams:
+              - loft-admins
         pro:
           enabled: true
         helmRelease:
