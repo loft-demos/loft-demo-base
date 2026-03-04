@@ -28,7 +28,9 @@ spec:
         values: |-
           admin:
             create: true
-            username: admin
+            username: '{{ .Values.username }}'
+            password: '{{ .Values.password }}'
+            email: '{{ .Values.email }}'
 
           isolation:
             enabled: true
@@ -77,6 +79,20 @@ spec:
             some-customer.loft.host
           required: true
           placeholder: some-customer.loft.host
+        - variable: username
+          label: Admin Username
+          description: Your admin username for vCluster Platform
+          type: string
+          required: true
+        - variable: password
+          label: Admin Password
+          description: Your admin password for vCluster Platform
+          type: password
+          required: true
+        - variable: email
+          label: Admin Email
+          description: Your admin email for vCluster Platform
+          type: string
         - variable: uiLogoURL
           label: Logo logoURL
           description: Will update the vCluster Platform config ui settings logoURL
