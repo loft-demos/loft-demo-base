@@ -10,31 +10,17 @@ spec:
     chart: {}
     bash:
       script: >
-        kubectl wait --for condition=established --timeout=60s
-        crd/applicationsets.argoproj.io
-
 
         while ! kubectl get crd applicationsets.argoproj.io; do
           echo "Waiting for argo cd applicationset crd...";
           sleep 1; 
         done
-
-
-        kubectl wait --for condition=established --timeout=60s
-        crd/applicationsets.argoproj.io
-
-
-        while ! kubectl get crd applicationsets.argoproj.io; do
-          echo "Waiting for argo cd applicationset crd...";
-          sleep 1; 
-        done
-
 
         POD=$(kubectl get pod -n argocd -l
         app.kubernetes.io/component=applicationset-controller -o
         jsonpath="{.items[0].metadata.name}")
 
-        kubectl delete pod -n argocd $POD
+        kubectl delete pod -n argocd $POD --force --grace-period=0
 
         while ! kubectl get secret ghcr-login-secret -n vcluster-platform; do
         

@@ -51,7 +51,6 @@ spec:
             namespace: vcluster-platform
             version: 4.7.0
             parameters: |
-              username: '{{ .Values.username }}'
               password: '{{ .Values.password }}'
               email: '{{ .Values.email }}'
               uiLogoURL: '{{ .Values.uiLogoURL }}'
@@ -422,15 +421,9 @@ spec:
           type: string
           defaultValue: '#001529'
           section: UI Customization
-        - variable: username
-          label: Admin Username
-          description: Your admin username for vCluster Platform
-          type: string
-          required: true
-          section: vCluster Platform Config
         - variable: password
           label: Admin Password
-          description: Your admin password for vCluster Platform
+          description: Your admin password for vCluster Platform (username will be admin)
           type: password
           required: true
           section: vCluster Platform Config
