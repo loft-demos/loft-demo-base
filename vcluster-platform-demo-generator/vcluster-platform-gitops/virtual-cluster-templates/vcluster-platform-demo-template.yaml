@@ -62,7 +62,7 @@ spec:
               sleepTimeZone: '{{ .Values.sleepTimeZone }}'
           - name: argocd
             namespace: argocd
-            version: 3.2.6
+            version: 3.3.2
             parameters: |
               appValues: |-
                 global:
