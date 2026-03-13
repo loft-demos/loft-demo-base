@@ -24,6 +24,15 @@ spec:
           
         done
 
+        kubectl rollout status deployment/argocd-repo-server -n argocd --timeout=180s
+        kubectl rollout status statefulset/argocd-application-controller -n argocd --timeout=180s
+
+        # optional but nice: verify service endpoints actually exist
+        while [ -z "$(kubectl get endpoints argocd-repo-server -n argocd -o jsonpath='{.subsets[*].addresses[*].ip}')" ]; do
+          echo "Waiting for argocd-repo-server endpoints..."
+          sleep 2
+        done
+
         PULL_SECRET=$(kubectl get secret ghcr-login-secret -n vcluster-platform -o
         jsonpath="{.data['\.dockerconfigjson']}")
 
