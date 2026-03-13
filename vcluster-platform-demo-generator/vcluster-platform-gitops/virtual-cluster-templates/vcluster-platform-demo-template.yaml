@@ -28,7 +28,7 @@ spec:
     spaceTemplate:
       metadata: {}
   versions:
-    - version: 2.480.4
+    - version: 2.480.5
       template:
         metadata:
           labels:
@@ -49,7 +49,7 @@ spec:
         apps:
           - name: vcluster-platform-demo
             namespace: vcluster-platform
-            version: 2.480.4
+            version: 2.480.5
             parameters: |
               {{if .Values.uiLogoURL}}
               uiLogoURL: '{{ .Values.uiLogoURL }}'
@@ -498,7 +498,7 @@ spec:
           type: string
           defaultValue: '#001529'
           section: UI Customization
-    - version: 2.480.2
+    - version: 2.480.4
       template:
         metadata:
           labels:
@@ -519,7 +519,7 @@ spec:
         apps:
           - name: vcluster-platform-demo
             namespace: vcluster-platform
-            version: 2.480.2
+            version: 2.480.4
             parameters: |
               {{if .Values.uiLogoURL}}
               uiLogoURL: '{{ .Values.uiLogoURL }}'
@@ -682,6 +682,7 @@ spec:
             labels:
               argocd.argoproj.io/secret-type: cluster
               loftDemoDomain: {{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}
+              argoCdInVcluster: '{{ .Values.argoCdInVcluster }}'
               autoSnapshots: '{{ .Values.autoSnapshots }}'
               connectedHostCluster: '{{ .Values.connectedHostCluster }}'
               crossplane: 'true'
@@ -825,6 +826,12 @@ spec:
         - variable: connectedHostCluster
           label: Connected Host Cluster
           description: Creates a connected host cluster as a vCluster using Crossplane so it will be deleted when this demo vCluster is deleted.
+          type: boolean
+          defaultValue: 'false'
+          section: Use Case Examples
+        - variable: argoCdInVcluster
+          label: Argo CD in vCluster
+          description: This use case creates a vCluster from a vCluster Platform VirtualClusterTemplate, imports that vCluster into the host Argo CD instance through the vCluster Platform Argo CD integration, and then uses an Argo CD ApplicationSet to install a dedicated Argo CD instance inside the vCluster.
           type: boolean
           defaultValue: 'false'
           section: Use Case Examples
