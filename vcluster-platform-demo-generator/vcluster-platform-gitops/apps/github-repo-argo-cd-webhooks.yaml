@@ -59,7 +59,7 @@ spec:
           source:
             path: vcluster-gitops
             repoURL: https://github.com/loft-demos/{{ .Values.loft.virtualClusterName }}-app.git
-            targetRevision: HEAD
+            targetRevision: main
             kustomize:
               patches:
                 - target:
