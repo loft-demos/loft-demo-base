@@ -9,39 +9,46 @@ spec:
   config:
     chart: {}
     bash:
-      script: >
+      script: |
+        set -e
 
-        while ! kubectl get crd applicationsets.argoproj.io; do
-          echo "Waiting for argo cd applicationset crd...";
-          sleep 1; 
+        while ! kubectl get crd applicationsets.argoproj.io >/dev/null 2>&1; do
+          echo "Waiting for argo cd applicationset crd..."
+          sleep 1
         done
 
-        while ! kubectl get secret ghcr-login-secret -n vcluster-platform; do
-        
-          echo "Waiting for ghcr-login-secret...";
-          
-          sleep 1; 
-          
+        while ! kubectl get secret ghcr-login-secret -n vcluster-platform >/dev/null 2>&1; do
+          echo "Waiting for ghcr-login-secret..."
+          sleep 1
         done
 
-        kubectl rollout status deployment/argocd-repo-server -n argocd --timeout=180s
-        kubectl rollout status statefulset/argocd-application-controller -n argocd --timeout=180s
+        while ! kubectl get deployment argocd-repo-server -n argocd >/dev/null 2>&1; do
+          echo "Waiting for argocd-repo-server deployment..."
+          sleep 2
+        done
 
-        # optional but nice: verify service endpoints actually exist
-        while [ -z "$(kubectl get endpoints argocd-repo-server -n argocd -o jsonpath='{.subsets[*].addresses[*].ip}')" ]; do
+        while ! kubectl get statefulset argocd-application-controller -n argocd >/dev/null 2>&1; do
+          echo "Waiting for argocd-application-controller statefulset..."
+          sleep 2
+        done
+
+        kubectl rollout status deployment argocd-repo-server -n argocd --timeout=180s
+        kubectl rollout status statefulset argocd-application-controller -n argocd --timeout=180s
+
+        while true; do
+          REPO_ENDPOINTS="$(kubectl get endpoints argocd-repo-server -n argocd -o jsonpath="{.subsets[*].addresses[*].ip}" 2>/dev/null || true)"
+          if [ -n "$REPO_ENDPOINTS" ]; then
+            break
+          fi
           echo "Waiting for argocd-repo-server endpoints..."
           sleep 2
         done
 
-        PULL_SECRET=$(kubectl get secret ghcr-login-secret -n vcluster-platform -o
-        jsonpath="{.data['\.dockerconfigjson']}")
+        PULL_SECRET="$(kubectl get secret ghcr-login-secret -n vcluster-platform -o jsonpath="{.data.\.dockerconfigjson}")"
 
         cat <<EOF | kubectl apply -f -
-
         apiVersion: argoproj.io/v1alpha1
-
         kind: Application
-
         metadata:
           name: vcluster-gitops
           namespace: argocd
@@ -67,11 +74,13 @@ spec:
               prune: true
               selfHeal: true
             syncOptions:
-            - CreateNamespace=true
+              - CreateNamespace=true
             retry:
               limit: 14
               backoff:
-                duration: 2s 
-                factor: 2 
+                duration: 2s
+                factor: 2
                 maxDuration: 2m
         EOF
+
+        kubectl annotate application vcluster-gitops -n argocd argocd.argoproj.io/refresh=hard --overwrite || true
