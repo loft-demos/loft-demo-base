@@ -44,6 +44,16 @@ spec:
           sleep 2
         done
 
+        while ! kubectl get crd appprojects.argoproj.io >/dev/null 2>&1; do
+          echo "Waiting for argo cd appproject crd..."
+          sleep 1
+        done
+
+        while ! kubectl get appproject default -n argocd >/dev/null 2>&1; do
+          echo "Waiting for default AppProject..."
+          sleep 1
+        done
+
         PULL_SECRET="$(kubectl get secret ghcr-login-secret -n vcluster-platform -o jsonpath="{.data.\.dockerconfigjson}")"
 
         cat <<EOF | kubectl apply -f -
