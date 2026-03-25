@@ -133,17 +133,6 @@ spec:
                     tls: true
           - name: github-repo-argo-cd-webhooks
         objects: |
-          apiVersion: demo.loft.sh/v1alpha1
-          kind: DemoRepository
-          metadata:
-            name: github-repo
-            namespace: default
-          spec:
-            name: "{{ .Values.loft.virtualClusterName }}-app"
-            loftDemoDomain: "{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}"
-            virtualClusterName: "{{ .Values.loft.virtualClusterName }}"
-            virtualClusterNamespace: "{{ .Values.loft.virtualClusterNamespace }}"
-          ---
           apiVersion: v1
           kind: Namespace
           metadata:
@@ -267,9 +256,6 @@ spec:
                 pods:
                   enabled: true
                   runtimeClassName: vnode
-                customResources:
-                  demorepositories.demo.loft.sh:
-                    enabled: true
               fromHost:
                 nodes:
                   enabled: true
@@ -309,6 +295,16 @@ spec:
         spaceTemplate:
           metadata: {}
           objects: |-
+            apiVersion: demo.loft.sh/v1alpha1
+            kind: DemoRepository
+            metadata:
+              name: github-repo
+            spec:
+              name: "{{ .Values.loft.virtualClusterName }}-app"
+              loftDemoDomain: "{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}"
+              virtualClusterName: "{{ .Values.loft.virtualClusterName }}"
+              virtualClusterNamespace: "{{ .Values.loft.virtualClusterNamespace }}"
+            ---
             apiVersion: v1
             kind: Secret
             metadata:
