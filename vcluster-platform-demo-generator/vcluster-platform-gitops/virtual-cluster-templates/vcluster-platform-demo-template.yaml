@@ -204,6 +204,7 @@ spec:
               argoCdInVcluster: '{{ .Values.argoCdInVcluster }}'
               autoSnapshots: '{{ .Values.autoSnapshots }}'
               connectedHostCluster: '{{ .Values.connectedHostCluster }}'
+              continuousPromotion: '{{ .Values.continuousPromotion }}'
               crossplane: 'true'
               databaseConnector: '{{ .Values.databaseConnector }}'
               vnode: '{{ .Values.vnode }}'
@@ -387,6 +388,12 @@ spec:
           label: vCluster Platform Database Connector
           description: >-
             Uses the vCluster Platform database connector with CloudNative PG as an external backing store for vCluster instances.
+          type: boolean
+          defaultValue: 'false'
+          section: Use Case Examples
+        - variable: continuousPromotion
+          label: Continuous Promotion
+          description: Demonstrates GitOps-native continuous promotion across isolated Kubernetes environments using Kargo and Argo CD
           type: boolean
           defaultValue: 'false'
           section: Use Case Examples
