@@ -79,6 +79,11 @@ spec:
               - link: https://flux-{{ .Values.domain }}
                 position: TopEnd
                 text: Flux UI
+              {{if .Values.continuousPromotion}}
+              - link: https://kargo-{{ .Values.domain }}
+                position: TopEnd
+                text: Kargo
+              {{end}}
               - link: https://komoplane-{{ .Values.domain }}
                 position: TopEnd
                 text: Komoplane
@@ -94,6 +99,12 @@ spec:
                 redirectURI: https://{{ .Values.domain }}/auth/oidc/callback
                 groupsClaim: groups
       parameters:
+        - variable: continuousPromotion
+          label: Continuous Promotion
+          description: Enables link for Kargo
+          type: boolean
+          defaultValue: 'false'
+          section: Use Case Examples
         - variable: domain
           label: Loft Domain
           description: >-
