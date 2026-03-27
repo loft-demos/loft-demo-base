@@ -77,10 +77,16 @@ spec:
                 position: TopEnd
                 text: GitHub Repo
               - link: https://flux-{{ .Values.domain }}
+                icon: "https://flux-{{ .Values.domain }}/favicon.svg"
                 position: TopEnd
                 text: Flux UI
+              - link: "https://argocd-{{ .Values.domain }}/"
+                icon: "https://argocd-{{ .Values.domain }}/assets/favicon/favicon-32x32.png"
+                text: "Argo CD"
+                position: TopEnd
               {{if .Values.continuousPromotion}}
               - link: https://kargo-{{ .Values.domain }}
+                icon: "https://kargo-{{ .Values.domain }}/kargo-logo-white.png"
                 position: TopEnd
                 text: Kargo
               {{end}}
