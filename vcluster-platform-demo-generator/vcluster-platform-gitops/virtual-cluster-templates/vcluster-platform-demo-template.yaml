@@ -323,22 +323,6 @@ spec:
               loftDemoDomain: "{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}"
               virtualClusterName: "{{ .Values.loft.virtualClusterName }}"
               virtualClusterNamespace: "{{ .Values.loft.virtualClusterNamespace }}"
-            ---
-            apiVersion: v1
-            kind: Secret
-            metadata:
-              name: argo-webhook-url
-            type: Opaque
-            stringData:
-              url: "https://argocd-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}/api/webhook"
-            ---
-            apiVersion: v1
-            kind: Secret
-            metadata:
-              name: argo-appset-webhook-url
-            type: Opaque
-            stringData:
-              url: "https://argocd-appset-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}/api/webhook"
             {{if .Values.connectedHostCluster}}
             ---
             apiVersion: virtualcluster.demo.vcluster.com/v1alpha1
