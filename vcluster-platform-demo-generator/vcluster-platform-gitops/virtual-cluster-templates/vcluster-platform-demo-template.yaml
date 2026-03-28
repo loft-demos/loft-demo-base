@@ -96,7 +96,7 @@ spec:
                     timeout.reconciliation: 0
                     application.namespaces: "argo-apps-*"
                   secret:
-                    createSecret: true
+                    createSecret: false
                   rbac:
                     policy.csv: |-
                       g, Administration, role:admin
@@ -563,7 +563,7 @@ spec:
                     timeout.reconciliation: 0
                     application.namespaces: "argo-apps-*"
                   secret:
-                    createSecret: true
+                    createSecret: false
                   rbac:
                     policy.csv: |-
                       g, Administration, role:admin
@@ -1027,7 +1027,7 @@ spec:
                     timeout.reconciliation: 0
                     application.namespaces: "argo-apps-*"
                   secret:
-                    createSecret: true
+                    createSecret: false
                   rbac:
                     policy.csv: |-
                       g, Administration, role:admin

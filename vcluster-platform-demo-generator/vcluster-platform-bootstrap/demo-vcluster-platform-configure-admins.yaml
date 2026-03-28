@@ -10,23 +10,42 @@ spec:
   config:
     chart: {}
     bash:
-      script: >
-        kubectl wait --for condition=established --timeout=60s
-        crd/teams.storage.loft.sh
+      script: |-
+        set -euo pipefail
 
+        ensure_argocd_secret() {
+          echo "Ensuring argocd namespace exists..."
+          kubectl create namespace argocd --dry-run=client -o yaml | kubectl apply -f -
 
-        while ! kubectl get teams.storage.loft.sh loft-admins; do
-          echo "Waiting for team...";
-          sleep 1; 
+          existing_key="$(kubectl get secret argocd-secret -n argocd -o jsonpath='{.data.server\.secretkey}' 2>/dev/null || true)"
+          if [ -n "${existing_key}" ]; then
+            echo "argocd-secret already has server.secretkey"
+            return
+          fi
+
+          server_secretkey="$(dd if=/dev/urandom bs=36 count=1 2>/dev/null | base64 | tr -d '\n' | tr '+/' '-_')"
+
+          if kubectl get secret argocd-secret -n argocd >/dev/null 2>&1; then
+            echo "Patching argocd-secret with server.secretkey..."
+            kubectl patch secret argocd-secret -n argocd --type merge -p "{\"stringData\":{\"server.secretkey\":\"${server_secretkey}\"}}"
+          else
+            echo "Creating argocd-secret with server.secretkey..."
+            kubectl create secret generic argocd-secret -n argocd --from-literal=server.secretkey="${server_secretkey}"
+          fi
+        }
+
+        ensure_argocd_secret
+
+        kubectl wait --for=condition=Established --timeout=60s crd/teams.storage.loft.sh
+
+        until kubectl get teams.storage.loft.sh loft-admins >/dev/null 2>&1; do
+          echo "Waiting for team..."
+          sleep 1
         done
 
-
-        cat <<EOF | kubectl apply -f -
-
+        cat <<'EOF' | kubectl apply -f -
         kind: Team
-
         apiVersion: storage.loft.sh/v1
-
         metadata:
           name: loft-admins
         spec:
@@ -55,11 +74,8 @@ spec:
                 - loft-admins
         EOF
 
-
-        kubectl annotate clusters loft-cluster domainPrefix={{
-        .Values.loft.virtualClusterName }}
-
-        kubectl annotate clusters loft-cluster domain={{
-        .Values.loft.clusterAnnotations.domain }}
+        kubectl annotate --overwrite cluster loft-cluster \
+          domainPrefix="{{ .Values.loft.virtualClusterName }}" \
+          domain="{{ .Values.loft.clusterAnnotations.domain }}"
 
         kubectl delete project default

@@ -61,6 +61,8 @@ spec:
                   params:
                     "server.insecure": true
                     timeout.reconciliation: 0 
+                  secret:
+                    createSecret: false
                   rbac:
                     policy.csv: |-
                       g, Administration, role:admin
