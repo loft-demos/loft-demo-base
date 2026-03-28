@@ -65,7 +65,7 @@ spec:
               sleepTimeZone: '{{ .Values.sleepTimeZone }}'
           - name: argocd
             namespace: argocd
-            version: 3.3.2
+            version: 3.3.6
             parameters: |
               appValues: |-
                 global:
@@ -129,6 +129,18 @@ spec:
                 ## ApplicationSet controller
                 applicationSet:
                   enabled: true
+                  readinessProbe:
+                    enabled: true
+                    initialDelaySeconds: 5
+                    periodSeconds: 5
+                    timeoutSeconds: 1
+                    failureThreshold: 6
+                  livenessProbe:
+                    enabled: true
+                    initialDelaySeconds: 60
+                    periodSeconds: 10
+                    timeoutSeconds: 1
+                    failureThreshold:
                   ingress:
                     enabled: true
                     ingressClassName: "nginx"
