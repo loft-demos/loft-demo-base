@@ -44,19 +44,17 @@ spec:
           enabled: true
         helmRelease:
           chart:
-            version: 0.27.0
+            version: 0.32.1
           values: |
-            sleepMode:
-              enabled: true
-              autoSleep:
+            deletion:
+              auto:
+                afterInactivity: 366h
+            sleep:
+              auto:
                 afterInactivity: 14h
-              timeZone: '{{ .Values.sleepTimeZone }}'
-              autoWakeup:
-                schedule: 0 4 * * 1-5
-            external:
-              platform:
-                autoDelete:
-                  afterInactivity: 43200000
+                wakeup:
+                  schedule: 0 4 * * 1-5
+                timezone: '{{ .Values.sleepTimeZone }}'
                   
             sync:
               toHost:
@@ -103,11 +101,11 @@ spec:
           description: Please select Kubernetes version
           type: string
           options:
-            - v1.33.4
-            - v1.32.8
-            - v1.31.12
-            - v1.30.15
-          defaultValue: v1.33.4
+            - v1.35.2
+            - v1.34.5
+            - v1.33.9
+            - v1.32.13
+          defaultValue: v1.34.5
           section: vCluster Config
         - variable: sleepTimeZone
           label: Sleep Time Zone
