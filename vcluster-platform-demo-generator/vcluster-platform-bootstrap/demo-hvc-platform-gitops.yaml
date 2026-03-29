@@ -51,6 +51,7 @@ spec:
               patches:
                 - target:
                     kind: Project
+                    name: demos
                   patch: |-
                     - op: replace
                       path: /spec/argoCD/sso/host

@@ -15,9 +15,6 @@ spec:
   allowedTemplates:
     - kind: VirtualClusterTemplate
       group: storage.loft.sh
-      name: vcluster-platform-partner-template
-    - kind: VirtualClusterTemplate
-      group: storage.loft.sh
       name: vcluster-platform-demo
       isDefault: true
   members:
@@ -76,8 +73,6 @@ spec:
     - kind: VirtualClusterTemplate
       group: storage.loft.sh
       name: 'connected-host-cluster'
-  requireTemplate:
-    disabled: true
   requirePreset: {}
   access:
     - name: loft-admin-access

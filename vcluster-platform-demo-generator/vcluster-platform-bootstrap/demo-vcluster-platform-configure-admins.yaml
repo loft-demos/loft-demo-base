@@ -36,16 +36,16 @@ spec:
 
         ensure_argocd_secret
 
-        kubectl wait --for=condition=Established --timeout=60s crd/teams.storage.loft.sh
+        kubectl wait --for=condition=Available --timeout=300s apiservice/v1.management.loft.sh --validate=false
 
-        until kubectl get teams.storage.loft.sh loft-admins >/dev/null 2>&1; do
+        until kubectl get teams.management.loft.sh loft-admins >/dev/null 2>&1; do
           echo "Waiting for team..."
           sleep 1
         done
 
         cat <<'EOF' | kubectl apply -f -
         kind: Team
-        apiVersion: storage.loft.sh/v1
+        apiVersion: management.loft.sh/v1
         metadata:
           name: loft-admins
         spec:

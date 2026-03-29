@@ -36,17 +36,17 @@ spec:
 
         ensure_argocd_secret
 
-        echo "Waiting for Team CRD..."
-        kubectl wait --for=condition=Established --timeout=60s crd/teams.storage.loft.sh
+        echo "Waiting for Loft management APIService..."
+        kubectl wait --for=condition=Available --timeout=300s apiservice/v1.management.loft.sh --validate=false
 
         echo "Waiting for auto-generated team loft-admins..."
-        until kubectl get team.storage.loft.sh loft-admins >/dev/null 2>&1; do
+        until kubectl get teams.management.loft.sh loft-admins >/dev/null 2>&1; do
           sleep 1
         done
 
         echo "Applying admin team overrides..."
         cat <<'EOF' | kubectl apply -f -
-        apiVersion: storage.loft.sh/v1
+        apiVersion: management.loft.sh/v1
         kind: Team
         metadata:
           name: loft-admins
