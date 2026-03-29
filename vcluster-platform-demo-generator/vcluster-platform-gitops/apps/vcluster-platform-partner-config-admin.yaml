@@ -14,7 +14,7 @@ spec:
         set -euo pipefail
 
         echo "Waiting for Loft management APIService..."
-        kubectl wait --for=condition=Available --timeout=300s apiservice/v1.management.loft.sh --validate=false
+        kubectl wait --for=condition=Available --timeout=300s apiservice/v1.management.loft.sh
 
         echo "Applying admin user (desired state) via management API..."
         cat <<'EOF' | kubectl apply --server-side --field-manager=vcp-bootstrap -f -
@@ -84,4 +84,3 @@ spec:
         Environment for deployments for this vCluster used as cluster label
         for Argo CD ApplicationSet Cluster Generator
       type: string
-

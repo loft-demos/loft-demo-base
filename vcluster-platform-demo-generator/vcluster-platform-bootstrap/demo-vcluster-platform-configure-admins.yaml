@@ -36,7 +36,7 @@ spec:
 
         ensure_argocd_secret
 
-        kubectl wait --for=condition=Available --timeout=300s apiservice/v1.management.loft.sh --validate=false
+        kubectl wait --for=condition=Available --timeout=300s apiservice/v1.management.loft.sh
 
         until kubectl get teams.management.loft.sh loft-admins >/dev/null 2>&1; do
           echo "Waiting for team..."
