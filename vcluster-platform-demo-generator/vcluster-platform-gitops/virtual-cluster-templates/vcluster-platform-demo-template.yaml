@@ -70,6 +70,8 @@ spec:
               appValues: |-
                 global:
                   domain: argocd-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}
+                  image:
+                    tag: v3.4.0-rc4
                 configs:
                   cm:
                     url: https://argocd-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}
