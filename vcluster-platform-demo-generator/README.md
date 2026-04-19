@@ -77,8 +77,8 @@ The `crossplane/vcluster-demo-repository-x/` package handles the sequencing:
 2. `Repository` creates the generated repo from the template.
 3. For non-`main` cases, the composition enables copying all template branches.
 4. `DefaultBranch` updates the generated repo default branch to `gitTargetRevision`.
-5. After `DefaultBranch` is ready, the seed `RepositoryFile` writes `helm-chart/Chart.yaml` on `gitTargetRevision` with the existing commit message `seed: [run replace-text]`.
-6. That seed commit triggers the generated repo `replace-text` GitHub Actions workflow, which renders `{REPLACE_GIT_TARGET_REVISION}` in self-repo Argo CD and Flux manifests.
+5. After `DefaultBranch` is ready, the seed `RepositoryFile` writes `.generator-seed/replace-text-trigger.txt` on `gitTargetRevision` with the existing commit message `seed: [run replace-text]`.
+6. That seed commit triggers the generated repo `replace-text` GitHub Actions workflow, which renders `{REPLACE_GIT_TARGET_REVISION}` in self-repo Argo CD and Flux manifests, including repos that keep the demo content under `project/`.
 
 This ordering is important. The default branch must be switched before the seed commit lands, otherwise the generated repo can render `main` into self-repo references even when a branch-test flow was requested.
 

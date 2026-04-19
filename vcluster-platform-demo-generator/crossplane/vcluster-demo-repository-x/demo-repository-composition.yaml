@@ -105,7 +105,7 @@ spec:
         spec:
           forProvider:
             branch: main
-            file: helm-chart/Chart.yaml
+            file: .generator-seed/replace-text-trigger.txt
             commitMessage: "seed: [run replace-text]"
             overwriteOnCreate: true
             repository: repo-name
@@ -114,13 +114,13 @@ spec:
             - Observe
           providerConfigRef:
             name: github-provider-config
-      name: helm-chart-chart
+      name: replace-text-seed
       patches:
         - fromFieldPath: metadata.name
           toFieldPath: metadata.name
           transforms:
             - string:
-                fmt: '%s-helm-chart-chart'
+                fmt: '%s-replace-text-seed'
                 type: Format
               type: string
           type: FromCompositeFieldPath
@@ -139,14 +139,12 @@ spec:
             strategy: string
             string:
               fmt: |
-                apiVersion: v2
-                name: %s
-                description: A Helm chart for simple echo app
-                type: application
-                version: 1.4.0
-                appVersion: 0.0.1
+                repo: %s
+                branch: %s
+                purpose: trigger the generated repo replace-text workflow
             variables:
               - fromFieldPath: spec.name
+              - fromFieldPath: spec.gitTargetRevision
           toFieldPath: spec.forProvider.content
           type: CombineFromComposite
       readinessChecks:
