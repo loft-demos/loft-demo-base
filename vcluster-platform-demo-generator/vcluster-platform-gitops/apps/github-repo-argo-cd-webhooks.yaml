@@ -69,7 +69,7 @@ spec:
           source:
             path: vcluster-gitops
             repoURL: https://github.com/loft-demos/{{ .Values.loft.virtualClusterName }}-app.git
-            targetRevision: main
+            targetRevision: '{{ default "main" .Values.gitRevision }}'
             kustomize:
               patches:
                 - target:
@@ -94,3 +94,9 @@ spec:
         EOF
 
         kubectl annotate application vcluster-gitops -n argocd argocd.argoproj.io/refresh=hard --overwrite || true
+  parameters:
+    - variable: gitRevision
+      label: Git Revision
+      description: Git revision to use for the generated repo bootstrap application
+      type: string
+      defaultValue: main
