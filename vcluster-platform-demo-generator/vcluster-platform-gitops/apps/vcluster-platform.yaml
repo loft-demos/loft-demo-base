@@ -104,13 +104,34 @@ spec:
                 clientSecret: $CLIENT_SECRET
                 redirectURI: https://{{ .Values.domain }}/auth/oidc/callback
                 groupsClaim: groups
-    - version: 1.490.1
+      parameters:
+        - variable: continuousPromotion
+          label: Continuous Promotion
+          description: Enables link for Kargo
+          type: boolean
+          defaultValue: 'false'
+          section: Use Case Examples
+        - variable: domain
+          label: Loft Domain
+          description: >-
+            The domain to run this Loft instance on, e.g.
+            some-customer.loft.host
+          required: true
+          placeholder: some-customer.loft.host
+        - variable: uiLogoURL
+          label: Logo logoURL
+          description: Will update the vCluster Platform config ui settings logoURL
+        - variable: logoBackgroundColor
+          label: Logo Background Color
+          description: LogoBackgroundColor is the color value to use as the background color for the logo
+          defaultValue: '#001529'
+    - version: 1.490.4
       icon: https://raw.githubusercontent.com/loft-demos/loft-demo-base/refs/heads/main/logos/vCluster_Horizontal_2colors_reversed-2.svg
       defaultNamespace: vcluster-platform
       config:
         chart:
           name: vcluster-platform
-          version: 4.9.0-next.1
+          version: 4.9.0-next.4
           repoURL: https://charts.loft.sh/
         values: |-
           admin:
@@ -148,7 +169,7 @@ spec:
           config:
             loftHost: "{{ .Values.domain }}"
             costControl:
-              enabled: true
+              enabled: {{ .Values.costControl }}
             imageBuilder:
               enabled: false
             uiSettings:
@@ -191,6 +212,33 @@ spec:
                 clientSecret: $CLIENT_SECRET
                 redirectURI: https://{{ .Values.domain }}/auth/oidc/callback
                 groupsClaim: groups
+      parameters:
+        - variable: continuousPromotion
+          label: Continuous Promotion
+          description: Enables link for Kargo
+          type: boolean
+          defaultValue: 'false'
+          section: Use Case Examples
+        - variable: domain
+          label: Loft Domain
+          description: >-
+            The domain to run this Loft instance on, e.g.
+            some-customer.loft.host
+          required: true
+          placeholder: some-customer.loft.host
+        - variable: uiLogoURL
+          label: Logo logoURL
+          description: Will update the vCluster Platform config ui settings logoURL
+        - variable: logoBackgroundColor
+          label: Logo Background Color
+          description: LogoBackgroundColor is the color value to use as the background color for the logo
+          defaultValue: '#001529'
+        - variable: costControl
+          label: Enable Cost Control
+          description: Enables vCluster Platform Cost Control dashboard.
+          type: boolean
+          defaultValue: 'false'
+          section:
     - version: 0.490.0
       icon: https://raw.githubusercontent.com/loft-demos/loft-demo-base/refs/heads/main/logos/vCluster_Horizontal_2colors_reversed-2.svg
       defaultNamespace: vcluster-platform
