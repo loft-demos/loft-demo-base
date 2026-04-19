@@ -55,6 +55,46 @@ spec:
         done
 
         PULL_SECRET="$(kubectl get secret ghcr-login-secret -n vcluster-platform -o jsonpath="{.data.\.dockerconfigjson}")"
+        REPO_NAME="{{ .Values.loft.virtualClusterName }}-app"
+        GIT_REVISION='{{ default "main" .Values.gitRevision }}'
+        MARKER_URL="https://raw.githubusercontent.com/loft-demos/${REPO_NAME}/HEAD/.generator-seed/replace-text-complete.txt"
+        MARKER_FILE="$(mktemp)"
+        trap 'rm -f "$MARKER_FILE"' EXIT
+
+        check_marker() {
+          if command -v curl >/dev/null 2>&1; then
+            curl -fsS "$MARKER_URL" -o "$MARKER_FILE"
+          elif command -v wget >/dev/null 2>&1; then
+            wget -qO "$MARKER_FILE" "$MARKER_URL"
+          else
+            echo "[ERROR] Neither curl nor wget is available to check the replace-text marker."
+            return 2
+          fi
+
+          grep -Fqx "branch=${GIT_REVISION}" "$MARKER_FILE"
+        }
+
+        deadline=$((SECONDS + 900))
+        while true; do
+          marker_status=0
+          if check_marker; then
+            echo "Detected replace-text completion marker for ${REPO_NAME} on ${GIT_REVISION}."
+            break
+          fi
+          marker_status=$?
+
+          if [ "$marker_status" -eq 2 ]; then
+            exit 1
+          fi
+
+          if [ "$SECONDS" -ge "$deadline" ]; then
+            echo "[ERROR] Timed out waiting for replace-text completion marker at ${MARKER_URL}"
+            exit 1
+          fi
+
+          echo "Waiting for replace-text completion marker for ${REPO_NAME}..."
+          sleep 20
+        done
 
         cat <<EOF | kubectl apply -f -
         apiVersion: argoproj.io/v1alpha1

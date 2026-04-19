@@ -44,7 +44,7 @@ In short: **vCP running inside a vCluster creates demo vCP environments running 
 - `vcluster-platform-gitops/apps/crossplane-manifests.yaml`
   - Installs/applies Crossplane bootstrap manifests.
 - `vcluster-platform-gitops/apps/github-repo-argo-cd-webhooks.yaml`
-  - Bootstraps Argo CD application wiring to per-demo GitHub repository and webhook flow.
+  - Waits for the generated repo `replace-text` completion marker, then bootstraps Argo CD application wiring to the per-demo GitHub repository and webhook flow.
 - `crossplane/vcluster-demo-repository-x/*`
   - `DemoRepository` API (XRD + Composition) for template repo provisioning/automation.
 
@@ -78,7 +78,8 @@ The `crossplane/vcluster-demo-repository-x/` package handles the sequencing:
 3. For non-`main` cases, the composition enables copying all template branches.
 4. `DefaultBranch` updates the generated repo default branch to `gitTargetRevision`.
 5. After `DefaultBranch` is ready, the seed `RepositoryFile` writes `.generator-seed/replace-text-trigger.txt` on `gitTargetRevision` with the existing commit message `seed: [run replace-text]`.
-6. That seed commit triggers the generated repo `replace-text` GitHub Actions workflow, which renders `{REPLACE_GIT_TARGET_REVISION}` in self-repo Argo CD and Flux manifests, including repos that keep the demo content under `project/`.
+6. That seed commit triggers the generated repo `replace-text` GitHub Actions workflow, which renders `{REPLACE_GIT_TARGET_REVISION}` in self-repo Argo CD and Flux manifests, including repos that keep the demo content under `project/`, and commits `.generator-seed/replace-text-complete.txt` on success.
+7. The `github-repo-argo-cd-webhooks` bootstrap app waits for `.generator-seed/replace-text-complete.txt` on the generated repo default branch before it creates the root `vcluster-gitops` Argo CD `Application`.
 
 This ordering is important. The default branch must be switched before the seed commit lands, otherwise the generated repo can render `main` into self-repo references even when a branch-test flow was requested.
 

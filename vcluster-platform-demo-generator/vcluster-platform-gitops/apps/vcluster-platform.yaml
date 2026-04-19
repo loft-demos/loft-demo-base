@@ -181,7 +181,7 @@ spec:
               - link: https://www.vcluster.com/docs/platform/
                 position: TopEnd
                 text: vCluster Docs
-              - link: 'https://github.com/loft-demos/{{ .Values.loft.virtualClusterName }}-app/tree/main/vcluster-gitops'
+              - link: 'https://github.com/loft-demos/{{ .Values.loft.virtualClusterName }}-app/tree/{{ .Values.gitRevision }}/vcluster-gitops'
                 position: TopEnd
                 text: GitHub Repo
               - link: https://flux-{{ .Values.domain }}
@@ -233,6 +233,11 @@ spec:
           label: Logo Background Color
           description: LogoBackgroundColor is the color value to use as the background color for the logo
           defaultValue: '#001529'
+        - variable: gitRevision
+          label: Git Revision
+          description: Allows generating the demo repository from a non-main template branch for branch testing.
+          type: string
+          defaultValue: main
         - variable: costControl
           label: Enable Cost Control
           description: Enables vCluster Platform Cost Control dashboard.
