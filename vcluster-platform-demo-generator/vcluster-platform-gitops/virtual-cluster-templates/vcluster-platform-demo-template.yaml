@@ -54,7 +54,9 @@ spec:
               {{if .Values.uiLogoURL}}
               uiLogoURL: '{{ .Values.uiLogoURL }}'
               {{end}}
-              continuousPromotion: '{{ .Values.continuousPromotion }}'
+              continuousPromotion: {{ .Values.continuousPromotion }}
+              costControl: {{ .Values.costControl }}
+              gitRevision: '{{ .Values.gitRevision }}'
               logoBackgroundColor: '{{ .Values.logoBackgroundColor }}'
               domain: >-
                 {{ .Values.loft.virtualClusterName }}.{{
