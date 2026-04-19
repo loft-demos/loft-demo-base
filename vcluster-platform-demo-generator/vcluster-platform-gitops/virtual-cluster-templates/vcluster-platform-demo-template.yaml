@@ -5,9 +5,9 @@ metadata:
 spec:
   displayName: vCluster Platform Demo
   description: >-
-    This virtual cluster template deploys a vCluster Platform Hierarchical Demo
-    Environment that includes Crossplane, Argo CD, and a dedicated GitHub
-    repository for platform GitOps and demo examples.
+    This virtual cluster template deploys a vCluster Platform Demo Environment 
+    that includes Argo CD, Crossplane, Flux, and a generated copy of a GitHub
+    repository for platform GitOps and selected demo examples.
   owner:
     team: loft-admins
   template:
@@ -338,6 +338,8 @@ spec:
               loftDemoDomain: "{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}"
               virtualClusterName: "{{ .Values.loft.virtualClusterName }}"
               virtualClusterNamespace: "{{ .Values.loft.virtualClusterNamespace }}"
+              gitTargetRevision: "{{ .Values.gitRevision }}"
+              includeAllTemplateBranches: {{ if eq .Values.gitRevision "main" }}false{{ else }}true{{ end }}
             {{if .Values.connectedHostCluster}}
             ---
             apiVersion: virtualcluster.demo.vcluster.com/v1alpha1
@@ -486,6 +488,12 @@ spec:
           type: boolean
           defaultValue: 'false'
           section: vCluster Config
+        - variable: gitRevision
+          label: Git Revision
+          description: Allows generating the demo repository from a non-main template branch for branch testing.
+          type: string
+          defaultValue: main
+          section: Advanced
         - variable: uiLogoURL
           label: UI Logo uiLogoURL
           description: Allows overriding default ui settings logo
@@ -809,6 +817,8 @@ spec:
               loftDemoDomain: "{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}"
               virtualClusterName: "{{ .Values.loft.virtualClusterName }}"
               virtualClusterNamespace: "{{ .Values.loft.virtualClusterNamespace }}"
+              gitTargetRevision: "{{ .Values.gitRevision }}"
+              includeAllTemplateBranches: {{ if eq .Values.gitRevision "main" }}false{{ else }}true{{ end }}
             {{if .Values.connectedHostCluster}}
             ---
             apiVersion: virtualcluster.demo.vcluster.com/v1alpha1
@@ -957,6 +967,12 @@ spec:
           type: boolean
           defaultValue: 'false'
           section: vCluster Config
+        - variable: gitRevision
+          label: Git Revision
+          description: Allows generating the demo repository from a non-main template branch for branch testing.
+          type: string
+          defaultValue: main
+          section: Advanced
         - variable: uiLogoURL
           label: UI Logo uiLogoURL
           description: Allows overriding default ui settings logo
@@ -1280,6 +1296,8 @@ spec:
               loftDemoDomain: "{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}"
               virtualClusterName: "{{ .Values.loft.virtualClusterName }}"
               virtualClusterNamespace: "{{ .Values.loft.virtualClusterNamespace }}"
+              gitTargetRevision: "{{ .Values.gitRevision }}"
+              includeAllTemplateBranches: {{ if eq .Values.gitRevision "main" }}false{{ else }}true{{ end }}
             {{if .Values.connectedHostCluster}}
             ---
             apiVersion: virtualcluster.demo.vcluster.com/v1alpha1
@@ -1428,6 +1446,12 @@ spec:
           type: boolean
           defaultValue: 'false'
           section: vCluster Config
+        - variable: gitRevision
+          label: Git Revision
+          description: Allows generating the demo repository from a non-main template branch for branch testing.
+          type: string
+          defaultValue: main
+          section: Advanced
         - variable: uiLogoURL
           label: UI Logo uiLogoURL
           description: Allows overriding default ui settings logo
@@ -1749,6 +1773,8 @@ spec:
               loftDemoDomain: "{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}"
               virtualClusterName: "{{ .Values.loft.virtualClusterName }}"
               virtualClusterNamespace: "{{ .Values.loft.virtualClusterNamespace }}"
+              gitTargetRevision: "{{ .Values.gitRevision }}"
+              includeAllTemplateBranches: {{ if eq .Values.gitRevision "main" }}false{{ else }}true{{ end }}
             {{if .Values.connectedHostCluster}}
             ---
             apiVersion: virtualcluster.demo.vcluster.com/v1alpha1
@@ -1897,6 +1923,12 @@ spec:
           type: boolean
           defaultValue: 'false'
           section: vCluster Config
+        - variable: gitRevision
+          label: Git Revision
+          description: Allows generating the demo repository from a non-main template branch for branch testing.
+          type: string
+          defaultValue: main
+          section: Advanced
         - variable: uiLogoURL
           label: UI Logo uiLogoURL
           description: Allows overriding default ui settings logo
@@ -2203,6 +2235,8 @@ spec:
               loftDemoDomain: "{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}"
               virtualClusterName: "{{ .Values.loft.virtualClusterName }}"
               virtualClusterNamespace: "{{ .Values.loft.virtualClusterNamespace }}"
+              gitTargetRevision: "{{ .Values.gitRevision }}"
+              includeAllTemplateBranches: {{ if eq .Values.gitRevision "main" }}false{{ else }}true{{ end }}
             ---
             apiVersion: v1
             kind: Secret
@@ -2363,6 +2397,12 @@ spec:
           type: boolean
           defaultValue: 'false'
           section: vCluster Config
+        - variable: gitRevision
+          label: Git Revision
+          description: Allows generating the demo repository from a non-main template branch for branch testing.
+          type: string
+          defaultValue: main
+          section: Advanced
         - variable: uiLogoURL
           label: UI Logo uiLogoURL
           description: Allows overriding default ui settings logo
@@ -2665,6 +2705,8 @@ spec:
               loftDemoDomain: "{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}"
               virtualClusterName: "{{ .Values.loft.virtualClusterName }}"
               virtualClusterNamespace: "{{ .Values.loft.virtualClusterNamespace }}"
+              gitTargetRevision: "{{ .Values.gitRevision }}"
+              includeAllTemplateBranches: {{ if eq .Values.gitRevision "main" }}false{{ else }}true{{ end }}
             ---
             apiVersion: v1
             kind: Secret
@@ -2821,6 +2863,12 @@ spec:
           type: boolean
           defaultValue: 'false'
           section: vCluster Config
+        - variable: gitRevision
+          label: Git Revision
+          description: Allows generating the demo repository from a non-main template branch for branch testing.
+          type: string
+          defaultValue: main
+          section: Advanced
         - variable: uiLogoURL
           label: UI Logo uiLogoURL
           description: Allows overriding default ui settings logo

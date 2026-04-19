@@ -23,6 +23,14 @@ spec:
           properties:
             spec:
               properties:
+                gitTargetRevision:
+                  default: main
+                  description: Git branch to use for the generated repository default branch and seed commit target
+                  type: string
+                includeAllTemplateBranches:
+                  default: false
+                  description: Include all branches from the template repository when creating the generated repository
+                  type: boolean
                 loftDemoDomain:
                   description: vCluster Platform demo domain
                   type: string
@@ -39,6 +47,19 @@ spec:
                 - name
                 - virtualClusterNamespace
                 - loftDemoDomain
+              type: object
+            status:
+              properties:
+                defaultBranch:
+                  properties:
+                    id:
+                      type: string
+                  type: object
+                repository:
+                  properties:
+                    id:
+                      type: string
+                  type: object
               type: object
           type: object
       served: true

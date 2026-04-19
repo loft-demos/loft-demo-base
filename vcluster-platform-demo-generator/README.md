@@ -59,6 +59,38 @@ In short: **vCP running inside a vCluster creates demo vCP environments running 
   - triggers GitHub repo scaffolding via `DemoRepository` (Crossplane),
   - wires Argo CD to sync from the generated repo path.
 
+## Branch-Test Repo Generation
+
+The demo generator now supports creating child demo repos from a non-`main` branch of `vcluster-platform-demo-app-template` for testing.
+
+### User-facing behavior
+
+- `vcluster-platform-demo-template.yaml` exposes an `Advanced` parameter named `gitRevision`
+- when `gitRevision` is `main`, the default value, the generated repo keeps the existing behavior
+- when `gitRevision` is a feature or test branch, the generated repo is created from that template branch and its default branch is switched to the same value
+
+### Crossplane flow
+
+The `crossplane/vcluster-demo-repository-x/` package handles the sequencing:
+
+1. `DemoRepository.spec.gitTargetRevision` receives the selected branch.
+2. `Repository` creates the generated repo from the template.
+3. For non-`main` cases, the composition enables copying all template branches.
+4. `DefaultBranch` updates the generated repo default branch to `gitTargetRevision`.
+5. After `DefaultBranch` is ready, the seed `RepositoryFile` writes `helm-chart/Chart.yaml` on `gitTargetRevision` with the existing commit message `seed: [run replace-text]`.
+6. That seed commit triggers the generated repo `replace-text` GitHub Actions workflow, which renders `{REPLACE_GIT_TARGET_REVISION}` in self-repo Argo CD and Flux manifests.
+
+This ordering is important. The default branch must be switched before the seed commit lands, otherwise the generated repo can render `main` into self-repo references even when a branch-test flow was requested.
+
+### Template author expectations
+
+The companion template repo `vcluster-platform-demo-app-template` should use `{REPLACE_GIT_TARGET_REVISION}` for self-repo:
+
+- Argo CD `targetRevision`
+- Flux `GitRepository.spec.ref.branch`
+
+That keeps normal `main` repos unchanged while letting generated branch-test repos follow their selected branch automatically.
+
 ## Apply Notes
 
 Typical apply target for the management vCP GitOps package:
