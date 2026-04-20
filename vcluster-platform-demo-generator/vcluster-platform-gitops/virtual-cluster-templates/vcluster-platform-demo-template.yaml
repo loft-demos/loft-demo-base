@@ -486,18 +486,6 @@ spec:
             - prod
           defaultValue: dev
           section: vCluster Config
-        - variable: vnodeRuntimeClass
-          label: Enable vNode runtime for vCP vCluster
-          description: Enable vNode runtime for vCluster Platform vCluster workload.
-          type: boolean
-          defaultValue: 'false'
-          section: vCluster Config
-        - variable: gitRevision
-          label: Git Revision
-          description: Allows generating the demo repository from a non-main template branch for branch testing.
-          type: string
-          defaultValue: main
-          section: Advanced
         - variable: uiLogoURL
           label: UI Logo uiLogoURL
           description: Allows overriding default ui settings logo
@@ -511,6 +499,24 @@ spec:
           type: string
           defaultValue: '#001529'
           section: UI Customization
+        - variable: gitRevision
+          label: Git Revision
+          description: Allows generating the demo repository from a non-main template branch for branch testing.
+          type: string
+          defaultValue: main
+          section: Advanced
+        - variable: costControl
+          label: Enable Cost Control Dashboard
+          description: Enables vCluster Platform Cost Control dashboard, disabled by default.
+          type: boolean
+          defaultValue: 'false'
+          section: Advanced
+        - variable: vnodeRuntimeClass
+          label: Enable vNode runtime for vCP vCluster
+          description: Enable vNode runtime for vCluster Platform vCluster workload.
+          type: boolean
+          defaultValue: 'false'
+          section: Advanced
     - version: 1.490.4
       template:
         metadata:
