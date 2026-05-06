@@ -65,13 +65,11 @@ spec:
               sleepTimeZone: '{{ .Values.sleepTimeZone }}'
           - name: argocd
             namespace: argocd
-            version: 3.3.6
+            version: 3.4.1
             parameters: |
               appValues: |-
                 global:
                   domain: argocd-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}
-                  image:
-                    tag: v3.4.0-rc7
                 configs:
                   cm:
                     url: https://argocd-{{ .Values.loft.virtualClusterName }}.{{ .Values.loft.clusterAnnotations.domain }}
