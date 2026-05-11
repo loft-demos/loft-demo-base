@@ -46,6 +46,8 @@ spec:
               loft.sh/custom-links: >-
                 https://{{ .Values.loft.virtualClusterName }}.{{
                 .Values.loft.clusterAnnotations.domain }}
+              demo.vcluster.com/tint-cleanup: '{{ .Values.autoNodesAWS }}'
+              demo.vcluster.com/tint-cleanup-skip-projects: vcluster-flux-demo,api-framework
         apps:
           - name: vcluster-platform-demo
             namespace: vcluster-platform
@@ -230,6 +232,7 @@ spec:
               kyverno: '{{ .Values.kyverno }}'
               postgres: '{{ .Values.postgres }}'
               rancher: '{{ .Values.rancher }}'
+              autoNodesAWS: '{{ .Values.autoNodesAWS }}'
             name: cluster-local
             namespace: argocd
           stringData:
@@ -430,6 +433,12 @@ spec:
           description: >-
             Showcase how to use Kyverno with the Centeral Admission control
             vCluster feature
+          type: boolean
+          defaultValue: 'false'
+          section: Use Case Examples
+        - variable: autoNodesAWS
+          label: Auto Nodes AWS
+          description: Enable auto-provisioned AWS EC2 worker nodes via the aws-ec2-node-provider.
           type: boolean
           defaultValue: 'false'
           section: Use Case Examples
